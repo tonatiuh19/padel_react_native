@@ -27,7 +27,7 @@ const BottomTabBarStyles = StyleSheet.create({
   },
   indicatorStyle: {
     backgroundColor: "#FFAA00", // Change to your desired selected color
-    height: 4,
+    height: 5,
   },
 });
 
