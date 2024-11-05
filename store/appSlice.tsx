@@ -5,7 +5,12 @@ import {
 } from "../screens/HomeScreen/HomeScreen.model";
 
 const initialState: AppState = {
-  platformFields: [],
+  platformFields: {
+    title: "",
+    start_time: "",
+    end_time: "",
+    platforms_fields: [],
+  },
 };
 
 const appSlice = createSlice({
@@ -21,13 +26,18 @@ const appSlice = createSlice({
     clearState(state) {
       state.isLoading = false;
       state.isError = false;
-      state.platformFields = [];
+      state.platformFields = {
+        title: "",
+        start_time: "",
+        end_time: "",
+        platforms_fields: [],
+      };
     },
     fetchPlatformFieldsStart(state) {
       state.isLoading = true;
       state.isError = false;
     },
-    fetchPlatformFieldsSuccess(state, action: PayloadAction<PlatformField[]>) {
+    fetchPlatformFieldsSuccess(state, action: PayloadAction<PlatformField>) {
       state.isLoading = false;
       state.platformFields = action.payload;
     },

@@ -25,6 +25,27 @@ export const ReservationCardStyles = StyleSheet.create({
     width: "100%",
     padding: 16,
     backgroundColor: "#000", // Optional: Add a background color to make it more visible
+    flexDirection: "row",
+  },
+  columnLeftDetailsContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  columnLeftDetailsText: {
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 22,
+    color: "#e1dd2a",
+  },
+  columnCenterDetailsContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  columnRightDetailsContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   cardTitle: {
     fontSize: 18,

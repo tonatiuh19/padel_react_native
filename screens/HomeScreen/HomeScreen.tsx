@@ -35,20 +35,11 @@ export default function HomeScreen() {
         {platformFields.map((field) => (
           <ReservationCard
             key={field.id_platforms_field}
+            id_platforms_field={field.id_platforms_field}
             field={field.title}
             time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
             player="John Doe" // Example player, replace with actual data if available
-            images={[
-              {
-                uri: "https://garbrix.com/padel/assets/images/padel_example.jpg",
-              },
-              {
-                uri: "https://garbrix.com/padel/assets/images/padel_example_1.jpg",
-              },
-              {
-                uri: "https://garbrix.com/padel/assets/images/padel_example_2.jpg",
-              },
-            ]}
+            images={field.carrouselImages.map((image) => ({ uri: image.path }))}
           />
         ))}
       </ScrollView>

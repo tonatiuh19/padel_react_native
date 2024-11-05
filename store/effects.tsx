@@ -15,7 +15,7 @@ export const fetchPlatformFields =
   (id_platform: number) =>
   async (
     dispatch: (arg0: {
-      payload: PlatformField[] | undefined;
+      payload: PlatformField | undefined;
       type:
         | "app/fetchPlatformFieldsStart"
         | "app/fetchPlatformFieldsSuccess"
@@ -24,10 +24,11 @@ export const fetchPlatformFields =
   ) => {
     try {
       dispatch(fetchPlatformFieldsStart());
-      const response = await axios.post<PlatformField[]>(
+      const response = await axios.post<PlatformField>(
         GET_PLATFORM_FIELDS_BY_ID,
         {
           id_platform,
+          imageDirectory: "../assets/images/carrouselImages",
         }
       );
       dispatch(fetchPlatformFieldsSuccess(response.data));

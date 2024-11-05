@@ -3,8 +3,15 @@ import ProfileScreen from "../../screens/ProfileScreen/ProfileScreen"; // Import
 import TabNavigator from "../TabNavigator/TabNavigator";
 import BackButton from "../TabNavigator/shared/components/BackButton/BackButton";
 import { createStackNavigator } from "@react-navigation/stack";
+import ScheduleScreen from "../../screens/ScheduleScreen/ScheduleScreen";
 
-const { Navigator, Screen } = createStackNavigator();
+export type RootStackParamList = {
+  Main: undefined;
+  Profile: undefined;
+  Schedule: { id_platforms_field: number };
+};
+
+const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => (
   <Navigator>
@@ -18,6 +25,14 @@ const AppNavigator = () => (
       component={ProfileScreen}
       options={({ navigation }) => ({
         headerTitle: "Mi Perfil",
+        headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      })}
+    />
+    <Screen
+      name="Schedule"
+      component={ScheduleScreen}
+      options={({ navigation }) => ({
+        headerTitle: "Agendar",
         headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       })}
     />
