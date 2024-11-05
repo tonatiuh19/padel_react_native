@@ -1,57 +1,54 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { RefreshControl, ScrollView } from "react-native";
 import { HomeScreenStyles } from "./HomeScreen.style";
 import ReservationCard from "./shared/components/ReservationCard/ReservationCard";
 import { Layout } from "@ui-kitten/components";
+import { selectPlatformFields } from "../../store/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlatformFields } from "../../store/effects";
+import { AppDispatch } from "../../store";
 
 export default function HomeScreen() {
-  const reservations = [
-    {
-      id: 1,
-      field: "Field 1",
-      time: "10:00 AM - 11:00 AM",
-      player: "John Doe",
-      images: [
-        { uri: "https://garbrix.com/padel/assets/images/padel_example.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_1.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_2.jpg" },
-      ],
-    },
-    {
-      id: 2,
-      field: "Field 2",
-      time: "11:00 AM - 12:00 PM",
-      player: "Jane Smith",
-      images: [
-        { uri: "https://garbrix.com/padel/assets/images/padel_example.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_1.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_2.jpg" },
-      ],
-    },
-    {
-      id: 3,
-      field: "Field 3",
-      time: "12:00 PM - 01:00 PM",
-      player: "Alice Johnson",
-      images: [
-        { uri: "https://garbrix.com/padel/assets/images/padel_example.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_1.jpg" },
-        { uri: "https://garbrix.com/padel/assets/images/padel_example_2.jpg" },
-      ],
-    },
-    // Add more reservations as needed
-  ];
+  const dispatch: AppDispatch = useDispatch();
+  const platformFields = useSelector(selectPlatformFields);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchPlatformFields(1));
+  }, [dispatch]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(fetchPlatformFields(1)).finally(() => {
+      setRefreshing(false);
+    });
+  };
 
   return (
     <Layout style={HomeScreenStyles.container}>
-      <ScrollView contentContainerStyle={HomeScreenStyles.scrollView}>
-        {reservations.map((reservation) => (
+      <ScrollView
+        contentContainerStyle={HomeScreenStyles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {platformFields.map((field) => (
           <ReservationCard
-            key={reservation.id}
-            field={reservation.field}
-            time={reservation.time}
-            player={reservation.player}
-            images={reservation.images}
+            key={field.id_platforms_field}
+            field={field.title}
+            time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
+            player="John Doe" // Example player, replace with actual data if available
+            images={[
+              {
+                uri: "https://garbrix.com/padel/assets/images/padel_example.jpg",
+              },
+              {
+                uri: "https://garbrix.com/padel/assets/images/padel_example_1.jpg",
+              },
+              {
+                uri: "https://garbrix.com/padel/assets/images/padel_example_2.jpg",
+              },
+            ]}
           />
         ))}
       </ScrollView>

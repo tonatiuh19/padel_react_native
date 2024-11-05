@@ -14,19 +14,19 @@ const BottomTabBarStyles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   iconSelected: {
-    color: "#FF6347", // Change to your desired selected color
+    color: "#e1dd2a", // Change to your desired selected color
   },
   iconUnselected: {
     color: "#808080", // Change to your desired unselected color
   },
   titleSelected: {
-    color: "#FF6347", // Change to your desired selected color
+    color: "#e1dd2a", // Change to your desired selected color
   },
   titleUnselected: {
     color: "#808080", // Change to your desired unselected color
   },
   indicatorStyle: {
-    backgroundColor: "#FFAA00", // Change to your desired selected color
+    backgroundColor: "#e1dd2a", // Change to your desired selected color
     height: 5,
   },
 });
