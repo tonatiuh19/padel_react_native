@@ -4,11 +4,12 @@ import TabNavigator from "../TabNavigator/TabNavigator";
 import BackButton from "../TabNavigator/shared/components/BackButton/BackButton";
 import { createStackNavigator } from "@react-navigation/stack";
 import ScheduleScreen from "../../screens/ScheduleScreen/ScheduleScreen";
+import { PlatformsField } from "../../screens/HomeScreen/HomeScreen.model";
 
 export type RootStackParamList = {
   Main: undefined;
   Profile: undefined;
-  Schedule: { id_platforms_field: number };
+  Schedule: PlatformsField;
 };
 
 const { Navigator, Screen } = createStackNavigator<RootStackParamList>();

@@ -36,7 +36,8 @@ export default function HomeScreen() {
           <ReservationCard
             key={field.id_platforms_field}
             id_platforms_field={field.id_platforms_field}
-            field={field.title}
+            title={field.title}
+            field={field}
             time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
             player="John Doe" // Example player, replace with actual data if available
             images={field.carrouselImages.map((image) => ({ uri: image.path }))}

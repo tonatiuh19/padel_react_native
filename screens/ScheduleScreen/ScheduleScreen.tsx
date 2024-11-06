@@ -1,21 +1,44 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, RefreshControl } from "react-native";
 import { ScheduleScreenStyles } from "./ScheduleScreen.style";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
+import TimeSlotsAgenda from "./TimeSlotsAgenda/TimeSlotsAgenda";
+import { selectPlatformsFields } from "../../store/selectors";
+import { AppDispatch } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlatformsFields } from "../../store/effects";
 
 type ScheduleScreenRouteProp = RouteProp<RootStackParamList, "Schedule">;
 
 const ScheduleScreen: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const platformsFields = useSelector(selectPlatformsFields);
+  const [refreshing, setRefreshing] = useState(false);
+
   const route = useRoute<ScheduleScreenRouteProp>();
-  const { id_platforms_field } = route.params;
+  const { today, id_platforms_field } = route.params;
+
+  useEffect(() => {
+    dispatch(fetchPlatformsFields(id_platforms_field));
+  }, [dispatch, id_platforms_field]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(fetchPlatformsFields(id_platforms_field)).finally(() => {
+      setRefreshing(false);
+    });
+  };
 
   return (
     <View style={ScheduleScreenStyles.container}>
-      <Text style={ScheduleScreenStyles.title}>
-        Schedule for {id_platforms_field}
-      </Text>
-      {/* Add your scheduling or reservation logic here */}
+      <TimeSlotsAgenda
+        items={platformsFields.slots}
+        today={today}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </View>
   );
 };

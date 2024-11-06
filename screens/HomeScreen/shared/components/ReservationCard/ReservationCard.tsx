@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "@ui-kitten/components";
 import { ReservationCardProps } from "../../../HomeScreen.model";
 import {
@@ -19,16 +19,15 @@ const renderItem = ({ item }: { item: { path: string } }) => (
 );
 
 const ReservationCard: React.FC<ReservationCardProps> = ({
-  id_platforms_field,
   field,
-  time,
+  title,
   player,
   images,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handlePress = () => {
-    navigation.navigate("Schedule", { id_platforms_field });
+    navigation.navigate("Schedule", field);
   };
 
   return (
@@ -50,7 +49,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
       <View style={ReservationCardStyles.detailsContainer}>
         <View style={ReservationCardStyles.columnLeftDetailsContainer}>
           <Text style={ReservationCardStyles.columnLeftDetailsText}>
-            {field}
+            {title}
           </Text>
         </View>
         <View style={ReservationCardStyles.columnRightDetailsContainer}>

@@ -1,0 +1,137 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
+import { Agenda, LocaleConfig } from "react-native-calendars";
+import { TimeSlotsAgendaStyles } from "./TimeSlotsAgenda.styles";
+import { KnobButton } from "./KnobButton/KnobButton";
+import TimeSlotItem from "./TimeSlotItem/TimeSlotItem";
+import EmptyDataView from "./EmptyDataView/EmptyDataView";
+import { FontAwesome6 } from "@expo/vector-icons";
+
+LocaleConfig.locales["es"] = {
+  monthNames: [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ],
+  monthNamesShort: [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ],
+  dayNames: [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ],
+  dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+  today: "Hoy",
+};
+LocaleConfig.defaultLocale = "es";
+
+interface TimeSlotsAgendaProps {
+  items: Record<string, { active: number; height: number; name: string }[]>;
+  today: string;
+  refreshControl?: React.ReactNode;
+}
+
+const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
+  items,
+  today,
+  refreshControl,
+}) => {
+  const [isAgendaEmpty, setIsAgendaEmpty] = useState(false);
+
+  useEffect(() => {
+    const isEmpty = Object.keys(items).length === 0;
+    setIsAgendaEmpty(isEmpty);
+  }, [items]);
+
+  const formatTimeRange = (timeRange: string): string => {
+    const [start, end] = timeRange
+      .split(" - ")
+      .map((dateStr) => new Date(dateStr));
+    const formatTime = (date: Date) => {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "pm" : "am";
+      const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+      return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    };
+    return `${formatTime(start)} - ${formatTime(end)}`;
+  };
+
+  const handlePress = (item: any) => {
+    console.log("handlePress", item);
+  };
+
+  const handleAddSlot = () => {
+    console.log("Add new slot");
+  };
+
+  const now = new Date(today);
+  const minDate = now.toISOString().split("T")[0];
+  const maxDate = new Date(now.setDate(now.getDate() + 30))
+    .toISOString()
+    .split("T")[0];
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Agenda
+        items={items}
+        renderItem={(item: any) => (
+          <TimeSlotItem
+            item={item}
+            handlePress={handlePress}
+            formatTimeRange={formatTimeRange}
+          />
+        )}
+        style={TimeSlotsAgendaStyles.agenda}
+        agendaKnobColor="black"
+        renderEmptyDate={() => (
+          <View>
+            <Text>renderEmptyDate</Text>
+          </View>
+        )}
+        renderKnob={() => <KnobButton />}
+        renderEmptyData={() => <EmptyDataView onAddSlot={handleAddSlot} />}
+        minDate={minDate}
+        maxDate={maxDate}
+        refreshControl={refreshControl}
+      />
+      {!isAgendaEmpty && (
+        <TouchableOpacity
+          style={TimeSlotsAgendaStyles.fab}
+          onPress={handleAddSlot}
+        >
+          <FontAwesome6 name="plus" size={16} color="#000" />
+          <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
+
+export default TimeSlotsAgenda;

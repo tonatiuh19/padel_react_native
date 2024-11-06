@@ -1,15 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AppState,
+  EPlatformField,
   PlatformField,
 } from "../screens/HomeScreen/HomeScreen.model";
 
 const initialState: AppState = {
   platformFields: {
     title: "",
+    today: "",
     start_time: "",
     end_time: "",
     platforms_fields: [],
+  },
+  platformsFields: {
+    id_platforms_field: 0,
+    title: "",
+    today: "",
+    active_slots: [],
+    idle_slots: [],
+    slots: {},
   },
 };
 
@@ -28,9 +38,18 @@ const appSlice = createSlice({
       state.isError = false;
       state.platformFields = {
         title: "",
+        today: "",
         start_time: "",
         end_time: "",
         platforms_fields: [],
+      };
+      state.platformsFields = {
+        id_platforms_field: 0,
+        title: "",
+        today: "",
+        active_slots: [],
+        idle_slots: [],
+        slots: {},
       };
     },
     fetchPlatformFieldsStart(state) {
@@ -45,6 +64,18 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    fetchPlatformsFieldsStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    fetchPlatformsFieldsSuccess(state, action: PayloadAction<EPlatformField>) {
+      state.isLoading = false;
+      state.platformsFields = action.payload;
+    },
+    fetchPlatformsFieldsFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -55,6 +86,9 @@ export const {
   fetchPlatformFieldsStart,
   fetchPlatformFieldsSuccess,
   fetchPlatformFieldsFailure,
+  fetchPlatformsFieldsStart,
+  fetchPlatformsFieldsSuccess,
+  fetchPlatformsFieldsFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
