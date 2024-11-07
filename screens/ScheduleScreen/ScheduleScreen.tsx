@@ -38,6 +38,8 @@ const ScheduleScreen: React.FC = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       />
     </View>
   );

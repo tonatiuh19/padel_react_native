@@ -56,12 +56,16 @@ interface TimeSlotsAgendaProps {
   items: Record<string, { active: number; height: number; name: string }[]>;
   today: string;
   refreshControl?: React.ReactNode;
+  onRefresh: () => void;
+  refreshing: boolean;
 }
 
 const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   items,
   today,
   refreshControl,
+  onRefresh,
+  refreshing,
 }) => {
   const isDayEmpty = useSelector(selectIsDayEmpty);
 
@@ -113,7 +117,13 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           </View>
         )}
         renderKnob={() => <KnobButton />}
-        renderEmptyData={() => <EmptyDataView onAddSlot={handleAddSlot} />}
+        renderEmptyData={() => (
+          <EmptyDataView
+            onAddSlot={handleAddSlot}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
+          />
+        )}
         minDate={minDate}
         maxDate={maxDate}
         refreshControl={refreshControl}
