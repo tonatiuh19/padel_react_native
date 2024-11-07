@@ -42,9 +42,17 @@ export interface EPlatformField {
   id_platforms_field: number;
   title: string;
   today: string;
-  active_slots: ESlot[];
-  idle_slots: ESlot[];
+  markedDates: MarkedDate[];
+  active_slots?: ESlot[];
+  idle_slots?: ESlot[];
   slots: { [key: string]: Slot[] };
+}
+
+export interface MarkedDate {
+  id_platforms_disabled_date: number;
+  start_date_time: Date;
+  end_date_time: Date;
+  active: number;
 }
 
 export interface ESlot {

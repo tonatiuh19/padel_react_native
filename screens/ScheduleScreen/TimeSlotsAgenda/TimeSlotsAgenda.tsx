@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
-import { Agenda, LocaleConfig } from "react-native-calendars";
+import { Agenda, LocaleConfig, AgendaList } from "react-native-calendars";
 import {
   TimeSlotsAgendaCalendarTheme,
   TimeSlotsAgendaStyles,
@@ -142,6 +142,13 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         }}
         pastScrollRange={1}
         futureScrollRange={1}
+        onDayPress={(day: any) => {
+          console.log("Day pressed", day);
+          onRefresh();
+        }}
+        markedDates={{
+          "2024-11-18": { disabled: true },
+        }}
       />
       {!isDayEmpty && (
         <TouchableOpacity
