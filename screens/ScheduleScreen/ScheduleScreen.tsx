@@ -34,6 +34,7 @@ const ScheduleScreen: React.FC = () => {
     <View style={ScheduleScreenStyles.container}>
       <TimeSlotsAgenda
         items={platformsFields.slots}
+        markedDates={platformsFields.markedDates}
         today={today}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

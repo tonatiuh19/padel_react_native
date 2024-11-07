@@ -11,6 +11,7 @@ import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { selectIsDayEmpty } from "../../../store/selectors";
+import { MarkedDate } from "../../HomeScreen/HomeScreen.model";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -57,6 +58,7 @@ LocaleConfig.defaultLocale = "es";
 
 interface TimeSlotsAgendaProps {
   items: Record<string, { active: number; height: number; name: string }[]>;
+  markedDates: { [key: string]: MarkedDate };
   today: string;
   refreshControl?: React.ReactNode;
   onRefresh: () => void;
@@ -65,6 +67,7 @@ interface TimeSlotsAgendaProps {
 
 const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   items,
+  markedDates,
   today,
   refreshControl,
   onRefresh,
@@ -146,9 +149,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           console.log("Day pressed", day);
           onRefresh();
         }}
-        markedDates={{
-          "2024-11-18": { disabled: true },
-        }}
+        markedDates={markedDates}
       />
       {!isDayEmpty && (
         <TouchableOpacity

@@ -17,7 +17,7 @@ const initialState: AppState = {
     id_platforms_field: 0,
     title: "",
     today: "",
-    markedDates: [],
+    markedDates: {},
     slots: {},
   },
   schedule: {
@@ -49,7 +49,7 @@ const appSlice = createSlice({
         id_platforms_field: 0,
         title: "",
         today: "",
-        markedDates: [],
+        markedDates: {},
         slots: {},
       };
       state.schedule = {
