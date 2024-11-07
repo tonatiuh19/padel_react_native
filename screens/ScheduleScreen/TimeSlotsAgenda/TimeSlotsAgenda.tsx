@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
-import { TimeSlotsAgendaStyles } from "./TimeSlotsAgenda.styles";
+import {
+  TimeSlotsAgendaCalendarTheme,
+  TimeSlotsAgendaStyles,
+} from "./TimeSlotsAgenda.styles";
 import { KnobButton } from "./KnobButton/KnobButton";
 import TimeSlotItem from "./TimeSlotItem/TimeSlotItem";
 import EmptyDataView from "./EmptyDataView/EmptyDataView";
@@ -98,6 +101,11 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     .toISOString()
     .split("T")[0];
 
+  useEffect(() => {
+    console.log("Today", today);
+    console.log("Now", now);
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <Agenda
@@ -124,9 +132,16 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
             refreshing={refreshing}
           />
         )}
+        selected={today}
         minDate={minDate}
         maxDate={maxDate}
         refreshControl={refreshControl}
+        showClosingKnob={true}
+        theme={{
+          ...TimeSlotsAgendaCalendarTheme,
+        }}
+        pastScrollRange={1}
+        futureScrollRange={1}
       />
       {!isDayEmpty && (
         <TouchableOpacity
