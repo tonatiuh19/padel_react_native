@@ -6,6 +6,8 @@ import { KnobButton } from "./KnobButton/KnobButton";
 import TimeSlotItem from "./TimeSlotItem/TimeSlotItem";
 import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectIsDayEmpty } from "../../../store/selectors";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -61,12 +63,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   today,
   refreshControl,
 }) => {
-  const [isAgendaEmpty, setIsAgendaEmpty] = useState(false);
-
-  useEffect(() => {
-    const isEmpty = Object.keys(items).length === 0;
-    setIsAgendaEmpty(isEmpty);
-  }, [items]);
+  const isDayEmpty = useSelector(selectIsDayEmpty);
 
   const formatTimeRange = (timeRange: string): string => {
     const [start, end] = timeRange
@@ -121,7 +118,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         maxDate={maxDate}
         refreshControl={refreshControl}
       />
-      {!isAgendaEmpty && (
+      {!isDayEmpty && (
         <TouchableOpacity
           style={TimeSlotsAgendaStyles.fab}
           onPress={handleAddSlot}

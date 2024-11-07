@@ -7,3 +7,6 @@ export const selectPlatformFields = (state: RootState) =>
 
 export const selectPlatformsFields = (state: RootState) =>
   state.app.platformsFields;
+
+export const selectIsDayEmpty = (state: RootState) =>
+  state.app.schedule.isDayEmpty;

@@ -21,6 +21,9 @@ const initialState: AppState = {
     idle_slots: [],
     slots: {},
   },
+  schedule: {
+    isDayEmpty: false,
+  },
 };
 
 const appSlice = createSlice({
@@ -51,6 +54,9 @@ const appSlice = createSlice({
         idle_slots: [],
         slots: {},
       };
+      state.schedule = {
+        isDayEmpty: false,
+      };
     },
     fetchPlatformFieldsStart(state) {
       state.isLoading = true;
@@ -76,6 +82,9 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    setIsDayEmpty(state, action: PayloadAction<boolean>) {
+      state.schedule.isDayEmpty = action.payload;
+    },
   },
 });
 
@@ -89,6 +98,7 @@ export const {
   fetchPlatformsFieldsStart,
   fetchPlatformsFieldsSuccess,
   fetchPlatformsFieldsFailure,
+  setIsDayEmpty,
 } = appSlice.actions;
 
 export default appSlice.reducer;

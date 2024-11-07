@@ -14,8 +14,13 @@ export interface ReservationCardProps {
 export interface AppState {
   platformFields: PlatformField;
   platformsFields: EPlatformField;
+  schedule: ScheduleState;
   isLoading?: boolean;
   isError?: boolean;
+}
+
+export interface ScheduleState {
+  isDayEmpty: boolean;
 }
 
 export interface PlatformField {
