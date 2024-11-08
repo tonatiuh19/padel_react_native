@@ -9,9 +9,12 @@ import { KnobButton } from "./KnobButton/KnobButton";
 import TimeSlotItem from "./TimeSlotItem/TimeSlotItem";
 import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectIsDayEmpty } from "../../../store/selectors";
 import { MarkedDate } from "../../HomeScreen/HomeScreen.model";
+import { AppDispatch } from "../../../store";
+import { setMarkedActiveDay } from "../../../store/appSlice";
+import AddSlotModal from "../AddSlotModal/AddSlotModal";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -73,7 +76,9 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   onRefresh,
   refreshing,
 }) => {
+  const dispatch: AppDispatch = useDispatch();
   const isDayEmpty = useSelector(selectIsDayEmpty);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const formatTimeRange = (timeRange: string): string => {
     const [start, end] = timeRange
@@ -95,7 +100,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   };
 
   const handleAddSlot = () => {
-    console.log("Add new slot");
+    setModalVisible(true);
   };
 
   const now = new Date(today);
@@ -104,10 +109,22 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     .toISOString()
     .split("T")[0];
 
-  useEffect(() => {
-    console.log("Today", today);
-    console.log("Now", now);
-  }, []);
+  const getActiveStatus = (
+    markedDates: { [key: string]: MarkedDate },
+    date: {
+      dateString: string;
+      day: number;
+      month: number;
+      timestamp: number;
+      year: number;
+    }
+  ) => {
+    if (markedDates[date.dateString]) {
+      dispatch(setMarkedActiveDay(markedDates[date.dateString].active));
+    } else {
+      dispatch(setMarkedActiveDay(0));
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -121,7 +138,6 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           />
         )}
         style={TimeSlotsAgendaStyles.agenda}
-        agendaKnobColor="black"
         renderEmptyDate={() => (
           <View>
             <Text>renderEmptyDate</Text>
@@ -144,9 +160,9 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           ...TimeSlotsAgendaCalendarTheme,
         }}
         pastScrollRange={1}
-        futureScrollRange={1}
+        futureScrollRange={2}
         onDayPress={(day: any) => {
-          console.log("Day pressed", day);
+          getActiveStatus(markedDates, day);
           onRefresh();
         }}
         markedDates={markedDates}
@@ -160,6 +176,10 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
         </TouchableOpacity>
       )}
+      <AddSlotModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };

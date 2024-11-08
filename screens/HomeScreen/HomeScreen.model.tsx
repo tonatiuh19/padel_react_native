@@ -21,6 +21,7 @@ export interface AppState {
 
 export interface ScheduleState {
   isDayEmpty: boolean;
+  markedActiveDay: number;
 }
 
 export interface PlatformField {

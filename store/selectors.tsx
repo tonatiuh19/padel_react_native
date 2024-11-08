@@ -10,3 +10,6 @@ export const selectPlatformsFields = (state: RootState) =>
 
 export const selectIsDayEmpty = (state: RootState) =>
   state.app.schedule.isDayEmpty;
+
+export const selectMarkedActiveDay = (state: RootState) =>
+  state.app.schedule.markedActiveDay;

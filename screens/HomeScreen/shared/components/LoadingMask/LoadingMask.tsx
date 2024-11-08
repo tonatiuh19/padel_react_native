@@ -11,27 +11,16 @@ const LoadingMask: React.FC<LoadingMaskProps> = ({ isLoading }) => {
   const rotation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    let rotateAnimation: Animated.CompositeAnimation;
-    if (isLoading) {
-      rotateAnimation = Animated.loop(
-        Animated.timing(rotation, {
-          toValue: 1,
-          duration: 800, // Decrease duration to increase speed
-          easing: Easing.linear,
-          useNativeDriver: true,
-        })
-      );
-      rotateAnimation.start();
-    } else {
-      rotation.stopAnimation();
-    }
-
-    return () => {
-      if (rotateAnimation) {
-        rotateAnimation.stop();
-      }
-    };
-  }, [isLoading, rotation]);
+    const rotateAnimation = Animated.loop(
+      Animated.timing(rotation, {
+        toValue: 1,
+        duration: 800, // Decrease duration to increase speed
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    );
+    rotateAnimation.start();
+  }, [rotation]);
 
   const rotate = rotation.interpolate({
     inputRange: [0, 1],
@@ -45,7 +34,7 @@ const LoadingMask: React.FC<LoadingMaskProps> = ({ isLoading }) => {
   return (
     <View style={LoadingMaskStyles.overlay}>
       <Animated.View style={{ transform: [{ rotate }] }}>
-        <Ionicons name="tennisball" size={64} color="#e1dd2a" />
+        <Ionicons name="tennisball" size={34} color="#e1dd2a" />
       </Animated.View>
     </View>
   );

@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import { EmptyDataViewStyles } from "./EmptyDataView.style";
 import { AppDispatch } from "../../../../store";
-import { useDispatch } from "react-redux";
-import { setIsDayEmpty } from "../../../../store/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsDayEmpty, setMarkedActiveDay } from "../../../../store/appSlice";
+import { selectMarkedActiveDay } from "../../../../store/selectors";
 
 interface EmptyDataViewProps {
   onAddSlot: () => void;
@@ -24,6 +25,7 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
   refreshing,
 }) => {
   const dispatch: AppDispatch = useDispatch();
+  const markedActiveDay = useSelector(selectMarkedActiveDay);
 
   useEffect(() => {
     dispatch(setIsDayEmpty(true));
@@ -31,6 +33,7 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
     return () => {
       // Cleanup function to reset the state when the component is unmounted
       dispatch(setIsDayEmpty(false));
+      dispatch(setMarkedActiveDay(0));
     };
   }, [dispatch]);
 
@@ -41,10 +44,33 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <Text style={EmptyDataViewStyles.text}>Este dia esta libre</Text>
-      <TouchableOpacity style={EmptyDataViewStyles.button} onPress={onAddSlot}>
-        <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
-      </TouchableOpacity>
+      {markedActiveDay === 0 ? (
+        <>
+          <Text style={EmptyDataViewStyles.text}>Este dia esta libre</Text>
+          <TouchableOpacity
+            style={EmptyDataViewStyles.button}
+            onPress={onAddSlot}
+          >
+            <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
+          </TouchableOpacity>
+        </>
+      ) : markedActiveDay === 1 ? (
+        <Text style={EmptyDataViewStyles.text}>
+          Esta cancha permanecera cerrada todo el dia
+        </Text>
+      ) : (
+        <>
+          <Text style={EmptyDataViewStyles.text}>
+            Esta cancha permanecera cerrada parcialmente en ciertos horarios
+          </Text>
+          <TouchableOpacity
+            style={EmptyDataViewStyles.button}
+            onPress={onAddSlot}
+          >
+            <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </ScrollView>
   );
 };

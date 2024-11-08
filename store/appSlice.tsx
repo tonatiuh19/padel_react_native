@@ -22,6 +22,7 @@ const initialState: AppState = {
   },
   schedule: {
     isDayEmpty: false,
+    markedActiveDay: 0,
   },
 };
 
@@ -54,6 +55,7 @@ const appSlice = createSlice({
       };
       state.schedule = {
         isDayEmpty: false,
+        markedActiveDay: 0,
       };
     },
     fetchPlatformFieldsStart(state) {
@@ -83,6 +85,9 @@ const appSlice = createSlice({
     setIsDayEmpty(state, action: PayloadAction<boolean>) {
       state.schedule.isDayEmpty = action.payload;
     },
+    setMarkedActiveDay(state, action: PayloadAction<number>) {
+      state.schedule.markedActiveDay = action.payload;
+    },
   },
 });
 
@@ -97,6 +102,7 @@ export const {
   fetchPlatformsFieldsSuccess,
   fetchPlatformsFieldsFailure,
   setIsDayEmpty,
+  setMarkedActiveDay,
 } = appSlice.actions;
 
 export default appSlice.reducer;
