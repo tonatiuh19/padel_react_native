@@ -15,6 +15,8 @@ export interface AppState {
   platformFields: PlatformField;
   platformsFields: EPlatformField;
   schedule: ScheduleState;
+  payment: PaymentState;
+  disabledSlots: DisabledSlotsState;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -22,6 +24,20 @@ export interface AppState {
 export interface ScheduleState {
   isDayEmpty: boolean;
   markedActiveDay: number;
+}
+
+export interface PaymentState {
+  id_platforms_date_time_slot?: number;
+  id_platforms_field: number;
+  platforms_date_time_start: string;
+  platforms_date_time_end?: string;
+  active: number;
+  stripe_id?: string;
+}
+
+export interface DisabledSlotsState {
+  disabledSlots: string[];
+  today: string;
 }
 
 export interface PlatformField {

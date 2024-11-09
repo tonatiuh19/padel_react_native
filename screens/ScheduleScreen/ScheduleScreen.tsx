@@ -8,6 +8,7 @@ import { selectPlatformsFields } from "../../store/selectors";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlatformsFields } from "../../store/effects";
+import { isEmptyObject } from "../../utils/UtilsFunctions";
 
 type ScheduleScreenRouteProp = RouteProp<RootStackParamList, "Schedule">;
 
@@ -33,7 +34,9 @@ const ScheduleScreen: React.FC = () => {
   return (
     <View style={ScheduleScreenStyles.container}>
       <TimeSlotsAgenda
-        items={platformsFields.slots}
+        items={
+          isEmptyObject(platformsFields.slots) ? {} : platformsFields.slots
+        }
         markedDates={platformsFields.markedDates}
         today={today}
         refreshControl={

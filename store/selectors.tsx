@@ -13,3 +13,8 @@ export const selectIsDayEmpty = (state: RootState) =>
 
 export const selectMarkedActiveDay = (state: RootState) =>
   state.app.schedule.markedActiveDay;
+
+export const selectPayment = (state: RootState) => state.app.payment;
+
+export const selectDisabledSlots = (state: RootState) =>
+  state.app.disabledSlots;

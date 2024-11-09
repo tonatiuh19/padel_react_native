@@ -13,8 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectIsDayEmpty } from "../../../store/selectors";
 import { MarkedDate } from "../../HomeScreen/HomeScreen.model";
 import { AppDispatch } from "../../../store";
-import { setMarkedActiveDay } from "../../../store/appSlice";
+import { setMarkedActiveDay, setSelectedDay } from "../../../store/appSlice";
 import AddSlotModal from "../AddSlotModal/AddSlotModal";
+import { getDisabledSlots } from "../../../utils/UtilsFunctions";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -162,6 +163,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         pastScrollRange={1}
         futureScrollRange={2}
         onDayPress={(day: any) => {
+          dispatch(setSelectedDay(day.dateString));
           getActiveStatus(markedDates, day);
           onRefresh();
         }}

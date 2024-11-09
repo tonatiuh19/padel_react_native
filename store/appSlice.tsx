@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AppState,
   EPlatformField,
+  PaymentState,
   PlatformField,
 } from "../screens/HomeScreen/HomeScreen.model";
 
@@ -23,6 +24,18 @@ const initialState: AppState = {
   schedule: {
     isDayEmpty: false,
     markedActiveDay: 0,
+  },
+  payment: {
+    id_platforms_date_time_slot: 0,
+    id_platforms_field: 0,
+    platforms_date_time_start: "",
+    platforms_date_time_end: "",
+    active: 0,
+    stripe_id: "",
+  },
+  disabledSlots: {
+    disabledSlots: [],
+    today: "",
   },
 };
 
@@ -57,6 +70,18 @@ const appSlice = createSlice({
         isDayEmpty: false,
         markedActiveDay: 0,
       };
+      state.payment = {
+        id_platforms_date_time_slot: 0,
+        id_platforms_field: 0,
+        platforms_date_time_start: "",
+        platforms_date_time_end: "",
+        active: 0,
+        stripe_id: "",
+      };
+      state.disabledSlots = {
+        disabledSlots: [],
+        today: "",
+      };
     },
     fetchPlatformFieldsStart(state) {
       state.isLoading = true;
@@ -88,6 +113,55 @@ const appSlice = createSlice({
     setMarkedActiveDay(state, action: PayloadAction<number>) {
       state.schedule.markedActiveDay = action.payload;
     },
+    insertPlatformDateTimeSlotStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    insertPlatformDateTimeSlotSuccess(
+      state,
+      action: PayloadAction<PaymentState>
+    ) {
+      state.isLoading = false;
+      state.payment = action.payload;
+    },
+    insertPlatformDateTimeSlotFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    deletePlatformDateTimeSlotStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    deletePlatformDateTimeSlotSuccess(state) {
+      state.isLoading = false;
+      state.payment = {
+        id_platforms_date_time_slot: 0,
+        id_platforms_field: 0,
+        platforms_date_time_start: "",
+        platforms_date_time_end: "",
+        active: 0,
+        stripe_id: "",
+      };
+    },
+    deletePlatformDateTimeSlotFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    fetchgetDisabledSlotsStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    fetchgetDisabledSlotsSuccess(state, action: PayloadAction<string[]>) {
+      state.isLoading = false;
+      state.disabledSlots.disabledSlots = action.payload;
+    },
+    fetchgetDisabledSlotsFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    setSelectedDay(state, action: PayloadAction<string>) {
+      state.disabledSlots.today = action.payload;
+    },
   },
 });
 
@@ -103,6 +177,16 @@ export const {
   fetchPlatformsFieldsFailure,
   setIsDayEmpty,
   setMarkedActiveDay,
+  insertPlatformDateTimeSlotStart,
+  insertPlatformDateTimeSlotSuccess,
+  insertPlatformDateTimeSlotFailure,
+  deletePlatformDateTimeSlotStart,
+  deletePlatformDateTimeSlotSuccess,
+  deletePlatformDateTimeSlotFailure,
+  fetchgetDisabledSlotsStart,
+  fetchgetDisabledSlotsSuccess,
+  fetchgetDisabledSlotsFailure,
+  setSelectedDay,
 } = appSlice.actions;
 
 export default appSlice.reducer;

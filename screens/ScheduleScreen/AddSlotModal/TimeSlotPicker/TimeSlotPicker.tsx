@@ -1,46 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TimeSlotPickerStyles } from "./TimeSlotPicker.style";
+import {
+  formatTimeLabel,
+  generateTimeSlots,
+} from "../../../../utils/UtilsFunctions";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../../store";
+import {
+  selectDisabledSlots,
+  selectPlatformsFields,
+} from "../../../../store/selectors";
+import { fetchgetDisabledSlots } from "../../../../store/effects";
 
 interface TimeSlotPickerProps {
   selectedTime: string;
   onTimeChange: (time: string) => void;
-  disabledSlots: string[];
 }
 
 const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   selectedTime,
   onTimeChange,
-  disabledSlots,
 }) => {
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = 8; hour <= 23; hour++) {
-      const fullHour = Math.floor(hour);
-      const minutes = (hour % 1) * 60;
-      const formattedHour = fullHour < 10 ? `0${fullHour}` : fullHour;
-      const formattedMinutes = minutes === 0 ? "00" : minutes;
-      const time = `${formattedHour}:${formattedMinutes}:00`;
-      if (!disabledSlots.includes(time)) {
-        slots.push(time);
-      }
+  const dispatch: AppDispatch = useDispatch();
+  const disabledSlots = useSelector(selectDisabledSlots);
+  const platformsFields = useSelector(selectPlatformsFields);
+
+  useEffect(() => {
+    dispatch(
+      fetchgetDisabledSlots(
+        disabledSlots.today,
+        platformsFields.id_platforms_field
+      )
+    );
+  }, [dispatch]);
+
+  const renderPickerItem = (slot: string) => {
+    console.log("slot", slot);
+    if (slot === "") {
+      return (
+        <Picker.Item key={slot} label={slot} value={slot} enabled={false} />
+      );
+    } else {
+      return <Picker.Item key={slot} label={slot} value={slot} />;
     }
-    return slots;
   };
-
-  const formatTimeLabel = (time: string) => {
-    const [hour, minutes] = time.split(":");
-    const hourInt = parseInt(hour, 10);
-    const ampm = hourInt >= 12 ? "PM" : "AM";
-    const formattedHour = hourInt % 12 || 12;
-    const formattedTime = `${
-      formattedHour < 10 ? `0${formattedHour}` : formattedHour
-    }:${minutes} ${ampm}`;
-    return formattedTime;
-  };
-
-  const timeSlots = generateTimeSlots();
 
   return (
     <View style={TimeSlotPickerStyles.pickerContainer}>
@@ -49,9 +54,9 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
         onValueChange={(itemValue) => onTimeChange(itemValue)}
         style={TimeSlotPickerStyles.picker}
       >
-        {timeSlots.map((slot) => (
-          <Picker.Item key={slot} label={formatTimeLabel(slot)} value={slot} />
-        ))}
+        {generateTimeSlots(8, 23, 1.5, disabledSlots.disabledSlots).map(
+          renderPickerItem
+        )}
       </Picker>
     </View>
   );

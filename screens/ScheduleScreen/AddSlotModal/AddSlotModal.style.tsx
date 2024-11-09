@@ -35,4 +35,14 @@ export const AddSlotModalStyles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
+
+  containerCard: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    padding: 8,
+  },
+  cardField: {
+    height: 50,
+  },
 });
