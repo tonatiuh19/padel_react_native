@@ -37,7 +37,6 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   }, [dispatch]);
 
   const renderPickerItem = (slot: string) => {
-    console.log("slot", slot);
     if (slot === "") {
       return (
         <Picker.Item key={slot} label={slot} value={slot} enabled={false} />
