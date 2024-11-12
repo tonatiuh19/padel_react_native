@@ -37,6 +37,9 @@ const initialState: AppState = {
     disabledSlots: [],
     today: "",
   },
+  userInfo: {
+    isSignedIn: false,
+  },
 };
 
 const appSlice = createSlice({
@@ -81,6 +84,9 @@ const appSlice = createSlice({
       state.disabledSlots = {
         disabledSlots: [],
         today: "",
+      };
+      state.userInfo = {
+        isSignedIn: false,
       };
     },
     fetchPlatformFieldsStart(state) {
@@ -162,6 +168,18 @@ const appSlice = createSlice({
     setSelectedDay(state, action: PayloadAction<string>) {
       state.disabledSlots.today = action.payload;
     },
+    validateUserSessionStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    validateUserSessionSuccess(state) {
+      state.userInfo.isSignedIn = true;
+      state.isLoading = false;
+    },
+    validateUserSessionFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -187,6 +205,9 @@ export const {
   fetchgetDisabledSlotsSuccess,
   fetchgetDisabledSlotsFailure,
   setSelectedDay,
+  validateUserSessionStart,
+  validateUserSessionSuccess,
+  validateUserSessionFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

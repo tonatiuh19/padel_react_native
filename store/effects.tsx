@@ -18,6 +18,9 @@ import {
   fetchgetDisabledSlotsStart,
   fetchgetDisabledSlotsSuccess,
   fetchgetDisabledSlotsFailure,
+  validateUserSessionStart,
+  validateUserSessionSuccess,
+  validateUserSessionFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -32,6 +35,7 @@ const CREATE_PAYMENT_INTENT = `${DOMAIN}/createPaymentIntent.php`;
 const INSERT_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/insertPlatformDateTimeSlot.php`;
 const DELETE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/deletePlatformDateTimeSlot.php`;
 const GET_DISABLED_SLOTS = `${DOMAIN}/getDisabledSlots.php`;
+const VALIDATE_USER_SESSION = `${DOMAIN}/validateUserSession.php`;
 
 export const fetchPlatformFields =
   (id_platform: number) =>
@@ -162,6 +166,29 @@ export const fetchgetDisabledSlots =
     } catch (error) {
       console.log("Error", error);
       dispatch(fetchgetDisabledSlotsFailure());
+    }
+  };
+
+export const validateUserSession =
+  (id_platforms_user: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/validateUserSessionStart"
+        | "app/validateUserSessionSuccess"
+        | "app/validateUserSessionFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(validateUserSessionStart());
+      const response = await axios.post<any>(VALIDATE_USER_SESSION, {
+        id_platforms_user,
+      });
+      dispatch(validateUserSessionSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(validateUserSessionFailure());
     }
   };
 

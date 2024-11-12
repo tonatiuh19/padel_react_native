@@ -17,6 +17,7 @@ export interface AppState {
   schedule: ScheduleState;
   payment: PaymentState;
   disabledSlots: DisabledSlotsState;
+  userInfo: UserState;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -38,6 +39,16 @@ export interface PaymentState {
 export interface DisabledSlotsState {
   disabledSlots: string[];
   today: string;
+}
+
+export interface UserState {
+  isSignedIn: boolean;
+  info?: UserInfo;
+}
+
+export interface UserInfo {
+  id_platforms_user: number;
+  full_name: string;
 }
 
 export interface PlatformField {

@@ -18,3 +18,5 @@ export const selectPayment = (state: RootState) => state.app.payment;
 
 export const selectDisabledSlots = (state: RootState) =>
   state.app.disabledSlots;
+
+export const selectUserInfo = (state: RootState) => state.app.userInfo;
