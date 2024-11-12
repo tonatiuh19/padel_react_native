@@ -43,12 +43,15 @@ export interface DisabledSlotsState {
 
 export interface UserState {
   isSignedIn: boolean;
-  info?: UserInfo;
+  isUserExist: boolean;
+  info: UserInfo;
 }
 
 export interface UserInfo {
   id_platforms_user: number;
   full_name: string;
+  phone_number: number;
+  phone_number_code: string;
 }
 
 export interface PlatformField {

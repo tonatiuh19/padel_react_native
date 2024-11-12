@@ -61,3 +61,36 @@ export const generateTimeSlots = (
   }
   return slots;
 };
+
+export const getFlagImage = (zone: string) => {
+  switch (zone) {
+    case "+52":
+      return { uri: "https://garbrix.com/padel/assets/images/mx.png" };
+    case "+1":
+      return { uri: "https://garbrix.com/padel/assets/images/us.png" };
+    default:
+      return { uri: "https://garbrix.com/padel/assets/images/mx.png" };
+  }
+};
+
+export const formatDate = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const monthNames = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day} de ${month} de ${year}`;
+};

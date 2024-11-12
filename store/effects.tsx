@@ -21,6 +21,9 @@ import {
   validateUserSessionStart,
   validateUserSessionSuccess,
   validateUserSessionFailure,
+  validateUserByPhoneNumberStart,
+  validateUserByPhoneNumberSuccess,
+  validateUserByPhoneNumberFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -36,6 +39,7 @@ const INSERT_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/insertPlatformDateTimeSlot.php
 const DELETE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/deletePlatformDateTimeSlot.php`;
 const GET_DISABLED_SLOTS = `${DOMAIN}/getDisabledSlots.php`;
 const VALIDATE_USER_SESSION = `${DOMAIN}/validateUserSession.php`;
+const VALIDATE_USER_BY_PHONE_NUMBER = `${DOMAIN}/validateUserByPhoneNumber.php`;
 
 export const fetchPlatformFields =
   (id_platform: number) =>
@@ -189,6 +193,31 @@ export const validateUserSession =
     } catch (error) {
       console.log("Error", error);
       dispatch(validateUserSessionFailure());
+    }
+  };
+
+export const validateUserByPhoneNumber =
+  (phone_number: number, phone_number_code: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/validateUserByPhoneNumberStart"
+        | "app/validateUserByPhoneNumberSuccess"
+        | "app/validateUserByPhoneNumberFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(
+        validateUserByPhoneNumberStart({ phone_number, phone_number_code })
+      );
+      const response = await axios.post<any>(VALIDATE_USER_BY_PHONE_NUMBER, {
+        phone_number,
+      });
+      dispatch(validateUserByPhoneNumberSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(validateUserByPhoneNumberFailure());
     }
   };
 

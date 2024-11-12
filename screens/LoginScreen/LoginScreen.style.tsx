@@ -28,16 +28,20 @@ export const LoginScreenStyles = StyleSheet.create({
     elevation: 5,
   },
   input: {
-    height: 40,
-    borderColor: "#333333", // Dark gray border
+    height: 50,
+    borderColor: "#e1dd2a", // Dark gray border
+    borderRadius: 22,
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
     backgroundColor: "#000000", // Black background for input
-    color: "#ffffff", // White text color
+    color: "#e1dd2a", // White text color
     width: "100%",
+    padding: 15,
+    paddingLeft: 25,
+    paddingRight: 25,
   },
-  phoneContainer: {
+  generalContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
@@ -121,5 +125,45 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   buttonText: {
     color: "#000", // White button text
+  },
+  phoneFullNumberContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#e1dd2a", // Dark gray border
+    backgroundColor: "#000000", // Black background for phone number container
+    borderWidth: 1,
+    borderRadius: 22, // Equivalent to 1.375rem
+  },
+  phoneZoneContainer: {
+    flexDirection: "row",
+    backgroundColor: "#000000", // Black background for phone zone container
+    borderWidth: 1,
+    borderTopLeftRadius: 22, // Equivalent to 1.375rem
+    borderBottomLeftRadius: 22,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 5,
+    paddingLeft: 10,
+  },
+  flagImage: {
+    width: 35,
+    height: 18,
+    marginRight: 8,
+    marginLeft: 5,
+  },
+  phoneZoneText: {
+    color: "#e1dd2a", // White text color
+  },
+  phoneNumberContainer: {
+    backgroundColor: "#000000", // Black background for phone number container
+    borderWidth: 1,
+    borderTopRightRadius: 22, // Equivalent to 1.375rem
+    borderBottomRightRadius: 22,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  phoneNumberText: {
+    color: "#e1dd2a", // White text color
   },
 });

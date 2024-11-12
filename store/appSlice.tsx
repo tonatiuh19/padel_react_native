@@ -39,6 +39,13 @@ const initialState: AppState = {
   },
   userInfo: {
     isSignedIn: false,
+    isUserExist: false,
+    info: {
+      id_platforms_user: 0,
+      full_name: "",
+      phone_number: 0,
+      phone_number_code: "",
+    },
   },
 };
 
@@ -87,6 +94,13 @@ const appSlice = createSlice({
       };
       state.userInfo = {
         isSignedIn: false,
+        isUserExist: false,
+        info: {
+          id_platforms_user: 0,
+          full_name: "",
+          phone_number: 0,
+          phone_number_code: "",
+        },
       };
     },
     fetchPlatformFieldsStart(state) {
@@ -172,11 +186,31 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    validateUserSessionSuccess(state) {
-      state.userInfo.isSignedIn = true;
+    validateUserSessionSuccess(state, action: PayloadAction<boolean>) {
+      state.userInfo.isSignedIn = action.payload;
       state.isLoading = false;
     },
     validateUserSessionFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    validateUserByPhoneNumberStart(
+      state,
+      action: PayloadAction<{
+        phone_number: number;
+        phone_number_code: string;
+      }>
+    ) {
+      state.userInfo.info.phone_number = action.payload.phone_number;
+      state.userInfo.info.phone_number_code = action.payload.phone_number_code;
+      state.isLoading = true;
+      state.isError = false;
+    },
+    validateUserByPhoneNumberSuccess(state, action: PayloadAction<boolean>) {
+      state.userInfo.isUserExist = action.payload;
+      state.isLoading = false;
+    },
+    validateUserByPhoneNumberFailure(state) {
       state.isLoading = false;
       state.isError = true;
     },
@@ -208,6 +242,9 @@ export const {
   validateUserSessionStart,
   validateUserSessionSuccess,
   validateUserSessionFailure,
+  validateUserByPhoneNumberStart,
+  validateUserByPhoneNumberSuccess,
+  validateUserByPhoneNumberFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
