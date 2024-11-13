@@ -8,7 +8,7 @@ export const ReservationCardStyles = StyleSheet.create({
   card: {
     marginBottom: 8, // Only apply margin to the bottom
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 22,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#ddd",
@@ -37,6 +37,7 @@ export const ReservationCardStyles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 22,
     color: "#e1dd2a",
+    fontFamily: "Kanit-Regular",
   },
   columnCenterDetailsContainer: {
     flex: 1,

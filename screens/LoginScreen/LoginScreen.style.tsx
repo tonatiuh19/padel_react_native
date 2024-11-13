@@ -36,6 +36,7 @@ export const LoginScreenStyles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#000000", // Black background for input
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
     width: "100%",
     padding: 15,
     paddingLeft: 25,
@@ -54,6 +55,7 @@ export const LoginScreenStyles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#000000", // Black background for input
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
     width: "100%",
     padding: 15,
     paddingLeft: 25,
@@ -92,6 +94,7 @@ export const LoginScreenStyles = StyleSheet.create({
   picker: {
     width: 80, // Adjust width to ensure it displays correctly
     color: "#ffffff", // White text color
+    fontFamily: "Kanit-Regular",
     backgroundColor: "#000000", // Black background for picker
     fontSize: 14, // Set a reasonable font size
     paddingVertical: 5, // Decrease vertical padding
@@ -104,6 +107,7 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   pickerText: {
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
     fontSize: 14, // Set a reasonable font size
   },
   pickerTouchable: {
@@ -121,6 +125,7 @@ export const LoginScreenStyles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#000000", // Black background for input
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
     borderTopRightRadius: 22, // Equivalent to 1.375rem
     borderBottomRightRadius: 22,
   },
@@ -129,6 +134,7 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   error: {
     color: "#ff0000", // Red error text
+    fontFamily: "Kanit-Regular",
     marginTop: 5,
     marginBottom: 20,
   },
@@ -143,10 +149,12 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   buttonText: {
     color: "#000", // White button text
+    fontFamily: "Kanit-Regular",
   },
   secondaryButton: {
     backgroundColor: "#000", // Dark gray button background
     color: "#e1dd2a", // White button text
+    fontFamily: "Kanit-Regular",
     padding: 10,
     borderRadius: 22,
     borderColor: "#e1dd2a", // Dark gray border
@@ -157,6 +165,7 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   secodnaryButtonText: {
     color: "#e1dd2a", // White button text
+    fontFamily: "Kanit-Regular",
   },
   phoneFullNumberContainer: {
     flexDirection: "row",
@@ -185,6 +194,7 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   phoneZoneText: {
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
   },
   phoneNumberContainer: {
     backgroundColor: "#000000", // Black background for phone number container
@@ -197,9 +207,11 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   phoneNumberText: {
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
   },
   label: {
     color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
     marginBottom: 20,
     textAlign: "center",
     fontSize: 16,

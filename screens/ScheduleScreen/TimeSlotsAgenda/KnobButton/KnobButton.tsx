@@ -10,7 +10,7 @@ export const KnobButton = () => {
         name="down"
         style={KnobButtonStyles.knobButtonText}
         size={24}
-        color="#54a468"
+        color="#000"
       />
     </TouchableOpacity>
   );

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { RefreshControl, ScrollView } from "react-native";
-import { HomeScreenStyles } from "./HomeScreen.style";
+import { RefreshControl, ScrollView, View, Text } from "react-native";
+import { HomeScreenStyles, HomeScreenWidth } from "./HomeScreen.style";
 import ReservationCard from "./shared/components/ReservationCard/ReservationCard";
 import { Layout } from "@ui-kitten/components";
 import { selectPlatformFields } from "../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlatformFields } from "../../store/effects";
 import { AppDispatch } from "../../store";
+import Carousel from "react-native-reanimated-carousel";
 
 export default function HomeScreen() {
   const dispatch: AppDispatch = useDispatch();
@@ -24,6 +25,26 @@ export default function HomeScreen() {
     });
   };
 
+  const renderCarouselItem = ({ item }: { item: any }) => (
+    <View
+      style={{
+        flex: 1,
+        borderRadius: 22,
+        justifyContent: "center",
+      }}
+    >
+      <ReservationCard
+        key={item.id_platforms_field}
+        id_platforms_field={item.id_platforms_field}
+        title={item.title}
+        field={item}
+        time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
+        player="John Doe" // Example player, replace with actual data if available
+        images={item.carrouselImages.map((image: any) => ({ uri: image.path }))}
+      />
+    </View>
+  );
+
   return (
     <Layout style={HomeScreenStyles.container}>
       <ScrollView
@@ -32,17 +53,22 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {platformFields.map((field) => (
-          <ReservationCard
-            key={field.id_platforms_field}
-            id_platforms_field={field.id_platforms_field}
-            title={field.title}
-            field={field}
-            time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
-            player="John Doe" // Example player, replace with actual data if available
-            images={field.carrouselImages.map((image) => ({ uri: image.path }))}
+        <View style={{ flex: 1 }}>
+          <Carousel
+            loop
+            width={HomeScreenWidth}
+            height={HomeScreenWidth / 2}
+            autoPlay={true}
+            data={platformFields}
+            scrollAnimationDuration={1800}
+            mode="parallax"
+            modeConfig={{
+              parallaxScrollingScale: 0.9,
+              parallaxScrollingOffset: 50,
+            }}
+            renderItem={renderCarouselItem}
           />
-        ))}
+        </View>
       </ScrollView>
     </Layout>
   );

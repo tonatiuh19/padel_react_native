@@ -21,9 +21,11 @@ const BottomTabBarStyles = StyleSheet.create({
   },
   titleSelected: {
     color: "#e1dd2a", // Change to your desired selected color
+    fontFamily: "Kanit-Regular",
   },
   titleUnselected: {
     color: "#808080", // Change to your desired unselected color
+    fontFamily: "Kanit-Regular",
   },
   indicatorStyle: {
     backgroundColor: "#e1dd2a", // Change to your desired selected color
