@@ -9,6 +9,7 @@ import store, { RootState } from "./store";
 import LoadingMask from "./screens/HomeScreen/shared/components/LoadingMask/LoadingMask";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Font from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const STRIPE_PUBLBISHABLE_KEY =
   "pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny";
@@ -41,7 +42,11 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    loadFonts().then(() => setFontsLoaded(true));
+    SplashScreen.preventAutoHideAsync();
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+      SplashScreen.hideAsync();
+    });
   }, []);
 
   if (!fontsLoaded) {

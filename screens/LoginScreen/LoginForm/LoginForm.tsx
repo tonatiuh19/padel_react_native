@@ -1,5 +1,12 @@
-import React from "react";
-import { View, TextInput, Text, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Image,
+  Animated,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { LoginScreenStyles } from "../LoginScreen.style";
 import { Formik } from "formik";
@@ -16,6 +23,16 @@ const LoginForm: React.FC<any> = ({
       .required("Número de teléfono es requerido")
       .matches(/^\d{10}$/, "El número de teléfono debe tener 10 dígitos"),
   });
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
   return (
     <Formik
@@ -34,7 +51,7 @@ const LoginForm: React.FC<any> = ({
         errors,
         touched,
       }) => (
-        <>
+        <Animated.View style={{ opacity: fadeAnim, width: "100%" }}>
           <View
             style={
               errors.phoneNumber && touched.phoneNumber
@@ -89,7 +106,7 @@ const LoginForm: React.FC<any> = ({
           >
             <Text style={LoginScreenStyles.buttonText}>Continuar</Text>
           </TouchableOpacity>
-        </>
+        </Animated.View>
       )}
     </Formik>
   );
