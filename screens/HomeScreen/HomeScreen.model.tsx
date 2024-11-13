@@ -50,8 +50,15 @@ export interface UserState {
 export interface UserInfo {
   id_platforms_user: number;
   full_name: string;
+  age: number;
+  date_of_birth: string;
   phone_number: number;
-  phone_number_code: string;
+  stripe_id: string;
+  type: number;
+  date_created: string;
+  id_platforms_users_session: number;
+  code: number;
+  session: boolean;
 }
 
 export interface PlatformField {
