@@ -60,48 +60,7 @@ const appSlice = createSlice({
       state.isError = action.payload;
     },
     clearState(state) {
-      state.isLoading = false;
-      state.isError = false;
-      state.platformFields = {
-        title: "",
-        today: "",
-        start_time: "",
-        end_time: "",
-        platforms_fields: [],
-      };
-      state.platformsFields = {
-        id_platforms_field: 0,
-        title: "",
-        today: "",
-        markedDates: {},
-        slots: {},
-      };
-      state.schedule = {
-        isDayEmpty: false,
-        markedActiveDay: 0,
-      };
-      state.payment = {
-        id_platforms_date_time_slot: 0,
-        id_platforms_field: 0,
-        platforms_date_time_start: "",
-        platforms_date_time_end: "",
-        active: 0,
-        stripe_id: "",
-      };
-      state.disabledSlots = {
-        disabledSlots: [],
-        today: "",
-      };
-      state.userInfo = {
-        isSignedIn: false,
-        isUserExist: false,
-        info: {
-          id_platforms_user: 0,
-          full_name: "",
-          phone_number: 0,
-          phone_number_code: "",
-        },
-      };
+      state = initialState;
     },
     fetchPlatformFieldsStart(state) {
       state.isLoading = true;
@@ -213,6 +172,14 @@ const appSlice = createSlice({
     validateUserByPhoneNumberFailure(state) {
       state.isLoading = false;
       state.isError = true;
+    },
+    insertPlatformUserStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    insertPlatformUserSuccess(state, action: PayloadAction<any>) {
+      state.userInfo.info = action.payload;
+      state.isLoading = false;
     },
   },
 });

@@ -46,6 +46,23 @@ export const LoginScreenStyles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
+  inputError: {
+    height: 50,
+    borderColor: "#e1dd2a", // Dark gray border
+    borderRadius: 22,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    backgroundColor: "#000000", // Black background for input
+    color: "#e1dd2a", // White text color
+    width: "100%",
+    padding: 15,
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  generalContainerError: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   flagContainer: {
     height: 70,
     justifyContent: "center", // Center vertically
@@ -112,7 +129,8 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   error: {
     color: "#ff0000", // Red error text
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: "#e1dd2a", // Dark gray button background
@@ -125,6 +143,20 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   buttonText: {
     color: "#000", // White button text
+  },
+  secondaryButton: {
+    backgroundColor: "#000", // Dark gray button background
+    color: "#e1dd2a", // White button text
+    padding: 10,
+    borderRadius: 22,
+    borderColor: "#e1dd2a", // Dark gray border
+    borderWidth: 1,
+    marginTop: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  secodnaryButtonText: {
+    color: "#e1dd2a", // White button text
   },
   phoneFullNumberContainer: {
     flexDirection: "row",
@@ -165,5 +197,11 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   phoneNumberText: {
     color: "#e1dd2a", // White text color
+  },
+  label: {
+    color: "#e1dd2a", // White text color
+    marginBottom: 20,
+    textAlign: "center",
+    fontSize: 16,
   },
 });

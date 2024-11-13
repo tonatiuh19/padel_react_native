@@ -12,11 +12,6 @@ const LoginForm: React.FC<any> = ({
   getFlagImage,
 }) => {
   const validationSchema = Yup.object().shape({
-    /*fullName: Yup.string().required("Nombre completo es requerido"),
-    age: Yup.number()
-      .required("Edad válida es requerida")
-      .typeError("Edad válida es requerida"),
-    dateOfBirth: Yup.string().required("Fecha de nacimiento es requerida"),*/
     phoneNumber: Yup.string()
       .required("Número de teléfono es requerido")
       .matches(/^\d{10}$/, "El número de teléfono debe tener 10 dígitos"),
@@ -40,7 +35,13 @@ const LoginForm: React.FC<any> = ({
         touched,
       }) => (
         <>
-          <View style={LoginScreenStyles.generalContainer}>
+          <View
+            style={
+              errors.phoneNumber && touched.phoneNumber
+                ? LoginScreenStyles.generalContainerError
+                : LoginScreenStyles.generalContainer
+            }
+          >
             <View style={LoginScreenStyles.pickerContainer}>
               <TouchableOpacity
                 onPress={() => setPickerVisible(true)}

@@ -8,6 +8,7 @@ import { selectUserInfo } from "../../../store/selectors";
 import { useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDate } from "../../../utils/UtilsFunctions";
+import CodeValidationForm from "../CodeValidationForm/CodeValidationForm";
 
 const SignInForm: React.FC<any> = ({
   isUserExist,
@@ -38,6 +39,11 @@ const SignInForm: React.FC<any> = ({
     dateOfBirth: Yup.string().required("Fecha de nacimiento es requerida"),
   });
 
+  const handleCodeValidation = (values: any) => {
+    console.log("Code Validation", values);
+    // Handle code validation logic here
+  };
+
   return (
     <Formik
       initialValues={{
@@ -61,7 +67,11 @@ const SignInForm: React.FC<any> = ({
           {!isUserExist ? (
             <>
               <TextInput
-                style={LoginScreenStyles.input}
+                style={
+                  errors.fullName && touched.fullName
+                    ? LoginScreenStyles.inputError
+                    : LoginScreenStyles.input
+                }
                 placeholder="Nombre Completo"
                 placeholderTextColor="#c7c585"
                 onChangeText={handleChange("fullName")}
@@ -72,7 +82,11 @@ const SignInForm: React.FC<any> = ({
                 <Text style={LoginScreenStyles.error}>{errors.fullName}</Text>
               )}
               <TextInput
-                style={LoginScreenStyles.input}
+                style={
+                  errors.age && touched.age
+                    ? LoginScreenStyles.inputError
+                    : LoginScreenStyles.input
+                }
                 placeholder="Edad"
                 placeholderTextColor="#c7c585"
                 onChangeText={handleChange("age")}
@@ -84,11 +98,19 @@ const SignInForm: React.FC<any> = ({
                 <Text style={LoginScreenStyles.error}>{errors.age}</Text>
               )}
               <TouchableOpacity
-                style={LoginScreenStyles.generalContainer}
+                style={
+                  errors.dateOfBirth && touched.dateOfBirth
+                    ? LoginScreenStyles.generalContainerError
+                    : LoginScreenStyles.generalContainer
+                }
                 onPress={() => setShow(true)}
               >
                 <TextInput
-                  style={LoginScreenStyles.input}
+                  style={
+                    errors.dateOfBirth && touched.dateOfBirth
+                      ? LoginScreenStyles.inputError
+                      : LoginScreenStyles.input
+                  }
                   placeholder="Fecha de Nacimiento"
                   placeholderTextColor="#c7c585"
                   value={values.dateOfBirth}
@@ -134,17 +156,19 @@ const SignInForm: React.FC<any> = ({
                 style={LoginScreenStyles.button}
                 onPress={() => handleSubmit()}
               >
-                <Text style={LoginScreenStyles.buttonText}>Registrarse</Text>
+                <Text style={LoginScreenStyles.buttonText}>Continuar</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={LoginScreenStyles.button}
+                style={LoginScreenStyles.secondaryButton}
                 onPress={() => setNextSection(false)}
               >
-                <Text style={LoginScreenStyles.buttonText}>Volver</Text>
+                <Text style={LoginScreenStyles.secodnaryButtonText}>
+                  Volver
+                </Text>
               </TouchableOpacity>
             </>
           ) : (
-            <Text>Si existe</Text>
+            <CodeValidationForm handleCodeValidation={handleCodeValidation} />
           )}
         </>
       )}
