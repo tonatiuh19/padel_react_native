@@ -24,6 +24,12 @@ import {
   validateUserByPhoneNumberStart,
   validateUserByPhoneNumberSuccess,
   validateUserByPhoneNumberFailure,
+  insertPlatformUserStart,
+  insertPlatformUserSuccess,
+  insertPlatformUserFailure,
+  sendCodeStart,
+  sendCodeSuccess,
+  sendCodeFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -40,6 +46,28 @@ const DELETE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/deletePlatformDateTimeSlot.php
 const GET_DISABLED_SLOTS = `${DOMAIN}/getDisabledSlots.php`;
 const VALIDATE_USER_SESSION = `${DOMAIN}/validateUserSession.php`;
 const VALIDATE_USER_BY_PHONE_NUMBER = `${DOMAIN}/validateUserByPhoneNumber.php`;
+const INSERT_PLATFORM_USER = `${DOMAIN}/insertPlatformUser.php`;
+const SEND_CODE = `${DOMAIN}/sendCode.php`;
+
+export const fetchPaymentIntentClientSecret = async (amount: number) => {
+  try {
+    const response = await axios.post(
+      CREATE_PAYMENT_INTENT,
+      {
+        items: [{ id: "id" }],
+        amount: amount * 100,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const { clientSecret } = response.data;
+    return clientSecret;
+  } catch (error) {
+    console.error("Error fetching client secret:", error);
+    throw error;
+  }
+};
 
 export const fetchPlatformFields =
   (id_platform: number) =>
@@ -197,7 +225,7 @@ export const validateUserSession =
   };
 
 export const validateUserByPhoneNumber =
-  (phone_number: number, phone_number_code: string) =>
+  (phone_number: string, phone_number_code: string) =>
   async (
     dispatch: (arg0: {
       payload: any;
@@ -221,22 +249,61 @@ export const validateUserByPhoneNumber =
     }
   };
 
-export const fetchPaymentIntentClientSecret = async (amount: number) => {
-  try {
-    const response = await axios.post(
-      CREATE_PAYMENT_INTENT,
-      {
-        items: [{ id: "id" }],
-        amount: amount * 100,
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    const { clientSecret } = response.data;
-    return clientSecret;
-  } catch (error) {
-    console.error("Error fetching client secret:", error);
-    throw error;
-  }
-};
+export const insertPlatformUser =
+  (
+    full_name: string,
+    age: number,
+    date_of_birth: string,
+    phone_number_code: string,
+    phone_number: string,
+    type: number,
+    id_platforms: number
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/insertPlatformUserStart"
+        | "app/insertPlatformUserSuccess"
+        | "app/insertPlatformUserFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(insertPlatformUserStart());
+      const response = await axios.post<any>(INSERT_PLATFORM_USER, {
+        full_name,
+        age,
+        date_of_birth,
+        phone_number_code,
+        phone_number,
+        type,
+        id_platforms,
+      });
+      dispatch(insertPlatformUserSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(insertPlatformUserFailure());
+    }
+  };
+
+export const sendCode =
+  (id_platforms_user: number, id_platforms: number, method: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type: "app/sendCodeStart" | "app/sendCodeSuccess" | "app/sendCodeFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(sendCodeStart());
+      const response = await axios.post<any>(SEND_CODE, {
+        id_platforms_user,
+        id_platforms,
+        method,
+      });
+      dispatch(sendCodeSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(sendCodeFailure());
+    }
+  };

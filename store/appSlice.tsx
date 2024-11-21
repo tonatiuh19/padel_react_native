@@ -4,6 +4,7 @@ import {
   EPlatformField,
   PaymentState,
   PlatformField,
+  UserInfo,
 } from "../screens/HomeScreen/HomeScreen.model";
 
 const initialState: AppState = {
@@ -40,11 +41,18 @@ const initialState: AppState = {
   userInfo: {
     isSignedIn: false,
     isUserExist: false,
+    isCodeSent: false,
     info: {
       id_platforms_user: 0,
       full_name: "",
-      phone_number: 0,
+      age: 0,
+      date_of_birth: "",
+      phone_number: "",
       phone_number_code: "",
+      stripe_id: "",
+      type: 0,
+      date_created: "",
+      id_platforms: 0,
     },
   },
 };
@@ -156,7 +164,7 @@ const appSlice = createSlice({
     validateUserByPhoneNumberStart(
       state,
       action: PayloadAction<{
-        phone_number: number;
+        phone_number: string;
         phone_number_code: string;
       }>
     ) {
@@ -177,9 +185,28 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    insertPlatformUserSuccess(state, action: PayloadAction<any>) {
+    insertPlatformUserSuccess(state, action: PayloadAction<UserInfo>) {
       state.userInfo.info = action.payload;
+      state.userInfo.isUserExist = true;
       state.isLoading = false;
+    },
+    insertPlatformUserFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    sendCodeStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    sendCodeSuccess(state, action: PayloadAction<boolean>) {
+      if (action.payload) {
+        state.userInfo.isCodeSent = true;
+      }
+      state.isLoading = false;
+    },
+    sendCodeFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });
@@ -212,6 +239,12 @@ export const {
   validateUserByPhoneNumberStart,
   validateUserByPhoneNumberSuccess,
   validateUserByPhoneNumberFailure,
+  insertPlatformUserStart,
+  insertPlatformUserSuccess,
+  insertPlatformUserFailure,
+  sendCodeStart,
+  sendCodeSuccess,
+  sendCodeFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

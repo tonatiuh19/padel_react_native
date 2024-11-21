@@ -21,7 +21,7 @@ const SignInForm: React.FC<any> = ({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    console.log(isUserExist);
+    console.log("isUserExist", isUserExist);
   }, [isUserExist]);
 
   const onChange = (event: any, selectedDate: any, setFieldValue: any) => {
@@ -38,11 +38,6 @@ const SignInForm: React.FC<any> = ({
       .typeError("Edad válida es requerida"),
     dateOfBirth: Yup.string().required("Fecha de nacimiento es requerida"),
   });
-
-  const handleCodeValidation = (values: any) => {
-    console.log("Code Validation", values);
-    // Handle code validation logic here
-  };
 
   return (
     <Formik
@@ -168,7 +163,7 @@ const SignInForm: React.FC<any> = ({
               </TouchableOpacity>
             </>
           ) : (
-            <CodeValidationForm handleCodeValidation={handleCodeValidation} />
+            <CodeValidationForm />
           )}
         </>
       )}

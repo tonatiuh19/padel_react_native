@@ -44,6 +44,7 @@ export interface DisabledSlotsState {
 export interface UserState {
   isSignedIn: boolean;
   isUserExist: boolean;
+  isCodeSent: boolean;
   info: UserInfo;
 }
 
@@ -52,13 +53,12 @@ export interface UserInfo {
   full_name: string;
   age: number;
   date_of_birth: string;
-  phone_number: number;
+  phone_number: string;
+  phone_number_code: string;
   stripe_id: string;
   type: number;
   date_created: string;
-  id_platforms_users_session: number;
-  code: number;
-  session: boolean;
+  id_platforms: number;
 }
 
 export interface PlatformField {

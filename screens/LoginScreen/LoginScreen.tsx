@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { LoginScreenStyles } from "./LoginScreen.style";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsUserExist } from "../../store/selectors";
-import { validateUserByPhoneNumber } from "../../store/effects";
+import { selectIsUserExist, selectUserInfo } from "../../store/selectors";
+import {
+  insertPlatformUser,
+  validateUserByPhoneNumber,
+} from "../../store/effects";
 
 import SignInForm from "./SignInForm/SignInForm";
 import LoginForm from "./LoginForm/LoginForm";
@@ -14,20 +17,32 @@ import { getFlagImage } from "../../utils/UtilsFunctions";
 const LoginScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const isUserExist = useSelector(selectIsUserExist);
+  const userInfo = useSelector(selectUserInfo);
   const [nextSection, setNextSection] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
 
-  const handleSignUp = (values: any) => {
-    console.log("Sign Up", values);
-    // Handle sign up logic here
+  useEffect(() => {
+    //console.log("User Info", userInfo);
+  }, [userInfo]);
+
+  const handleSignIn = (values: any) => {
+    dispatch(
+      insertPlatformUser(
+        values.fullName,
+        values.age,
+        values.dateOfBirth,
+        userInfo.info.phone_number_code,
+        userInfo.info.phone_number,
+        1,
+        1
+      )
+    );
+    // Handle sign in logic here
   };
 
   const handleLogin = (values: any) => {
-    console.log("Log In", values);
     setNextSection(true);
-    dispatch(
-      validateUserByPhoneNumber(Number(values.phoneNumber), values.phoneZone)
-    );
+    dispatch(validateUserByPhoneNumber(values.phoneNumber, values.phoneZone));
   };
 
   return (
@@ -36,7 +51,7 @@ const LoginScreen: React.FC = () => {
         {nextSection ? (
           <SignInForm
             isUserExist={isUserExist}
-            handleSignUp={handleSignUp}
+            handleSignIn={handleSignIn}
             setNextSection={setNextSection}
             pickerVisible={pickerVisible}
             setPickerVisible={setPickerVisible}

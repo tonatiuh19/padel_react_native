@@ -151,6 +151,18 @@ export const LoginScreenStyles = StyleSheet.create({
     color: "#000", // White button text
     fontFamily: "Kanit-Regular",
   },
+  buttonLink: {
+    color: "#e1dd2a", // White button text
+    padding: 10,
+    borderRadius: 22,
+    marginTop: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  buttonLinkText: {
+    color: "#e1dd2a", // White button text
+    fontFamily: "Kanit-Regular",
+  },
   secondaryButton: {
     backgroundColor: "#000", // Dark gray button background
     color: "#e1dd2a", // White button text
@@ -215,5 +227,37 @@ export const LoginScreenStyles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     fontSize: 16,
+  },
+  radioContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 20,
+  },
+  radioOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 20,
+  },
+  radioText: {
+    color: "#ffffff", // White text color
+    marginLeft: 10,
+  },
+  timerResendText: {
+    marginTop: 20,
+    color: "#e1dd2a",
+    fontFamily: "Kanit-Regular",
+    fontSize: 15,
+  },
+  timerCodecontainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  timerCodeText: {
+    fontSize: 16,
+    color: "#e1dd2a",
+  },
+  timerCodeTextRed: {
+    color: "#e1dd2a",
   },
 });
