@@ -7,15 +7,25 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../../../store/selectors";
 import { AppDispatch } from "../../../store";
-import { sendCode } from "../../../store/effects";
+import { sendCode, validateSessionCode } from "../../../store/effects";
 import Countdown from "../../ScheduleScreen/AddSlotModal/Countdown/Countdown";
 
 const CodeValidationForm: React.FC<any> = ({}) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSendCode, setIsSendCode] = useState(false);
   const [disabledResend, setDisabledResend] = useState(true);
+  const [codeInvalid, setCodeInvalid] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
+
+  useEffect(() => {
+    if (userInfo.isIncorrectCode) {
+      setDisabledResend(false);
+      setCodeInvalid(true);
+    } else {
+      setCodeInvalid(false);
+    }
+  }, [userInfo]);
 
   const validationSchema = Yup.object().shape({
     code: Yup.string()
@@ -43,10 +53,16 @@ const CodeValidationForm: React.FC<any> = ({}) => {
 
   const handleCodeValidation = (values: any) => {
     console.log("Code Validation", values);
+    dispatch(
+      validateSessionCode(
+        userInfo.info.id_platforms_user,
+        userInfo.info.id_platforms,
+        values.code
+      )
+    );
   };
 
   const countDownComplete = (resetForm: () => void) => {
-    console.log("Countdown completed");
     setDisabledResend(false);
   };
 
@@ -129,6 +145,11 @@ const CodeValidationForm: React.FC<any> = ({}) => {
                   />
                   {errors.code && touched.code && (
                     <Text style={LoginScreenStyles.error}>{errors.code}</Text>
+                  )}
+                  {codeInvalid && (
+                    <Text style={LoginScreenStyles.error}>
+                      El codigo es incorrecto
+                    </Text>
                   )}
                   <TouchableOpacity
                     style={LoginScreenStyles.button}

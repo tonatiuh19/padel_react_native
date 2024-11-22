@@ -30,6 +30,9 @@ import {
   sendCodeStart,
   sendCodeSuccess,
   sendCodeFailure,
+  validateSessionCodeStart,
+  validateSessionCodeSuccess,
+  validateSessionCodeFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -48,6 +51,7 @@ const VALIDATE_USER_SESSION = `${DOMAIN}/validateUserSession.php`;
 const VALIDATE_USER_BY_PHONE_NUMBER = `${DOMAIN}/validateUserByPhoneNumber.php`;
 const INSERT_PLATFORM_USER = `${DOMAIN}/insertPlatformUser.php`;
 const SEND_CODE = `${DOMAIN}/sendCode.php`;
+const VALIDATE_SESSION_CODE = `${DOMAIN}/validateSessionCode.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -305,5 +309,30 @@ export const sendCode =
     } catch (error) {
       console.log("Error", error);
       dispatch(sendCodeFailure());
+    }
+  };
+
+export const validateSessionCode =
+  (id_platforms_user: number, id_platforms: number, code: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/validateSessionCodeStart"
+        | "app/validateSessionCodeSuccess"
+        | "app/validateSessionCodeFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(validateSessionCodeStart());
+      const response = await axios.post<any>(VALIDATE_SESSION_CODE, {
+        id_platforms_user,
+        id_platforms,
+        code,
+      });
+      dispatch(validateSessionCodeSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(validateSessionCodeFailure());
     }
   };

@@ -45,6 +45,7 @@ export interface UserState {
   isSignedIn: boolean;
   isUserExist: boolean;
   isCodeSent: boolean;
+  isIncorrectCode: boolean;
   info: UserInfo;
 }
 

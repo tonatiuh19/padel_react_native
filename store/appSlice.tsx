@@ -42,6 +42,7 @@ const initialState: AppState = {
     isSignedIn: false,
     isUserExist: false,
     isCodeSent: false,
+    isIncorrectCode: false,
     info: {
       id_platforms_user: 0,
       full_name: "",
@@ -208,6 +209,19 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    validateSessionCodeStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    validateSessionCodeSuccess(state, action: PayloadAction<boolean>) {
+      state.userInfo.isSignedIn = action.payload;
+      state.userInfo.isIncorrectCode = action.payload ? false : true;
+      state.isLoading = false;
+    },
+    validateSessionCodeFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -245,6 +259,9 @@ export const {
   sendCodeStart,
   sendCodeSuccess,
   sendCodeFailure,
+  validateSessionCodeStart,
+  validateSessionCodeSuccess,
+  validateSessionCodeFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
