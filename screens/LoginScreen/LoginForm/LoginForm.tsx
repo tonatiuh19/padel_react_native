@@ -11,17 +11,13 @@ import { Picker } from "@react-native-picker/picker";
 import { LoginScreenStyles } from "../LoginScreen.style";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import Feather from "@expo/vector-icons/Feather";
 
-const LoginForm: React.FC<any> = ({
-  handleLogin,
-  pickerVisible,
-  setPickerVisible,
-  getFlagImage,
-}) => {
+const LoginForm: React.FC<any> = ({ handleLogin }) => {
   const validationSchema = Yup.object().shape({
-    phoneNumber: Yup.string()
-      .required("Número de teléfono es requerido")
-      .matches(/^\d{10}$/, "El número de teléfono debe tener 10 dígitos"),
+    email: Yup.string()
+      .email("El Correo electrónico no es válido")
+      .required("Tu Correo electrónico es requerido"),
   });
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -37,8 +33,7 @@ const LoginForm: React.FC<any> = ({
   return (
     <Formik
       initialValues={{
-        phoneNumber: "",
-        phoneZone: "+52", // Default to Mexico
+        email: "",
       }}
       validationSchema={validationSchema}
       onSubmit={handleLogin}
@@ -54,51 +49,28 @@ const LoginForm: React.FC<any> = ({
         <Animated.View style={{ opacity: fadeAnim, width: "100%" }}>
           <View
             style={
-              errors.phoneNumber && touched.phoneNumber
+              errors.email && touched.email
                 ? LoginScreenStyles.generalContainerError
                 : LoginScreenStyles.generalContainer
             }
           >
             <View style={LoginScreenStyles.pickerContainer}>
-              <TouchableOpacity
-                onPress={() => setPickerVisible(true)}
-                style={LoginScreenStyles.pickerTouchable}
-              >
-                <Image
-                  source={getFlagImage(values.phoneZone)}
-                  style={LoginScreenStyles.flag}
-                />
-                <Text style={LoginScreenStyles.pickerText}>
-                  {values.phoneZone}
-                </Text>
-              </TouchableOpacity>
-              <Picker
-                selectedValue={values.phoneZone}
-                style={[
-                  LoginScreenStyles.hiddenPicker,
-                  pickerVisible && { opacity: 1 },
-                ]}
-                onValueChange={(itemValue) => {
-                  handleChange("phoneZone")(itemValue);
-                  setPickerVisible(false);
-                }}
-              >
-                <Picker.Item label="+52 (Mexico)" value="+52" />
-                <Picker.Item label="+1 (USA)" value="+1" />
-              </Picker>
+              <View style={LoginScreenStyles.pickerTouchable}>
+                <Feather name="mail" size={18} color="#e1dd2a" />
+              </View>
             </View>
             <TextInput
               style={LoginScreenStyles.phoneInput}
-              placeholder="Número de Teléfono"
+              placeholder="Tu correo electrónico"
               placeholderTextColor="#c7c585"
-              onChangeText={handleChange("phoneNumber")}
-              onBlur={handleBlur("phoneNumber")}
-              value={values.phoneNumber}
-              keyboardType="phone-pad"
+              onChangeText={(text) => handleChange("email")(text.toLowerCase())}
+              onBlur={handleBlur("email")}
+              value={values.email}
+              keyboardType="email-address"
             />
           </View>
-          {errors.phoneNumber && touched.phoneNumber && (
-            <Text style={LoginScreenStyles.error}>{errors.phoneNumber}</Text>
+          {errors.email && touched.email && (
+            <Text style={LoginScreenStyles.error}>{errors.email}</Text>
           )}
           <TouchableOpacity
             style={LoginScreenStyles.button}

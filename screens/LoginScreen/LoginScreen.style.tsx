@@ -81,6 +81,7 @@ export const LoginScreenStyles = StyleSheet.create({
     marginLeft: 15,
   },
   pickerContainer: {
+    paddingLeft: 15,
     height: 70,
     justifyContent: "center", // Center vertically
     alignItems: "center", // Center horizontally
@@ -137,6 +138,7 @@ export const LoginScreenStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
     marginTop: 5,
     marginBottom: 20,
+    alignSelf: "center",
   },
   button: {
     backgroundColor: "#e1dd2a", // Dark gray button background

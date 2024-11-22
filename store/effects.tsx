@@ -33,6 +33,9 @@ import {
   validateSessionCodeStart,
   validateSessionCodeSuccess,
   validateSessionCodeFailure,
+  validateUserByEmailStart,
+  validateUserByEmailSuccess,
+  validateUserByEmailFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -52,6 +55,7 @@ const VALIDATE_USER_BY_PHONE_NUMBER = `${DOMAIN}/validateUserByPhoneNumber.php`;
 const INSERT_PLATFORM_USER = `${DOMAIN}/insertPlatformUser.php`;
 const SEND_CODE = `${DOMAIN}/sendCode.php`;
 const VALIDATE_SESSION_CODE = `${DOMAIN}/validateSessionCode.php`;
+const VALIDATE_USER_BY_EMAIL = `${DOMAIN}/validateUserByEmail.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -334,5 +338,28 @@ export const validateSessionCode =
     } catch (error) {
       console.log("Error", error);
       dispatch(validateSessionCodeFailure());
+    }
+  };
+
+export const validateUserByEmail =
+  (email: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/validateUserByEmailStart"
+        | "app/validateUserByEmailSuccess"
+        | "app/validateUserByEmailFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(validateUserByEmailStart({ email }));
+      const response = await axios.post<any>(VALIDATE_USER_BY_EMAIL, {
+        email,
+      });
+      dispatch(validateUserByEmailSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(validateUserByEmailFailure());
     }
   };

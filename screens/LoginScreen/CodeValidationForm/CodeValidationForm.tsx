@@ -83,38 +83,9 @@ const CodeValidationForm: React.FC<any> = ({}) => {
       }) => (
         <>
           <Text style={LoginScreenStyles.label}>
-            Para garantizar la seguridad de tu cuenta, selecciona cómo deseas
-            recibir un código de verificación de seis dígitos e insértalo a
-            continuación:
+            Para garantizar la seguridad de tu cuenta, hemos enviado un código
+            de seis dígitos a tu correo. Insértalo a continuación:
           </Text>
-          {!isSendCode && (
-            <View style={LoginScreenStyles.radioContainer}>
-              <TouchableOpacity
-                style={LoginScreenStyles.radioOption}
-                onPress={() => setSelectedOption("sms")}
-              >
-                <Icon
-                  name={selectedOption === "sms" ? "check-circle" : "circle-o"}
-                  size={24}
-                  color="#ffffff"
-                />
-                <Text style={LoginScreenStyles.radioText}>SMS</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={LoginScreenStyles.radioOption}
-                onPress={() => setSelectedOption("whatsapp")}
-              >
-                <Icon
-                  name={
-                    selectedOption === "whatsapp" ? "check-circle" : "circle-o"
-                  }
-                  size={24}
-                  color="#ffffff"
-                />
-                <Text style={LoginScreenStyles.radioText}>Whatsapp</Text>
-              </TouchableOpacity>
-            </View>
-          )}
           {selectedOption !== null && (
             <>
               {!isSendCode ? (

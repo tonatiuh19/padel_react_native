@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDate } from "../../../utils/UtilsFunctions";
 import CodeValidationForm from "../CodeValidationForm/CodeValidationForm";
+import Feather from "@expo/vector-icons/Feather";
 
 const SignInForm: React.FC<any> = ({
   isUserExist,
@@ -132,17 +133,11 @@ const SignInForm: React.FC<any> = ({
               <View style={LoginScreenStyles.generalContainer}>
                 <View style={LoginScreenStyles.phoneFullNumberContainer}>
                   <View style={LoginScreenStyles.phoneZoneContainer}>
-                    <Image
-                      source={getFlagImage(userInfo.info.phone_number_code)}
-                      style={LoginScreenStyles.flagImage}
-                    />
-                    <Text style={LoginScreenStyles.phoneZoneText}>
-                      {userInfo.info.phone_number_code}
-                    </Text>
+                    <Feather name="mail" size={18} color="#e1dd2a" />
                   </View>
                   <View style={LoginScreenStyles.phoneNumberContainer}>
                     <Text style={LoginScreenStyles.phoneNumberText}>
-                      {userInfo.info.phone_number}
+                      {userInfo.info.email}
                     </Text>
                   </View>
                 </View>

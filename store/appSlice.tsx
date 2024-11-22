@@ -48,6 +48,7 @@ const initialState: AppState = {
       full_name: "",
       age: 0,
       date_of_birth: "",
+      email: "",
       phone_number: "",
       phone_number_code: "",
       stripe_id: "",
@@ -222,6 +223,24 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    validateUserByEmailStart(
+      state,
+      action: PayloadAction<{
+        email: string;
+      }>
+    ) {
+      state.userInfo.info.email = action.payload.email;
+      state.isLoading = true;
+      state.isError = false;
+    },
+    validateUserByEmailSuccess(state, action: PayloadAction<boolean>) {
+      state.userInfo.isUserExist = action.payload;
+      state.isLoading = false;
+    },
+    validateUserByEmailFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -262,6 +281,9 @@ export const {
   validateSessionCodeStart,
   validateSessionCodeSuccess,
   validateSessionCodeFailure,
+  validateUserByEmailStart,
+  validateUserByEmailSuccess,
+  validateUserByEmailFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

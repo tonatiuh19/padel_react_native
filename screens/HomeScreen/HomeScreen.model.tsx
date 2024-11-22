@@ -54,6 +54,7 @@ export interface UserInfo {
   full_name: string;
   age: number;
   date_of_birth: string;
+  email: string;
   phone_number: string;
   phone_number_code: string;
   stripe_id: string;

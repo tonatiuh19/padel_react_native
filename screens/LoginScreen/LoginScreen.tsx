@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectIsUserExist, selectUserInfo } from "../../store/selectors";
 import {
   insertPlatformUser,
+  validateUserByEmail,
   validateUserByPhoneNumber,
 } from "../../store/effects";
 
@@ -42,7 +43,7 @@ const LoginScreen: React.FC = () => {
 
   const handleLogin = (values: any) => {
     setNextSection(true);
-    dispatch(validateUserByPhoneNumber(values.phoneNumber, values.phoneZone));
+    dispatch(validateUserByEmail(values.email));
   };
 
   return (
@@ -61,9 +62,6 @@ const LoginScreen: React.FC = () => {
           <LoginForm
             handleLogin={handleLogin}
             setNextSection={setNextSection}
-            pickerVisible={pickerVisible}
-            setPickerVisible={setPickerVisible}
-            getFlagImage={getFlagImage}
           />
         )}
       </View>
