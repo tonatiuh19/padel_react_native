@@ -42,10 +42,10 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
+    //SplashScreen.preventAutoHideAsync();
     loadFonts().then(() => {
       setFontsLoaded(true);
-      SplashScreen.hideAsync();
+      //SplashScreen.hideAsync();
     });
   }, []);
 

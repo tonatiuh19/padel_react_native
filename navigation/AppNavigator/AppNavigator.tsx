@@ -26,14 +26,14 @@ const AppNavigator = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    dispatch(validateUserSession(userInfo.info?.id_platforms_user ?? 0));
     console.log(userInfo);
     if (userInfo.isSignedIn) {
       setIsAuthenticated(true);
     } else {
+      dispatch(validateUserSession(userInfo.info?.id_platforms_user ?? 0));
       setIsAuthenticated(false);
     }
-  }, [dispatch, userInfo]);
+  }, [userInfo]);
 
   return (
     <Navigator>

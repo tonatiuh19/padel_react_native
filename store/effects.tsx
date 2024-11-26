@@ -39,6 +39,9 @@ import {
   sendCodeByMailStart,
   sendCodeByMailSuccess,
   sendCodeByMailFailure,
+  logoutStart,
+  logoutSuccess,
+  logoutFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -60,6 +63,7 @@ const SEND_CODE = `${DOMAIN}/sendCode.php`;
 const VALIDATE_SESSION_CODE = `${DOMAIN}/validateSessionCode.php`;
 const VALIDATE_USER_BY_EMAIL = `${DOMAIN}/validateUserByEmail.php`;
 const SEND_CODE_BY_MAIL = `${DOMAIN}/sendCodeByMail.php`;
+const LOGOUT = `${DOMAIN}/logout.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -392,5 +396,26 @@ export const sendCodeByMail =
     } catch (error) {
       console.log("Error", error);
       dispatch(sendCodeByMailFailure());
+    }
+  };
+
+export const logout =
+  (id_platforms_user: number, id_platforms: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type: "app/logoutStart" | "app/logoutSuccess" | "app/logoutFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(logoutStart());
+      const response = await axios.post<any>(LOGOUT, {
+        id_platforms_user,
+        id_platforms,
+      });
+      dispatch(logoutSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(logoutFailure());
     }
   };

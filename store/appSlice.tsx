@@ -236,8 +236,14 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    validateUserByEmailSuccess(state, action: PayloadAction<boolean>) {
-      state.userInfo.isUserExist = action.payload;
+    validateUserByEmailSuccess(state, action: PayloadAction<any>) {
+      if (!action.payload) {
+        state.userInfo.isUserExist = action.payload;
+      } else {
+        state.userInfo.info = action.payload;
+        state.userInfo.isUserExist = true;
+      }
+
       state.isLoading = false;
     },
     validateUserByEmailFailure(state) {
@@ -255,6 +261,18 @@ const appSlice = createSlice({
       state.isLoading = false;
     },
     sendCodeByMailFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    logoutStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    logoutSuccess(state) {
+      state.userInfo = initialState.userInfo;
+      state.isLoading = false;
+    },
+    logoutFailure(state) {
       state.isLoading = false;
       state.isError = true;
     },
@@ -304,6 +322,9 @@ export const {
   sendCodeByMailStart,
   sendCodeByMailSuccess,
   sendCodeByMailFailure,
+  logoutStart,
+  logoutSuccess,
+  logoutFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
