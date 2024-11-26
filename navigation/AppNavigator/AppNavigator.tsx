@@ -10,6 +10,7 @@ import { selectUserInfo } from "../../store/selectors";
 import { AppDispatch } from "../../store";
 import { validateUserSession } from "../../store/effects";
 import LoginScreen from "../../screens/LoginScreen/LoginScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type RootStackParamList = {
   Main: undefined;
@@ -23,17 +24,42 @@ const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
 const AppNavigator = () => {
   const dispatch: AppDispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
+    const checkUserSession = async () => {
+      console.log(userInfo);
+      try {
+        const storedUserId = await AsyncStorage.getItem("id_platforms_user");
+        console.log("Stored user id", storedUserId);
+        if (storedUserId !== "0" && storedUserId !== null) {
+          console.log("Setting user session", userInfo.info?.id_platforms_user);
+          setIsAuthenticated(true);
+        } else {
+          console.log("Validating user session", storedUserId);
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Failed to load user session", error);
+      }
+    };
+
+    checkUserSession();
+  }, [userInfo]);
+
+  /* useEffect(() => {
     console.log(userInfo);
     if (userInfo.isSignedIn) {
+      AsyncStorage.setItem(
+        "id_platforms_user",
+        userInfo.info?.id_platforms_user.toString() ?? ""
+      );
       setIsAuthenticated(true);
     } else {
       dispatch(validateUserSession(userInfo.info?.id_platforms_user ?? 0));
       setIsAuthenticated(false);
     }
-  }, [userInfo]);
+  }, [userInfo]);*/
 
   return (
     <Navigator>

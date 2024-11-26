@@ -6,6 +6,7 @@ import {
   PlatformField,
   UserInfo,
 } from "../screens/HomeScreen/HomeScreen.model";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState: AppState = {
   platformFields: {
@@ -217,6 +218,12 @@ const appSlice = createSlice({
     },
     validateSessionCodeSuccess(state, action: PayloadAction<boolean>) {
       console.log("Validate Session Code", action.payload);
+      if (action.payload) {
+        AsyncStorage.setItem(
+          "id_platforms_user",
+          state.userInfo.info.id_platforms_user.toString()
+        );
+      }
       state.userInfo.isSignedIn = action.payload;
       state.userInfo.isIncorrectCode = action.payload ? false : true;
       state.userInfo.isUserValidated = action.payload;
