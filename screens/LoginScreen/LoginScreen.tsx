@@ -35,7 +35,8 @@ const LoginScreen: React.FC = () => {
         userInfo.info.phone_number_code,
         userInfo.info.phone_number,
         1,
-        1
+        1,
+        userInfo.info.email
       )
     );
     // Handle sign in logic here

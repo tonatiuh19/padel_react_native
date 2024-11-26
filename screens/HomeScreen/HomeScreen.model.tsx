@@ -46,6 +46,7 @@ export interface UserState {
   isUserExist: boolean;
   isCodeSent: boolean;
   isIncorrectCode: boolean;
+  isUserValidated: boolean;
   info: UserInfo;
 }
 

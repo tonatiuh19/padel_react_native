@@ -43,6 +43,7 @@ const initialState: AppState = {
     isUserExist: false,
     isCodeSent: false,
     isIncorrectCode: false,
+    isUserValidated: false,
     info: {
       id_platforms_user: 0,
       full_name: "",
@@ -215,8 +216,10 @@ const appSlice = createSlice({
       state.isError = false;
     },
     validateSessionCodeSuccess(state, action: PayloadAction<boolean>) {
+      console.log("Validate Session Code", action.payload);
       state.userInfo.isSignedIn = action.payload;
       state.userInfo.isIncorrectCode = action.payload ? false : true;
+      state.userInfo.isUserValidated = action.payload;
       state.isLoading = false;
     },
     validateSessionCodeFailure(state) {
@@ -238,6 +241,20 @@ const appSlice = createSlice({
       state.isLoading = false;
     },
     validateUserByEmailFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    sendCodeByMailStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    sendCodeByMailSuccess(state, action: PayloadAction<boolean>) {
+      if (action.payload) {
+        state.userInfo.isCodeSent = true;
+      }
+      state.isLoading = false;
+    },
+    sendCodeByMailFailure(state) {
       state.isLoading = false;
       state.isError = true;
     },
@@ -284,6 +301,9 @@ export const {
   validateUserByEmailStart,
   validateUserByEmailSuccess,
   validateUserByEmailFailure,
+  sendCodeByMailStart,
+  sendCodeByMailSuccess,
+  sendCodeByMailFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

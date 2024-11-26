@@ -7,8 +7,18 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../../../store/selectors";
 import { AppDispatch } from "../../../store";
-import { sendCode, validateSessionCode } from "../../../store/effects";
+import {
+  sendCode,
+  sendCodeByMail,
+  validateSessionCode,
+} from "../../../store/effects";
 import Countdown from "../../ScheduleScreen/AddSlotModal/Countdown/Countdown";
+import {
+  CommonActions,
+  NavigationProp,
+  useNavigation,
+} from "@react-navigation/native";
+import { RootStackParamList } from "../../../navigation/AppNavigator/AppNavigator";
 
 const CodeValidationForm: React.FC<any> = ({}) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -17,6 +27,7 @@ const CodeValidationForm: React.FC<any> = ({}) => {
   const [codeInvalid, setCodeInvalid] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (userInfo.isIncorrectCode) {
@@ -25,7 +36,10 @@ const CodeValidationForm: React.FC<any> = ({}) => {
     } else {
       setCodeInvalid(false);
     }
-  }, [userInfo]);
+
+    if (userInfo.isUserValidated) {
+    }
+  }, [userInfo, navigation]);
 
   const validationSchema = Yup.object().shape({
     code: Yup.string()
@@ -36,15 +50,16 @@ const CodeValidationForm: React.FC<any> = ({}) => {
   const sendCoding = () => {
     setIsSendCode(true);
     dispatch(
-      sendCode(
+      sendCodeByMail(
         userInfo.info.id_platforms_user,
         userInfo.info.id_platforms,
-        selectedOption ? selectedOption : "sms"
+        userInfo.info.email
       )
     );
   };
 
   const resendCode = (resetForm: () => void) => {
+    setCodeInvalid(false);
     setDisabledResend(true);
     setIsSendCode(false);
     setSelectedOption(null);
@@ -86,13 +101,12 @@ const CodeValidationForm: React.FC<any> = ({}) => {
             Para garantizar la seguridad de tu cuenta, hemos enviado un código
             de seis dígitos a tu correo. Insértalo a continuación:
           </Text>
-          {selectedOption !== null && (
+          {true && (
             <>
               {!isSendCode ? (
                 <TouchableOpacity
                   style={LoginScreenStyles.button}
                   onPress={() => sendCoding()}
-                  disabled={selectedOption === null} // Disable button until one option is selected
                 >
                   <Text style={LoginScreenStyles.buttonText}>
                     Enviar Código
@@ -101,18 +115,18 @@ const CodeValidationForm: React.FC<any> = ({}) => {
               ) : (
                 <>
                   <TextInput
-                    style={
+                    style={[
                       errors.code && touched.code
                         ? LoginScreenStyles.inputError
-                        : LoginScreenStyles.input
-                    }
+                        : LoginScreenStyles.input,
+                      { textAlign: "center" }, // Center the text
+                    ]}
                     placeholder="Código de 6 dígitos"
                     placeholderTextColor="#c7c585"
                     onChangeText={handleChange("code")}
                     onBlur={handleBlur("code")}
                     value={values.code}
                     keyboardType="numeric"
-                    editable={selectedOption !== null} // Disable until one option is selected
                   />
                   {errors.code && touched.code && (
                     <Text style={LoginScreenStyles.error}>{errors.code}</Text>
@@ -125,7 +139,6 @@ const CodeValidationForm: React.FC<any> = ({}) => {
                   <TouchableOpacity
                     style={LoginScreenStyles.button}
                     onPress={() => handleSubmit()}
-                    disabled={selectedOption === null} // Disable button until one option is selected
                   >
                     <Text style={LoginScreenStyles.buttonText}>
                       Validar Código
