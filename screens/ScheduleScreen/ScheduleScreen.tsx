@@ -6,7 +6,6 @@ import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
 import TimeSlotsAgenda from "./TimeSlotsAgenda/TimeSlotsAgenda";
 import {
   selectDisabledSlots,
-  selectMarkedActiveDay,
   selectPlatformsFields,
 } from "../../store/selectors";
 import { AppDispatch } from "../../store";
@@ -20,7 +19,6 @@ const ScheduleScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const platformsFields = useSelector(selectPlatformsFields);
   const disabledSlots = useSelector(selectDisabledSlots);
-  const markedActiveDay = useSelector(selectMarkedActiveDay);
   const [refreshing, setRefreshing] = useState(false);
 
   const route = useRoute<ScheduleScreenRouteProp>();
@@ -30,10 +28,6 @@ const ScheduleScreen: React.FC = () => {
     console.log("Platforms Fields", getTodayDate());
     dispatch(fetchPlatformsFields(id_platforms_field, getTodayDate()));
   }, [dispatch, id_platforms_field]);
-
-  /*useEffect(() => {
-    console.log("Platforms Fields", platformsFields.slots);
-  }, [platformsFields]);*/
 
   const onRefresh = () => {
     console.log("Refreshing", disabledSlots.today);
@@ -46,7 +40,6 @@ const ScheduleScreen: React.FC = () => {
   };
 
   const handleDayPress = (day: string) => {
-    console.log("Selected day:", day);
     setRefreshing(true);
     dispatch(fetchPlatformsFields(id_platforms_field, day)).finally(() => {
       setRefreshing(false);

@@ -10,7 +10,10 @@ import TimeSlotItem from "./TimeSlotItem/TimeSlotItem";
 import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsDayEmpty } from "../../../store/selectors";
+import {
+  selectIsDayEmpty,
+  selectPlatformsFields,
+} from "../../../store/selectors";
 import { MarkedDate } from "../../HomeScreen/HomeScreen.model";
 import { AppDispatch } from "../../../store";
 import { setMarkedActiveDay, setSelectedDay } from "../../../store/appSlice";
@@ -80,8 +83,10 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   onDayPress,
 }) => {
   const dispatch: AppDispatch = useDispatch();
+  const platformsFields = useSelector(selectPlatformsFields);
   const isDayEmpty = useSelector(selectIsDayEmpty);
   const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(today);
 
   const formatTimeRange = (timeRange: string): string => {
     const [start, end] = timeRange
@@ -104,7 +109,6 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
 
   const handleAddSlot = () => {
     setModalVisible(true);
-    // onRefresh();
   };
 
   const now = new Date(today);
@@ -132,8 +136,20 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    //onDayPress(today);
   };
+
+  useEffect(() => {
+    if (today === date) {
+      dispatch(setSelectedDay(today));
+      getActiveStatus(platformsFields.markedDates, {
+        dateString: today,
+        day: 0,
+        month: 0,
+        timestamp: 0,
+        year: 0,
+      });
+    }
+  }, [platformsFields]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -172,6 +188,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         futureScrollRange={2}
         onDayPress={(day: any) => {
           //console.log("onDayPress", day);
+          setDate(day.dateString);
           dispatch(setSelectedDay(day.dateString));
           getActiveStatus(markedDates, day);
           onDayPress(day.dateString);
