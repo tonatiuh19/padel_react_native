@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Modal, TextInput, Button, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TextInput,
+  Button,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { AddSlotModalStyles } from "./AddSlotModal.style";
 import TimeSlotPicker from "./TimeSlotPicker/TimeSlotPicker";
 import Countdown from "./Countdown/Countdown";
@@ -12,10 +20,16 @@ import {
   deletePlatformDateTimeSlot,
   fetchPaymentIntentClientSecret,
   insertPlatformDateTimeSlot,
+  updatePlatformDateTimeSlot,
 } from "../../../store/effects";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store";
-import { selectPayment, selectPlatformsFields } from "../../../store/selectors";
+import {
+  selectDisabledSlots,
+  selectPayment,
+  selectPlatformsFields,
+  selectUserInfo,
+} from "../../../store/selectors";
 import { generateDateTime } from "../../../utils/UtilsFunctions";
 
 interface AddSlotModalProps {
@@ -25,7 +39,9 @@ interface AddSlotModalProps {
 
 const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
+  const userInfo = useSelector(selectUserInfo);
   const platformsFields = useSelector(selectPlatformsFields);
+  const disabledSlots = useSelector(selectDisabledSlots);
   const payment = useSelector(selectPayment);
 
   const [startTime, setStartTime] = useState("");
@@ -39,13 +55,13 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const handlePayPress = async () => {
     const clientSecret = await fetchPaymentIntentClientSecret(550);
     const billingDetails = {
-      email: "email@stripe.com",
-      phone: "+48888000888",
+      email: userInfo.info?.email,
+      /*phone: "+48888000888",
       addressCity: "Houston",
       addressCountry: "US",
       addressLine1: "1459  Circle Drive",
       addressLine2: "Texas",
-      addressPostalCode: "77063",
+      addressPostalCode: "77063",*/
     };
     const { error, paymentIntent } = await confirmPayment(clientSecret, {
       paymentMethodType: "Card",
@@ -58,6 +74,12 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
       console.log("Payment confirmation error", error);
     } else if (paymentIntent) {
       console.log("Success", paymentIntent);
+      dispatch(
+        updatePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0, 1)
+      );
+      setShowCountdown(false);
+      setStartTime("");
+      onClose();
     }
   };
 
@@ -66,8 +88,9 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
     dispatch(
       insertPlatformDateTimeSlot(
         platformsFields.id_platforms_field,
-        generateDateTime(platformsFields.today, time),
-        2
+        generateDateTime(disabledSlots.today, time),
+        2,
+        userInfo.info?.id_platforms_user
       )
     );
     setStartTime(time);
@@ -112,19 +135,24 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
                 <Text>Pagando</Text>
               ) : (
                 <View style={AddSlotModalStyles.buttonContainer}>
-                  <Button
-                    title="Cancel"
-                    onPress={() => {
-                      cleaningSlot();
-                    }}
-                    color="red"
-                  />
-                  <Button
-                    title="Pay"
+                  <TouchableOpacity
+                    style={AddSlotModalStyles.buttonPay}
                     onPress={() => {
                       handlePayPress();
                     }}
-                  />
+                  >
+                    <Text style={AddSlotModalStyles.buttonPayText}>Pagar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={AddSlotModalStyles.buttonCancel}
+                    onPress={() => {
+                      cleaningSlot();
+                    }}
+                  >
+                    <Text style={AddSlotModalStyles.buttonCancelText}>
+                      Cancelar
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>

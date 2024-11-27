@@ -45,9 +45,15 @@ export const generateTimeSlots = (
   start: number,
   end: number,
   range: number,
-  disabledSlots: string[]
+  disabledSlots: string[],
+  selectedDate: string
 ): string[] => {
   const slots = [];
+  const now = new Date();
+  const currentDate = now.toISOString().split("T")[0]; // Get current date in "YYYY-MM-DD" format
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+
   slots.push("");
   for (let hour = start; hour <= end; hour += range) {
     const fullHour = Math.floor(hour);
@@ -55,7 +61,13 @@ export const generateTimeSlots = (
     const formattedHour = fullHour < 10 ? `0${fullHour}` : fullHour;
     const formattedMinutes = minutes === 0 ? "00" : minutes;
     const time = `${formattedHour}:${formattedMinutes}:00`;
-    if (!disabledSlots.includes(time)) {
+    if (
+      !disabledSlots.includes(time) &&
+      (selectedDate > currentDate ||
+        (selectedDate === currentDate &&
+          (fullHour > currentHour ||
+            (fullHour === currentHour && minutes > currentMinutes))))
+    ) {
       slots.push(time);
     }
   }
@@ -93,4 +105,12 @@ export const formatDate = (date: Date): string => {
   const year = date.getFullYear();
 
   return `${day} de ${month} de ${year}`;
+};
+
+export const getTodayDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };

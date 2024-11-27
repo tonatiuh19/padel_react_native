@@ -39,10 +39,23 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   const renderPickerItem = (slot: string) => {
     if (slot === "") {
       return (
-        <Picker.Item key={slot} label={slot} value={slot} enabled={false} />
+        <Picker.Item
+          key={slot}
+          label={slot}
+          value={slot}
+          enabled={false}
+          style={TimeSlotPickerStyles.pickerItemDisabled}
+        />
       );
     } else {
-      return <Picker.Item key={slot} label={slot} value={slot} />;
+      return (
+        <Picker.Item
+          key={slot}
+          label={slot}
+          value={slot}
+          style={TimeSlotPickerStyles.pickerItem}
+        />
+      );
     }
   };
 
@@ -53,9 +66,13 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
         onValueChange={(itemValue) => onTimeChange(itemValue)}
         style={TimeSlotPickerStyles.picker}
       >
-        {generateTimeSlots(8, 23, 1.5, disabledSlots.disabledSlots).map(
-          renderPickerItem
-        )}
+        {generateTimeSlots(
+          8,
+          23,
+          1.5,
+          disabledSlots.disabledSlots,
+          disabledSlots.today
+        ).map(renderPickerItem)}
       </Picker>
     </View>
   );

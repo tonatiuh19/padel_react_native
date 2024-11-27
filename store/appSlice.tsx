@@ -283,6 +283,33 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getUserInfoByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getUserInfoByIdSuccess(state, action: PayloadAction<UserInfo>) {
+      state.userInfo.info = action.payload;
+      state.isLoading = false;
+    },
+    getUserInfoByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    updatePlatformDateTimeSlotStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    updatePlatformDateTimeSlotSuccess(
+      state,
+      action: PayloadAction<PaymentState>
+    ) {
+      state.isLoading = false;
+      state.payment = action.payload;
+    },
+    updatePlatformDateTimeSlotFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -332,6 +359,12 @@ export const {
   logoutStart,
   logoutSuccess,
   logoutFailure,
+  getUserInfoByIdStart,
+  getUserInfoByIdSuccess,
+  getUserInfoByIdFailure,
+  updatePlatformDateTimeSlotStart,
+  updatePlatformDateTimeSlotSuccess,
+  updatePlatformDateTimeSlotFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

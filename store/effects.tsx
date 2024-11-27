@@ -42,6 +42,12 @@ import {
   logoutStart,
   logoutSuccess,
   logoutFailure,
+  getUserInfoByIdStart,
+  getUserInfoByIdSuccess,
+  getUserInfoByIdFailure,
+  updatePlatformDateTimeSlotStart,
+  updatePlatformDateTimeSlotSuccess,
+  updatePlatformDateTimeSlotFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -64,6 +70,8 @@ const VALIDATE_SESSION_CODE = `${DOMAIN}/validateSessionCode.php`;
 const VALIDATE_USER_BY_EMAIL = `${DOMAIN}/validateUserByEmail.php`;
 const SEND_CODE_BY_MAIL = `${DOMAIN}/sendCodeByMail.php`;
 const LOGOUT = `${DOMAIN}/logout.php`;
+const GET_USER_INFO_BY_ID = `${DOMAIN}/getUserInfoById.php`;
+const UPDATE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/updatePlatformDateTimeSlot.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -113,7 +121,7 @@ export const fetchPlatformFields =
   };
 
 export const fetchPlatformsFields =
-  (id_platforms_field: number) =>
+  (id_platforms_field: number, date: string) =>
   async (
     dispatch: (arg0: {
       payload: EPlatformField | undefined;
@@ -129,6 +137,7 @@ export const fetchPlatformsFields =
         GET_PLATFORM_SLOTS_BY_ID,
         {
           id_platforms_field,
+          date,
         }
       );
       dispatch(fetchPlatformsFieldsSuccess(response.data));
@@ -142,7 +151,8 @@ export const insertPlatformDateTimeSlot =
   (
     id_platforms_field: number,
     platforms_date_time_start: string,
-    active: number
+    active: number,
+    id_platforms_user: number
   ) =>
   async (
     dispatch: (arg0: {
@@ -161,6 +171,7 @@ export const insertPlatformDateTimeSlot =
           id_platforms_field,
           platforms_date_time_start,
           active,
+          id_platforms_user,
         }
       );
       dispatch(insertPlatformDateTimeSlotSuccess(response.data));
@@ -417,5 +428,52 @@ export const logout =
     } catch (error) {
       console.log("Error", error);
       dispatch(logoutFailure());
+    }
+  };
+
+export const getUserInfoById =
+  (id_platforms_user: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getUserInfoByIdStart"
+        | "app/getUserInfoByIdSuccess"
+        | "app/getUserInfoByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getUserInfoByIdStart());
+      const response = await axios.post<any>(GET_USER_INFO_BY_ID, {
+        id_platforms_user,
+      });
+      dispatch(getUserInfoByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getUserInfoByIdFailure());
+    }
+  };
+
+export const updatePlatformDateTimeSlot =
+  (id_platforms_date_time_slot: number, active: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/updatePlatformDateTimeSlotStart"
+        | "app/updatePlatformDateTimeSlotSuccess"
+        | "app/updatePlatformDateTimeSlotFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(updatePlatformDateTimeSlotStart());
+      const response = await axios.post<any>(UPDATE_PLATFORM_DATE_TIME_SLOT, {
+        id_platforms_date_time_slot,
+        active,
+      });
+      dispatch(updatePlatformDateTimeSlotSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(updatePlatformDateTimeSlotFailure());
     }
   };

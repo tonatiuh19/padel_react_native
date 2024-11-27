@@ -67,6 +67,7 @@ interface TimeSlotsAgendaProps {
   refreshControl?: React.ReactNode;
   onRefresh: () => void;
   refreshing: boolean;
+  onDayPress: (day: string) => void;
 }
 
 const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
@@ -76,6 +77,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   refreshControl,
   onRefresh,
   refreshing,
+  onDayPress,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const isDayEmpty = useSelector(selectIsDayEmpty);
@@ -102,6 +104,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
 
   const handleAddSlot = () => {
     setModalVisible(true);
+    // onRefresh();
   };
 
   const now = new Date(today);
@@ -125,6 +128,11 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     } else {
       dispatch(setMarkedActiveDay(0));
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    //onDayPress(today);
   };
 
   return (
@@ -163,9 +171,10 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         pastScrollRange={1}
         futureScrollRange={2}
         onDayPress={(day: any) => {
+          //console.log("onDayPress", day);
           dispatch(setSelectedDay(day.dateString));
           getActiveStatus(markedDates, day);
-          onRefresh();
+          onDayPress(day.dateString);
         }}
         markedDates={markedDates}
       />
@@ -178,10 +187,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
         </TouchableOpacity>
       )}
-      <AddSlotModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-      />
+      <AddSlotModal visible={modalVisible} onClose={handleCloseModal} />
     </View>
   );
 };

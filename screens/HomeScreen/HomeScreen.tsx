@@ -5,9 +5,10 @@ import ReservationCard from "./shared/components/ReservationCard/ReservationCard
 import { Layout } from "@ui-kitten/components";
 import { selectPlatformFields } from "../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPlatformFields } from "../../store/effects";
+import { fetchPlatformFields, getUserInfoById } from "../../store/effects";
 import { AppDispatch } from "../../store";
 import Carousel from "react-native-reanimated-carousel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen() {
   const dispatch: AppDispatch = useDispatch();
@@ -16,6 +17,21 @@ export default function HomeScreen() {
 
   useEffect(() => {
     dispatch(fetchPlatformFields(1));
+  }, [dispatch]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("id_platforms_user");
+        if (storedUserId) {
+          dispatch(getUserInfoById(Number(storedUserId)));
+        }
+      } catch (error) {
+        console.error("Failed to load user session", error);
+      }
+    };
+
+    getUserInfo();
   }, [dispatch]);
 
   const onRefresh = () => {

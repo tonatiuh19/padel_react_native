@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
+export const AddSlotModalWidth = width;
 
 export const AddSlotModalStyles = StyleSheet.create({
   backdrop: {
@@ -31,9 +32,9 @@ export const AddSlotModalStyles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    flexDirection: "row",
+    flex: 1,
     justifyContent: "center",
-    width: "100%",
+    alignItems: "center",
   },
 
   containerCard: {
@@ -44,5 +45,37 @@ export const AddSlotModalStyles = StyleSheet.create({
   },
   cardField: {
     height: 50,
+  },
+  buttonPay: {
+    marginTop: 10,
+    width: AddSlotModalWidth * 0.6,
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#47914a",
+    borderRadius: 22,
+  },
+  buttonPayText: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
+  },
+  buttonCancel: {
+    marginTop: 10,
+    width: AddSlotModalWidth * 0.6,
+    padding: 8,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#fff",
+    borderRadius: 22,
+    borderColor: "red", // Add border color
+    borderWidth: 1,
+  },
+  buttonCancelText: {
+    color: "red",
+    fontSize: 12,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
   },
 });
