@@ -48,6 +48,9 @@ import {
   updatePlatformDateTimeSlotStart,
   updatePlatformDateTimeSlotSuccess,
   updatePlatformDateTimeSlotFailure,
+  getReservationsByUserIdStart,
+  getReservationsByUserIdSuccess,
+  getReservationsByUserIdFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -72,6 +75,7 @@ const SEND_CODE_BY_MAIL = `${DOMAIN}/sendCodeByMail.php`;
 const LOGOUT = `${DOMAIN}/logout.php`;
 const GET_USER_INFO_BY_ID = `${DOMAIN}/getUserInfoById.php`;
 const UPDATE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/updatePlatformDateTimeSlot.php`;
+const GET_RESERVATIONS_BY_USER_ID = `${DOMAIN}/getReservationsByUserId.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -475,5 +479,28 @@ export const updatePlatformDateTimeSlot =
     } catch (error) {
       console.log("Error", error);
       dispatch(updatePlatformDateTimeSlotFailure());
+    }
+  };
+
+export const getReservationsByUserId =
+  (id_platforms_user: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getReservationsByUserIdStart"
+        | "app/getReservationsByUserIdSuccess"
+        | "app/getReservationsByUserIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getReservationsByUserIdStart());
+      const response = await axios.post<any>(GET_RESERVATIONS_BY_USER_ID, {
+        id_platforms_user,
+      });
+      dispatch(getReservationsByUserIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getReservationsByUserIdFailure());
     }
   };

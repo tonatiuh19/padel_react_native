@@ -26,11 +26,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store";
 import {
   selectDisabledSlots,
+  selectIsLoading,
   selectPayment,
   selectPlatformsFields,
   selectUserInfo,
 } from "../../../store/selectors";
 import { generateDateTime } from "../../../utils/UtilsFunctions";
+import LoadingSmall from "../../HomeScreen/shared/components/LoadingSmall/LoadingSmall";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../../navigation/AppNavigator/AppNavigator";
 
 interface AddSlotModalProps {
   visible: boolean;
@@ -39,7 +43,9 @@ interface AddSlotModalProps {
 
 const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const userInfo = useSelector(selectUserInfo);
+  const isLoading = useSelector(selectIsLoading);
   const platformsFields = useSelector(selectPlatformsFields);
   const disabledSlots = useSelector(selectDisabledSlots);
   const payment = useSelector(selectPayment);
@@ -47,12 +53,14 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const [startTime, setStartTime] = useState("");
   const [showCountdown, setShowCountdown] = useState(false);
   const { confirmPayment, loading } = useConfirmPayment();
+  const [isPaying, setIsPaying] = useState(false);
 
   const handleCountdownComplete = () => {
     cleaningSlot();
   };
 
   const handlePayPress = async () => {
+    setIsPaying(true);
     const clientSecret = await fetchPaymentIntentClientSecret(550);
     const billingDetails = {
       email: userInfo.info?.email,
@@ -71,15 +79,18 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
     });
 
     if (error) {
+      setIsPaying(false);
       console.log("Payment confirmation error", error);
     } else if (paymentIntent) {
       console.log("Success", paymentIntent);
       dispatch(
         updatePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0, 1)
       );
+      setIsPaying(false);
       setShowCountdown(false);
       setStartTime("");
       onClose();
+      navigation.navigate("Reservations");
     }
   };
 
@@ -114,49 +125,59 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
     >
       <View style={AddSlotModalStyles.backdrop}>
         <View style={AddSlotModalStyles.modalContainer}>
-          <Text style={AddSlotModalStyles.title}>Add New Slottt</Text>
-          {showCountdown && (
-            <Countdown duration={90} onComplete={handleCountdownComplete} />
-          )}
-          <TimeSlotPicker
-            selectedTime={startTime}
-            onTimeChange={handleTimeChange}
-          />
-          <StripeProvider publishableKey="pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny">
-            <View style={AddSlotModalStyles.containerCard}>
-              <CardField
-                postalCodeEnabled={false}
-                style={AddSlotModalStyles.cardField}
-                cardStyle={{
-                  textColor: "#1c1c1c",
-                }}
-              />
-              {loading ? (
-                <Text>Pagando</Text>
-              ) : (
-                <View style={AddSlotModalStyles.buttonContainer}>
-                  <TouchableOpacity
-                    style={AddSlotModalStyles.buttonPay}
-                    onPress={() => {
-                      handlePayPress();
-                    }}
-                  >
-                    <Text style={AddSlotModalStyles.buttonPayText}>Pagar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={AddSlotModalStyles.buttonCancel}
-                    onPress={() => {
-                      cleaningSlot();
-                    }}
-                  >
-                    <Text style={AddSlotModalStyles.buttonCancelText}>
-                      Cancelar
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+          {loading ? (
+            <View style={AddSlotModalStyles.loadingContainer}>
+              <LoadingSmall isLoading={true} color="#000" />
+              <Text style={AddSlotModalStyles.loadingText}>Cargando</Text>
             </View>
-          </StripeProvider>
+          ) : (
+            <>
+              <Text style={AddSlotModalStyles.title}>Add New Slottt</Text>
+              {showCountdown && (
+                <Countdown duration={90} onComplete={handleCountdownComplete} />
+              )}
+              <TimeSlotPicker
+                selectedTime={startTime}
+                onTimeChange={handleTimeChange}
+                disabled={isLoading}
+              />
+              <StripeProvider publishableKey="pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny">
+                <View style={AddSlotModalStyles.containerCard}>
+                  <CardField
+                    postalCodeEnabled={false}
+                    style={AddSlotModalStyles.cardField}
+                    cardStyle={{
+                      textColor: "#1c1c1c",
+                    }}
+                  />
+                  <View style={AddSlotModalStyles.buttonContainer}>
+                    <TouchableOpacity
+                      style={AddSlotModalStyles.buttonPay}
+                      onPress={() => {
+                        handlePayPress();
+                      }}
+                      disabled={isPaying}
+                    >
+                      <Text style={AddSlotModalStyles.buttonPayText}>
+                        Pagar
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={AddSlotModalStyles.buttonCancel}
+                      onPress={() => {
+                        cleaningSlot();
+                      }}
+                      disabled={isPaying}
+                    >
+                      <Text style={AddSlotModalStyles.buttonCancelText}>
+                        Cancelar
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </StripeProvider>
+            </>
+          )}
         </View>
       </View>
     </Modal>

@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type RootStackParamList = {
   Main: undefined;
+  Reservations: undefined;
   Profile: undefined;
   Login: undefined;
   Schedule: PlatformsField;
@@ -75,6 +76,12 @@ const AppNavigator = () => {
             component={ProfileScreen}
             options={({ navigation }) => ({
               headerTitle: "Mi Perfil",
+              headerTitleStyle: {
+                fontSize: 30,
+                fontFamily: "Kanit-Regular",
+                fontWeight: "bold",
+                color: "#000", // Customize the color
+              },
               headerLeft: () => (
                 <BackButton onPress={() => navigation.goBack()} />
               ),

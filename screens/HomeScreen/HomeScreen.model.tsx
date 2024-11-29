@@ -18,6 +18,7 @@ export interface AppState {
   payment: PaymentState;
   disabledSlots: DisabledSlotsState;
   userInfo: UserState;
+  reservations: Reservations[];
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -116,4 +117,15 @@ export interface Slot {
   active: number;
   height: number;
   name: string;
+}
+
+export interface Reservations {
+  id_platforms_date_time_slot: number;
+  id_platforms_field: number;
+  id_platforms_user: number;
+  platforms_date_time_start: string;
+  platforms_date_time_end: string;
+  active: number;
+  stripe_id: string;
+  validated: number;
 }

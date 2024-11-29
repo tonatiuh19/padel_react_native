@@ -13,6 +13,15 @@ export const TimeSlotPickerStyles = StyleSheet.create({
     borderRadius: 22,
     marginBottom: 10,
   },
+  pickerContainerDisabled: {
+    width: TimeSlotPickeWidth * 0.6,
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#99998b",
+    borderRadius: 22,
+    marginBottom: 10,
+  },
   picker: {
     width: "100%",
   },

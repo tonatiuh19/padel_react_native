@@ -18,7 +18,19 @@ const TabNavigator = () => (
     })}
   >
     <Screen name="Home" component={HomeScreen} />
-    <Screen name="Reservations" component={ReservationsScreen} />
+    <Screen
+      name="Reservations"
+      component={ReservationsScreen}
+      options={({}) => ({
+        headerTitle: "Mis Reservas",
+        headerTitleStyle: {
+          fontSize: 30,
+          fontFamily: "Kanit-Regular",
+          fontWeight: "bold",
+          color: "#000", // Customize the color
+        },
+      })}
+    />
   </Navigator>
 );
 

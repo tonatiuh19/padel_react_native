@@ -4,6 +4,7 @@ import {
   EPlatformField,
   PaymentState,
   PlatformField,
+  Reservations,
   UserInfo,
 } from "../screens/HomeScreen/HomeScreen.model";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -59,6 +60,7 @@ const initialState: AppState = {
       id_platforms: 0,
     },
   },
+  reservations: [],
 };
 
 const appSlice = createSlice({
@@ -310,6 +312,21 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getReservationsByUserIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getReservationsByUserIdSuccess(
+      state,
+      action: PayloadAction<Reservations[]>
+    ) {
+      state.isLoading = false;
+      state.reservations = action.payload;
+    },
+    getReservationsByUserIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -365,6 +382,9 @@ export const {
   updatePlatformDateTimeSlotStart,
   updatePlatformDateTimeSlotSuccess,
   updatePlatformDateTimeSlotFailure,
+  getReservationsByUserIdStart,
+  getReservationsByUserIdSuccess,
+  getReservationsByUserIdFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

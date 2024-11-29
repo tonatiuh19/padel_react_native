@@ -17,11 +17,13 @@ import { fetchgetDisabledSlots } from "../../../../store/effects";
 interface TimeSlotPickerProps {
   selectedTime: string;
   onTimeChange: (time: string) => void;
+  disabled?: boolean; // Add disabled prop
 }
 
 const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   selectedTime,
   onTimeChange,
+  disabled = false,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const disabledSlots = useSelector(selectDisabledSlots);
@@ -60,11 +62,18 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   };
 
   return (
-    <View style={TimeSlotPickerStyles.pickerContainer}>
+    <View
+      style={
+        disabled
+          ? TimeSlotPickerStyles.pickerContainerDisabled
+          : TimeSlotPickerStyles.pickerContainer
+      }
+    >
       <Picker
         selectedValue={selectedTime}
         onValueChange={(itemValue) => onTimeChange(itemValue)}
         style={TimeSlotPickerStyles.picker}
+        enabled={!disabled}
       >
         {generateTimeSlots(
           8,

@@ -114,3 +114,60 @@ export const getTodayDate = () => {
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const formatFullDate = (dateTimeString: string): string => {
+  const date = new Date(dateTimeString);
+
+  const dayNames = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
+  const monthNames = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  const dayName = dayNames[date.getDay()];
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${dayName} ${day} de ${month}, ${year}`;
+};
+
+export const formatShortDate = (dateTimeString: string): string => {
+  const date = new Date(dateTimeString);
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const year = String(date.getFullYear()).slice(-2); // Get last two digits of the year
+
+  return `${day}/${month}/${year}`;
+};
+
+export const formatTime = (dateTimeString: string): string => {
+  const date = new Date(dateTimeString);
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${formattedHours}:${formattedMinutes} ${ampm}`;
+};

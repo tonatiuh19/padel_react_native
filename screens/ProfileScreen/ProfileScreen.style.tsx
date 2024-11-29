@@ -9,6 +9,7 @@ export const ProfileScreenStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#fff",
   },
   profileSection: {
     flex: 1,

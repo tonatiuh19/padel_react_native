@@ -78,4 +78,6 @@ export const AddSlotModalStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
     alignSelf: "center",
   },
+  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  loadingText: { marginTop: 10, fontSize: 16, fontFamily: "Kanit-Regular" },
 });
