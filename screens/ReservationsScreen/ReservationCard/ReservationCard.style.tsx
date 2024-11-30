@@ -55,7 +55,7 @@ export const ReservationCardStyles = StyleSheet.create({
     alignItems: "center",
   },
   cardTextTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#e1dd2a",
     fontWeight: "900",
     fontFamily: "Kanit-Regular",
@@ -72,10 +72,10 @@ export const ReservationCardStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
   },
   cardTextValue: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#e1dd2a",
     fontWeight: "700",
-    marginLeft: 10,
+    marginLeft: 5,
     fontFamily: "Kanit-Regular",
   },
   image: {

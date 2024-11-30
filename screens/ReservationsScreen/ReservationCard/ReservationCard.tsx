@@ -16,7 +16,9 @@ interface ReservationCardProps {
   reservation: Reservations; // Adjust the type according to your reservation data structure
 }
 
-const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
+const ReservationCardList: React.FC<ReservationCardProps> = ({
+  reservation,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openTicket = () => {
@@ -110,4 +112,4 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
   );
 };
 
-export default ReservationCard;
+export default ReservationCardList;

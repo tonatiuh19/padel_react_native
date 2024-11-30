@@ -52,9 +52,6 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
             {title}
           </Text>
         </View>
-        <View style={ReservationCardStyles.columnRightDetailsContainer}>
-          <Text>{player}</Text>
-        </View>
       </View>
     </TouchableOpacity>
   );

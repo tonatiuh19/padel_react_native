@@ -1,42 +1,78 @@
-import React, { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, View, Text } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  RefreshControl,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { HomeScreenStyles, HomeScreenWidth } from "./HomeScreen.style";
 import ReservationCard from "./shared/components/ReservationCard/ReservationCard";
 import { Layout } from "@ui-kitten/components";
-import { selectPlatformFields } from "../../store/selectors";
+import {
+  selectAds,
+  selectLastReservation,
+  selectPlatformFields,
+  selectPlatformsFields,
+} from "../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPlatformFields, getUserInfoById } from "../../store/effects";
+import {
+  fetchPlatformFields,
+  getAdsById,
+  getUserInfoById,
+} from "../../store/effects";
 import { AppDispatch } from "../../store";
 import Carousel from "react-native-reanimated-carousel";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReservationCardAds from "./shared/components/ReservationCardAds/ReservationCardAds";
+import ReservationCardList from "../ReservationsScreen/ReservationCard/ReservationCard";
+import {
+  NavigationProp,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
+import { PlatformsField } from "./HomeScreen.model";
 
 export default function HomeScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch: AppDispatch = useDispatch();
   const platformFields = useSelector(selectPlatformFields);
+  const lastReservation = useSelector(selectLastReservation);
+  const ads = useSelector(selectAds);
   const [refreshing, setRefreshing] = useState(false);
+  const [userId, setUserId] = useState(0);
 
-  useEffect(() => {
-    dispatch(fetchPlatformFields(1));
-  }, [dispatch]);
-
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const storedUserId = await AsyncStorage.getItem("id_platforms_user");
-        if (storedUserId) {
-          dispatch(getUserInfoById(Number(storedUserId)));
-        }
-      } catch (error) {
-        console.error("Failed to load user session", error);
+  const fetchUserInfo = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem("id_platforms_user");
+      if (storedUserId) {
+        setUserId(Number(storedUserId));
+        dispatch(getUserInfoById(Number(storedUserId)));
+        dispatch(fetchPlatformFields(1, Number(storedUserId)));
       }
-    };
+    } catch (error) {
+      console.error("Failed to load user session", error);
+    }
+  };
 
-    getUserInfo();
+  useEffect(() => {
+    dispatch(getAdsById(1));
   }, [dispatch]);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, [dispatch]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserInfo();
+    }, [])
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
-    dispatch(fetchPlatformFields(1)).finally(() => {
+    dispatch(fetchPlatformFields(1, userId)).finally(() => {
       setRefreshing(false);
     });
   };
@@ -61,6 +97,27 @@ export default function HomeScreen() {
     </View>
   );
 
+  const renderCarouselItemAd = ({ item }: { item: any }) => (
+    <View
+      style={{
+        flex: 1,
+        borderRadius: 22,
+        justifyContent: "center",
+      }}
+    >
+      <ReservationCardAds
+        key={item.id_platforms_ad}
+        id_platforms_ad={item.id_platforms_ad}
+        platforms_ad_title={item.platforms_ad_title}
+        platforms_ad_image={item.platforms_ad_image}
+      />
+    </View>
+  );
+
+  const handlePress = (field: PlatformsField) => {
+    navigation.navigate("Schedule", field);
+  };
+
   return (
     <Layout style={HomeScreenStyles.container}>
       <ScrollView
@@ -74,6 +131,7 @@ export default function HomeScreen() {
             loop
             width={HomeScreenWidth}
             height={HomeScreenWidth / 2}
+            pagingEnabled={true}
             autoPlay={true}
             data={platformFields}
             scrollAnimationDuration={1800}
@@ -84,6 +142,51 @@ export default function HomeScreen() {
             }}
             renderItem={renderCarouselItem}
           />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Carousel
+            loop
+            width={HomeScreenWidth}
+            height={HomeScreenWidth / 2}
+            autoPlay={true}
+            data={ads}
+            scrollAnimationDuration={2500}
+            mode="parallax"
+            modeConfig={{
+              parallaxScrollingScale: 0.9,
+              parallaxScrollingOffset: 50,
+            }}
+            renderItem={renderCarouselItemAd}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <View style={HomeScreenStyles.cardReservations}>
+            {lastReservation ? (
+              <>
+                <Text style={HomeScreenStyles.cardReservationText}>
+                  Tu próxima reserva:
+                </Text>
+                <ReservationCardList reservation={lastReservation} />
+              </>
+            ) : (
+              <View style={HomeScreenStyles.cardReservationEmpty}>
+                <Text style={HomeScreenStyles.cardReservationText}>
+                  Aún no tienes reservas
+                </Text>
+                {platformFields.map((field: PlatformsField) => (
+                  <TouchableOpacity
+                    key={field.id_platforms_field}
+                    style={HomeScreenStyles.buttonReservation}
+                    onPress={() => handlePress(field)}
+                  >
+                    <Text style={HomeScreenStyles.buttonReservationText}>
+                      Reservar Cancha {field.id_platforms_field}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
         </View>
       </ScrollView>
     </Layout>

@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
+export const ReservationsScreenHeight = height;
+export const ReservationsScreenWidth = width;
 
 export const ReservationsScreenStyles = StyleSheet.create({
   container: {
@@ -17,6 +19,11 @@ export const ReservationsScreenStyles = StyleSheet.create({
   scrollContainer: {
     alignItems: "center",
   },
+  scrollContainerEmpty: {
+    padding: 20,
+    flexGrow: 1,
+    justifyContent: "center",
+  },
   card: {
     width: "90%",
     padding: 20,
@@ -31,5 +38,33 @@ export const ReservationsScreenStyles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
+  },
+  cardReservationEmpty: {
+    width: ReservationsScreenWidth - 40,
+    height: ReservationsScreenHeight * 0.2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardReservationText: {
+    fontSize: 18,
+    color: "#000",
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "Kanit-Regular",
+  },
+  buttonReservation: {
+    marginTop: 10,
+    width: "60%",
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    alignItems: "center",
+  },
+  buttonReservationText: {
+    color: "#000",
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
   },
 });

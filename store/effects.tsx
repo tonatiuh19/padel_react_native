@@ -51,6 +51,9 @@ import {
   getReservationsByUserIdStart,
   getReservationsByUserIdSuccess,
   getReservationsByUserIdFailure,
+  getAdsByIdStart,
+  getAdsByIdSuccess,
+  getAdsByIdFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -76,6 +79,7 @@ const LOGOUT = `${DOMAIN}/logout.php`;
 const GET_USER_INFO_BY_ID = `${DOMAIN}/getUserInfoById.php`;
 const UPDATE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/updatePlatformDateTimeSlot.php`;
 const GET_RESERVATIONS_BY_USER_ID = `${DOMAIN}/getReservationsByUserId.php`;
+const GET_ADS_BY_ID = `${DOMAIN}/getAdsById.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -98,7 +102,7 @@ export const fetchPaymentIntentClientSecret = async (amount: number) => {
 };
 
 export const fetchPlatformFields =
-  (id_platform: number) =>
+  (id_platform: number, id_platforms_user: number) =>
   async (
     dispatch: (arg0: {
       payload: PlatformField | undefined;
@@ -115,6 +119,7 @@ export const fetchPlatformFields =
         {
           id_platform,
           imageDirectory: "../assets/images/carrouselImages",
+          id_platforms_user,
         }
       );
       dispatch(fetchPlatformFieldsSuccess(response.data));
@@ -502,5 +507,28 @@ export const getReservationsByUserId =
     } catch (error) {
       console.log("Error", error);
       dispatch(getReservationsByUserIdFailure());
+    }
+  };
+
+export const getAdsById =
+  (id_platform: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getAdsByIdStart"
+        | "app/getAdsByIdSuccess"
+        | "app/getAdsByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getAdsByIdStart());
+      const response = await axios.post<any>(GET_ADS_BY_ID, {
+        id_platform,
+      });
+      dispatch(getAdsByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getAdsByIdFailure());
     }
   };

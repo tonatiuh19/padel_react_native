@@ -31,6 +31,7 @@ export const ReservationCardStyles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-start",
     justifyContent: "center",
+    alignContent: "center",
   },
   columnLeftDetailsText: {
     fontWeight: "bold",

@@ -10,6 +10,14 @@ export interface ReservationCardProps {
   field: PlatformsField;
 }
 
+export interface ReservationCardAdsProps {
+  id_platforms_ad: number;
+  id_platform?: number;
+  platforms_ad_title: string;
+  platforms_ad_image: string;
+  active?: number;
+}
+
 /*Store*/
 export interface AppState {
   platformFields: PlatformField;
@@ -19,6 +27,8 @@ export interface AppState {
   disabledSlots: DisabledSlotsState;
   userInfo: UserState;
   reservations: Reservations[];
+  ads: ReservationCardAdsProps[];
+  last_reservation: Reservations | null;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -78,6 +88,7 @@ export interface PlatformsField {
   title: string;
   today: string;
   carrouselImages: CarrouselImage[];
+  last_reservation: Reservations | null;
 }
 
 export interface EPlatformField {

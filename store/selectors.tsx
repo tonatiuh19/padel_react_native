@@ -25,3 +25,8 @@ export const selectIsUserExist = (state: RootState) =>
   state.app.userInfo.isUserExist;
 
 export const selectReservations = (state: RootState) => state.app.reservations;
+
+export const selectAds = (state: RootState) => state.app.ads;
+
+export const selectLastReservation = (state: RootState) =>
+  state.app.last_reservation;

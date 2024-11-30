@@ -4,6 +4,7 @@ import {
   EPlatformField,
   PaymentState,
   PlatformField,
+  ReservationCardAdsProps,
   Reservations,
   UserInfo,
 } from "../screens/HomeScreen/HomeScreen.model";
@@ -61,6 +62,8 @@ const initialState: AppState = {
     },
   },
   reservations: [],
+  ads: [],
+  last_reservation: null,
 };
 
 const appSlice = createSlice({
@@ -80,8 +83,10 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    fetchPlatformFieldsSuccess(state, action: PayloadAction<PlatformField>) {
+    fetchPlatformFieldsSuccess(state, action: PayloadAction<any>) {
+      console.log("Action Payload", action.payload);
       state.isLoading = false;
+      state.last_reservation = action.payload.last_reservation;
       state.platformFields = action.payload;
     },
     fetchPlatformFieldsFailure(state) {
@@ -92,7 +97,7 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    fetchPlatformsFieldsSuccess(state, action: PayloadAction<EPlatformField>) {
+    fetchPlatformsFieldsSuccess(state, action: PayloadAction<any>) {
       state.isLoading = false;
       state.platformsFields = action.payload;
     },
@@ -327,6 +332,18 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getAdsByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getAdsByIdSuccess(state, action: PayloadAction<ReservationCardAdsProps[]>) {
+      state.isLoading = false;
+      state.ads = action.payload;
+    },
+    getAdsByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -385,6 +402,9 @@ export const {
   getReservationsByUserIdStart,
   getReservationsByUserIdSuccess,
   getReservationsByUserIdFailure,
+  getAdsByIdStart,
+  getAdsByIdSuccess,
+  getAdsByIdFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
