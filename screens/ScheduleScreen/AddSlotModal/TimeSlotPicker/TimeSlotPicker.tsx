@@ -30,6 +30,12 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   const platformsFields = useSelector(selectPlatformsFields);
 
   useEffect(() => {
+    console.log(
+      "Disabled Slots",
+      disabledSlots.today,
+      disabledSlots.fullToday,
+      platformsFields.id_platforms_field
+    );
     dispatch(
       fetchgetDisabledSlots(
         disabledSlots.today,

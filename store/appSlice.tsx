@@ -40,6 +40,7 @@ const initialState: AppState = {
   disabledSlots: {
     disabledSlots: [],
     today: "",
+    fullToday: "",
   },
   userInfo: {
     isSignedIn: false,

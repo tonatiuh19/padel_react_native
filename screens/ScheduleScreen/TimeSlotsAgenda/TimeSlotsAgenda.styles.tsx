@@ -18,7 +18,7 @@ export const TimeSlotsAgendaStyles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     backgroundColor: "#e1dd2a",
-    borderRadius: 10,
+    borderRadius: 22,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
@@ -27,8 +27,9 @@ export const TimeSlotsAgendaStyles = StyleSheet.create({
   },
   fabText: {
     color: "#000",
-    fontSize: 16,
+    fontSize: 20,
     marginLeft: 10,
+    fontFamily: "Kanit-Regular",
   },
 });
 

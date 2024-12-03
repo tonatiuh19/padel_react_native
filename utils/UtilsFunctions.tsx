@@ -48,8 +48,10 @@ export const generateTimeSlots = (
   disabledSlots: string[],
   selectedDate: string
 ): string[] => {
+  console.log("Selected Date", selectedDate);
   const slots = [];
-  const now = new Date();
+  const now = new Date(selectedDate);
+  console.log("Now", now);
   const currentDate = now.toISOString().split("T")[0]; // Get current date in "YYYY-MM-DD" format
   const currentHour = now.getHours();
   const currentMinutes = now.getMinutes();
@@ -61,13 +63,7 @@ export const generateTimeSlots = (
     const formattedHour = fullHour < 10 ? `0${fullHour}` : fullHour;
     const formattedMinutes = minutes === 0 ? "00" : minutes;
     const time = `${formattedHour}:${formattedMinutes}:00`;
-    if (
-      !disabledSlots.includes(time) &&
-      (selectedDate > currentDate ||
-        (selectedDate === currentDate &&
-          (fullHour > currentHour ||
-            (fullHour === currentHour && minutes > currentMinutes))))
-    ) {
+    if (!disabledSlots.includes(time)) {
       slots.push(time);
     }
   }
@@ -86,25 +82,14 @@ export const getFlagImage = (zone: string) => {
 };
 
 export const formatDate = (date: Date): string => {
-  const day = date.getDate().toString().padStart(2, "0");
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} de ${month} de ${year}`;
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  };
+  // Convert the date to the local time zone
+  const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+  return localDate.toLocaleDateString("es-MX", options);
 };
 
 export const getTodayDate = () => {

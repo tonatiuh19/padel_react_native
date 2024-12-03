@@ -92,6 +92,12 @@ const AppNavigator = () => {
             component={ScheduleScreen}
             options={({ navigation }) => ({
               headerTitle: "Agendar",
+              headerTitleStyle: {
+                fontSize: 30,
+                fontFamily: "Kanit-Regular",
+                fontWeight: "bold",
+                color: "#000", // Customize the color
+              },
               headerLeft: () => (
                 <BackButton onPress={() => navigation.goBack()} />
               ),

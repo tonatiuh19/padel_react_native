@@ -50,6 +50,7 @@ export interface PaymentState {
 export interface DisabledSlotsState {
   disabledSlots: string[];
   today: string;
+  fullToday: string;
 }
 
 export interface UserState {

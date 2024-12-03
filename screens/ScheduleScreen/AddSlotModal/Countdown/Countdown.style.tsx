@@ -4,7 +4,12 @@ export const CountdownStyles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 10,
+  },
+  timerTextTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+    marginBottom: 5,
   },
   timerText: {
     fontSize: 24,

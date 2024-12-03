@@ -12,16 +12,33 @@ export const AddSlotModalStyles = StyleSheet.create({
   },
   modalContainer: {
     width: width * 0.8, // 80% of the screen width
-    height: height * 0.5, // 50% of the screen height
+    height: height * 0.68, // 50% of the screen height
     padding: 20,
     backgroundColor: "white",
     borderRadius: 10,
     alignItems: "center",
   },
+  titleContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
+    fontSize: 32,
+    fontFamily: "Kanit-Regular",
+  },
+  titleValue: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 10,
+    fontFamily: "Kanit-Regular",
+  },
+  titleValueCard: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
   },
   input: {
     width: "100%",
@@ -44,10 +61,13 @@ export const AddSlotModalStyles = StyleSheet.create({
     padding: 8,
   },
   cardField: {
-    height: 50,
+    height: 60,
+    borderRadius: 22,
+    borderColor: "red", // Add border color
+    borderWidth: 1,
   },
   buttonPay: {
-    marginTop: 10,
+    marginTop: 15,
     width: AddSlotModalWidth * 0.6,
     padding: 10,
     paddingLeft: 20,
