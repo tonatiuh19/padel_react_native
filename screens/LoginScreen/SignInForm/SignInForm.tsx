@@ -16,6 +16,7 @@ const SignInForm: React.FC<any> = ({
   handleSignIn,
   setNextSection,
   getFlagImage,
+  setUserExists,
 }) => {
   const userInfo = useSelector(selectUserInfo);
   const [date, setDate] = useState(new Date());
@@ -23,7 +24,8 @@ const SignInForm: React.FC<any> = ({
 
   useEffect(() => {
     console.log("isUserExist", isUserExist);
-  }, [isUserExist]);
+    setUserExists(isUserExist); // Update the parent state when isUserExist changes
+  }, [isUserExist, setUserExists]);
 
   const onChange = (event: any, selectedDate: any, setFieldValue: any) => {
     const currentDate = selectedDate || date;
@@ -158,7 +160,9 @@ const SignInForm: React.FC<any> = ({
               </TouchableOpacity>
             </>
           ) : (
-            <CodeValidationForm />
+            <>
+              <CodeValidationForm setNextSection={setNextSection} />
+            </>
           )}
         </>
       )}

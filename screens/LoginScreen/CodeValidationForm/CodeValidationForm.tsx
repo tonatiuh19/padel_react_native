@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Linking } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { LoginScreenStyles } from "../LoginScreen.style";
@@ -20,7 +20,7 @@ import {
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/AppNavigator/AppNavigator";
 
-const CodeValidationForm: React.FC<any> = ({}) => {
+const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSendCode, setIsSendCode] = useState(false);
   const [disabledResend, setDisabledResend] = useState(true);
@@ -104,14 +104,24 @@ const CodeValidationForm: React.FC<any> = ({}) => {
           {true && (
             <>
               {!isSendCode ? (
-                <TouchableOpacity
-                  style={LoginScreenStyles.button}
-                  onPress={() => sendCoding()}
-                >
-                  <Text style={LoginScreenStyles.buttonText}>
-                    Enviar Código
-                  </Text>
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    style={LoginScreenStyles.button}
+                    onPress={() => sendCoding()}
+                  >
+                    <Text style={LoginScreenStyles.buttonText}>
+                      Enviar Código
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={LoginScreenStyles.secondaryButton}
+                    onPress={() => setNextSection(false)}
+                  >
+                    <Text style={LoginScreenStyles.secodnaryButtonText}>
+                      Volver
+                    </Text>
+                  </TouchableOpacity>
+                </>
               ) : (
                 <>
                   <TextInput
@@ -159,19 +169,49 @@ const CodeValidationForm: React.FC<any> = ({}) => {
                       />
                     </>
                   ) : (
-                    <TouchableOpacity
-                      style={LoginScreenStyles.secondaryButton}
-                      onPress={() => resendCode(resetForm)}
-                    >
-                      <Text style={LoginScreenStyles.buttonLinkText}>
-                        Reenviar Código
+                    <>
+                      <TouchableOpacity
+                        style={LoginScreenStyles.secondaryButton}
+                        onPress={() => resendCode(resetForm)}
+                      >
+                        <Text style={LoginScreenStyles.buttonLinkText}>
+                          Reenviar Código
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={
+                          (LoginScreenStyles.termsText,
+                          {
+                            color: "#ff0000", // Red text color
+                            textAlign: "center",
+                          })
+                        }
+                      >
+                        Revisa tu carpeta de spam si no encuentras el correo
                       </Text>
-                    </TouchableOpacity>
+                    </>
                   )}
                 </>
               )}
             </>
           )}
+          <Text style={LoginScreenStyles.termsText}>
+            Al registrarte o iniciar sesión, aceptas nuestros{" "}
+            <Text
+              style={LoginScreenStyles.linkText}
+              onPress={() => Linking.openURL("https://example.com/terms")}
+            >
+              Términos y Condiciones
+            </Text>{" "}
+            y{" "}
+            <Text
+              style={LoginScreenStyles.linkText}
+              onPress={() => Linking.openURL("https://example.com/privacy")}
+            >
+              Política de Privacidad
+            </Text>
+            .
+          </Text>
         </>
       )}
     </Formik>

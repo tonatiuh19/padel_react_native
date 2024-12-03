@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, Image, Text } from "react-native";
 import { LoginScreenStyles } from "./LoginScreen.style";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsUserExist, selectUserInfo } from "../../store/selectors";
-import {
-  insertPlatformUser,
-  validateUserByEmail,
-  validateUserByPhoneNumber,
-} from "../../store/effects";
-
+import { insertPlatformUser, validateUserByEmail } from "../../store/effects";
 import SignInForm from "./SignInForm/SignInForm";
 import LoginForm from "./LoginForm/LoginForm";
 import { getFlagImage } from "../../utils/UtilsFunctions";
+import { useFocusEffect } from "@react-navigation/native";
 
 const LoginScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -21,10 +16,20 @@ const LoginScreen: React.FC = () => {
   const userInfo = useSelector(selectUserInfo);
   const [nextSection, setNextSection] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
+  const [userExists, setUserExists] = useState(false);
 
   useEffect(() => {
     //console.log("User Info", userInfo);
   }, [userInfo]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Refresh logic here
+      console.log("Focused");
+      setNextSection(false);
+      setPickerVisible(false);
+    }, [])
+  );
 
   const handleSignIn = (values: any) => {
     dispatch(
@@ -49,6 +54,12 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={LoginScreenStyles.container}>
+      <View style={LoginScreenStyles.logoContainer}>
+        <Image
+          source={require("../../utils/images/by.png")} // Replace with your image path
+          style={LoginScreenStyles.logo}
+        />
+      </View>
       <View style={LoginScreenStyles.cardContainer}>
         {nextSection ? (
           <SignInForm
@@ -58,6 +69,7 @@ const LoginScreen: React.FC = () => {
             pickerVisible={pickerVisible}
             setPickerVisible={setPickerVisible}
             getFlagImage={getFlagImage}
+            setUserExists={setUserExists}
           />
         ) : (
           <LoginForm

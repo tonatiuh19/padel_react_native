@@ -1,15 +1,18 @@
 import { Dimensions, StyleSheet } from "react-native";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export const LoginScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
+    justifyContent: "flex-end", // Align items to the bottom
+    alignItems: "center", // Center horizontally
     padding: 20,
-    paddingBottom: 50,
     backgroundColor: "#000000", // Black background
+  },
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 20, // Space between the logo and the card container
   },
   cardContainer: {
     backgroundColor: "#1c1c1c", // Dark gray background
@@ -26,6 +29,17 @@ export const LoginScreenStyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginBottom: 20, // Space between the card container and the bottom of the screen
+  },
+  logo: {
+    width: 250, // Adjust the width as needed
+    height: 250, // Adjust the height as needed
+  },
+  logoText: {
+    color: "#e1dd2a", // White text color
+    fontSize: 24,
+    fontFamily: "Kanit-Regular",
+    marginTop: 0,
   },
   input: {
     height: 50,
@@ -261,5 +275,15 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   timerCodeTextRed: {
     color: "#e1dd2a",
+  },
+  termsText: {
+    color: "#e1dd2a", // White text color
+    fontFamily: "Kanit-Regular",
+    textAlign: "center",
+    marginTop: 25,
+  },
+  linkText: {
+    color: "#47914a", // Link color
+    textDecorationLine: "underline",
   },
 });
