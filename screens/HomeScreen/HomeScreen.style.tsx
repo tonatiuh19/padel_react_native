@@ -15,12 +15,8 @@ export const HomeScreenStyles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
-  cardReservationText: {
-    fontSize: 18,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 5,
-    fontFamily: "Kanit-Regular",
+  carouselContainer: {
+    marginBottom: 20,
   },
   cardReservations: {
     width: HomeScreenWidth - 40,
@@ -33,6 +29,25 @@ export const HomeScreenStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  cardReservationText: {
+    fontSize: 18,
+    color: "#000",
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "Kanit-Regular",
+    textAlign: "center",
+  },
+  cardNoReservationText: {
+    fontSize: 25,
+    color: "#e1dd2a",
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "Kanit-Regular",
+    textAlign: "center",
+    backgroundColor: "#1c1c1c", // Dark gray background
+    padding: 20,
+    borderRadius: 22,
   },
   buttonReservation: {
     marginTop: 10,
@@ -49,4 +64,11 @@ export const HomeScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Kanit-Regular",
   },
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 20,
+  },
 });
+
+export default HomeScreenStyles;

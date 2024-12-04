@@ -173,17 +173,9 @@ export default function HomeScreen() {
                 <Text style={HomeScreenStyles.cardReservationText}>
                   Aún no tienes reservas
                 </Text>
-                {platformFields.map((field: PlatformsField) => (
-                  <TouchableOpacity
-                    key={field.id_platforms_field}
-                    style={HomeScreenStyles.buttonReservation}
-                    onPress={() => handlePress(field)}
-                  >
-                    <Text style={HomeScreenStyles.buttonReservationText}>
-                      Reservar Cancha {field.id_platforms_field}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                <Text style={HomeScreenStyles.cardNoReservationText}>
+                  Selecciona una cancha para reservar en la sección de arriba
+                </Text>
               </View>
             )}
           </View>
