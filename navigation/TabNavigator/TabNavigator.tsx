@@ -4,6 +4,8 @@ import HomeScreen from "../../screens/HomeScreen/HomeScreen";
 import ReservationsScreen from "../../screens/ReservationsScreen/ReservationsScreen";
 import BottomTabBar from "../BottomTabBar/BottomTabBar";
 import ProfileButton from "./ProfileButton/ProfileButton";
+import { Image, StyleSheet } from "react-native";
+
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const TabNavigator = () => (
@@ -14,14 +16,26 @@ const TabNavigator = () => (
       headerRight: () => (
         <ProfileButton onPress={() => navigation.navigate("Profile")} />
       ),
-      headerTitle: "", // Remove the title
+      headerTitleAlign: "center",
     })}
   >
-    <Screen name="Home" component={HomeScreen} />
+    <Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        headerTitle: () => (
+          <Image
+            source={require("../../utils/images/logo_black_horizontal.png")} // Replace with your image path
+            style={styles.headerImage}
+            resizeMode="contain"
+          />
+        ),
+      }}
+    />
     <Screen
       name="Reservations"
       component={ReservationsScreen}
-      options={({}) => ({
+      options={{
         headerTitle: "Mis Reservas",
         headerTitleStyle: {
           fontSize: 30,
@@ -29,9 +43,16 @@ const TabNavigator = () => (
           fontWeight: "bold",
           color: "#000", // Customize the color
         },
-      })}
+      }}
     />
   </Navigator>
 );
+
+const styles = StyleSheet.create({
+  headerImage: {
+    width: 250, // Adjust the width as needed
+    height: 200, // Adjust the height as needed
+  },
+});
 
 export default TabNavigator;
