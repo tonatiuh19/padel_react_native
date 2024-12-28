@@ -9,6 +9,7 @@ import SignInForm from "./SignInForm/SignInForm";
 import LoginForm from "./LoginForm/LoginForm";
 import { getFlagImage } from "../../utils/UtilsFunctions";
 import { useFocusEffect } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -53,32 +54,39 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <View style={LoginScreenStyles.container}>
-      <View style={LoginScreenStyles.logoContainer}>
-        <Image
-          source={require("../../utils/images/by.png")} // Replace with your image path
-          style={LoginScreenStyles.logo}
-        />
-      </View>
-      <View style={LoginScreenStyles.cardContainer}>
-        {nextSection ? (
-          <SignInForm
-            isUserExist={isUserExist}
-            handleSignIn={handleSignIn}
-            setNextSection={setNextSection}
-            pickerVisible={pickerVisible}
-            setPickerVisible={setPickerVisible}
-            getFlagImage={getFlagImage}
-            setUserExists={setUserExists}
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1,  backgroundColor: "#000000" }}
+      enableOnAndroid={true}
+      extraHeight={65}
+      extraScrollHeight={65}
+    >
+      <View style={LoginScreenStyles.container}>
+        <View style={LoginScreenStyles.logoContainer}>
+          <Image
+            source={require("../../utils/images/by.png")} // Replace with your image path
+            style={LoginScreenStyles.logo}
           />
-        ) : (
-          <LoginForm
-            handleLogin={handleLogin}
-            setNextSection={setNextSection}
-          />
-        )}
+        </View>
+        <View style={LoginScreenStyles.cardContainer}>
+          {nextSection ? (
+            <SignInForm
+              isUserExist={isUserExist}
+              handleSignIn={handleSignIn}
+              setNextSection={setNextSection}
+              pickerVisible={pickerVisible}
+              setPickerVisible={setPickerVisible}
+              getFlagImage={getFlagImage}
+              setUserExists={setUserExists}
+            />
+          ) : (
+            <LoginForm
+              handleLogin={handleLogin}
+              setNextSection={setNextSection}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
