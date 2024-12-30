@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Text, TouchableOpacity, Image } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Image, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -95,13 +95,15 @@ const SignInForm: React.FC<any> = ({
               {errors.age && touched.age && (
                 <Text style={LoginScreenStyles.error}>{errors.age}</Text>
               )}
-              <TouchableOpacity
+              {!show && (<TouchableOpacity
                 style={
                   errors.dateOfBirth && touched.dateOfBirth
                     ? LoginScreenStyles.generalContainerError
                     : LoginScreenStyles.generalContainer
                 }
-                onPress={() => setShow(true)}
+                onPress={() => {
+                  console.log("show", show);
+                  return setShow(true)}}
               >
                 <TextInput
                   style={
@@ -113,19 +115,23 @@ const SignInForm: React.FC<any> = ({
                   placeholderTextColor="#c7c585"
                   value={values.dateOfBirth}
                   editable={false}
+                  pointerEvents="none"
                 />
-              </TouchableOpacity>
+              </TouchableOpacity>)}
               {show && (
+                <View style={LoginScreenStyles.datePickerContainer}>
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={date}
+                  textColor="#e1dd2a"
                   is24Hour={true}
-                  display="default"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                   maximumDate={new Date()}
                   onChange={(event, selectedDate) =>
                     onChange(event, selectedDate, setFieldValue)
                   }
                 />
+                </View>
               )}
               {errors.dateOfBirth && touched.dateOfBirth && (
                 <Text style={LoginScreenStyles.error}>

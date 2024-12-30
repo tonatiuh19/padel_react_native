@@ -173,9 +173,11 @@ export default function HomeScreen() {
                 <Text style={HomeScreenStyles.cardReservationText}>
                   Aún no tienes reservas
                 </Text>
-                <Text style={HomeScreenStyles.cardNoReservationText}>
-                  Selecciona una cancha para reservar en la sección de arriba
-                </Text>
+                <View style={HomeScreenStyles.cardNoReservationTextContainer}>
+                  <Text style={HomeScreenStyles.cardNoReservationText}>
+                    Selecciona una cancha para reservar en la sección de arriba
+                  </Text>
+                </View>
               </View>
             )}
           </View>

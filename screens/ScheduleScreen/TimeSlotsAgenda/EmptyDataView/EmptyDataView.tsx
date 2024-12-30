@@ -58,7 +58,7 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
         <Text style={EmptyDataViewStyles.text}>
           Esta cancha permanecera cerrada todo el dia
         </Text>
-      ) : (
+      ) : markedActiveDay === 2 ? (
         <>
           <Text style={EmptyDataViewStyles.text}>
             Esta cancha permanecera cerrada parcialmente en ciertos horarios
@@ -70,7 +70,25 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
             <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
           </TouchableOpacity>
         </>
-      )}
+      ) : markedActiveDay === 3 ? (
+        <>
+          <Text style={EmptyDataViewStyles.text}>
+            Esta cancha tiene eventos especiales programados
+          </Text>
+          <TouchableOpacity
+            style={EmptyDataViewStyles.buttonSpecial}
+            onPress={onAddSlot}
+          >
+            <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={EmptyDataViewStyles.buttonSpecial}
+            onPress={onAddSlot}
+          >
+            <Text style={EmptyDataViewStyles.buttonText}>Inscripción a evento</Text>
+          </TouchableOpacity>
+        </>
+      ) : null}
     </ScrollView>
   );
 };

@@ -12,17 +12,13 @@ export const TimeSlotsAgendaStyles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 20,
-    bottom: 20,
+    bottom: 30,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
     backgroundColor: "#e1dd2a",
     borderRadius: 22,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
     elevation: 5,
   },
   fabText: {
@@ -30,6 +26,19 @@ export const TimeSlotsAgendaStyles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     fontFamily: "Kanit-Regular",
+  },
+  customHeaderContainer: {
+    backgroundColor: '#e1dd2a',
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    borderRadius: 22,
+  },
+  customHeaderText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
   },
 });
 

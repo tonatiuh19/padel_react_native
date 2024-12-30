@@ -286,4 +286,16 @@ export const LoginScreenStyles = StyleSheet.create({
     color: "#47914a", // Link color
     textDecorationLine: "underline",
   },
+  datePickerContainer: {
+    marginLeft: 20, // Example margin
+    marginBottom: 20, // Example margin
+    borderColor: "#e1dd2a", // Dark gray border
+    backgroundColor: "#000000", // Black background for phone number container
+    borderWidth: 1,
+    borderRadius: 22,
+    color: "#e1dd2a", // White text color
+  },
+  datePicker: {
+    color: "#e1dd2a", // White text color
+  },
 });

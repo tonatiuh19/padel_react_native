@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Text, TouchableOpacity, RefreshControl, Platform } from "react-native";
 import { Agenda, LocaleConfig, AgendaList } from "react-native-calendars";
 import {
   TimeSlotsAgendaCalendarTheme,
@@ -151,8 +151,18 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     }
   }, [platformsFields]);
 
+  const CustomHeader = (date:any) => {
+    return (
+      <View style={TimeSlotsAgendaStyles.customHeaderContainer}>
+        <Text style={TimeSlotsAgendaStyles.customHeaderText}>
+          {date.date.toString('MMMM yyyy')}
+        </Text>
+      </View>
+    );
+  };
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 20 : 0, backgroundColor: "#fff" }}>
       <Agenda
         items={items}
         renderItem={(item: any) => (
@@ -163,6 +173,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           />
         )}
         style={TimeSlotsAgendaStyles.agenda}
+        renderHeader={(date:any) => <CustomHeader date={date} />}
         renderEmptyDate={() => (
           <View>
             <Text>renderEmptyDate</Text>
