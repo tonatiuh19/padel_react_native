@@ -11,17 +11,19 @@ export const AddSlotModalStyles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    width: width * 0.8, // 80% of the screen width
-    height: height * 0.68, // 50% of the screen height
+    width: width * 0.9,
+    height: height * 0.8,
     padding: 20,
     backgroundColor: "white",
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "space-between", // Distribute space between elements
   },
   titleContainer: {
-    flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
   },
   title: {
     fontSize: 32,
@@ -49,13 +51,12 @@ export const AddSlotModalStyles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
   },
-
   containerCard: {
-    flex: 1,
     width: "100%",
     justifyContent: "center",
     padding: 8,
@@ -100,4 +101,26 @@ export const AddSlotModalStyles = StyleSheet.create({
   },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   loadingText: { marginTop: 10, fontSize: 16, fontFamily: "Kanit-Regular" },
+  timePickerButton: {
+    padding: 10,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  timePickerButtonText: {
+    color: "#000",
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
+  },
+  centeredContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bottomContainer: {
+    width: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
 });

@@ -45,10 +45,15 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
 
   const [startTime, setStartTime] = useState("");
   const [showCountdown, setShowCountdown] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
   const { confirmPayment, loading } = useConfirmPayment();
   const [isPaying, setIsPaying] = useState(false);
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [buttonText, setButtonText] = useState("Reservar");
+
+  useEffect(() => {
+    setShowTimePicker(false); // Reset showTimePicker to false when the component mounts
+  }, []);
 
   useEffect(() => {
     if (isPaying) {
@@ -118,12 +123,25 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   };
 
   const cleaningSlot = () => {
+    console.log("Cleaning slot", payment.id_platforms_date_time_slot);
     dispatch(
       deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
     );
     setShowCountdown(false);
     setStartTime("");
+    setShowTimePicker(false);
     onClose();
+  };
+
+  const handleShowTimePicker = () => {
+    setShowTimePicker(true);
+    dispatch(
+      deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
+    );
+  };
+
+  const handleConfirmTimePicker = () => {
+    setShowTimePicker(false);
   };
 
   return (
@@ -150,75 +168,96 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
                   {formatDate(new Date(disabledSlots.today))}
                 </Text>
               </View>
-              {showCountdown && (
-                <Countdown
-                  duration={90}
-                  onComplete={handleCountdownComplete}
-                  isCheckout={true}
-                />
-              )}
-              {!showCountdown && (
-                <Text style={AddSlotModalStyles.titleValue}>
-                  Selecciona la hora:
-                </Text>
-              )}
-              <TimeSlotPicker
-                selectedTime={startTime}
-                onTimeChange={handleTimeChange}
-                disabled={isLoading}
-              />
-              <StripeProvider publishableKey="pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny">
-                <View style={AddSlotModalStyles.containerCard}>
-                  {showCountdown && (
-                    <Text style={AddSlotModalStyles.titleValueCard}>
-                      Ingresa los datos de tu tarjeta:
-                    </Text>
-                  )}
-                  <CardField
-                    postalCodeEnabled={false}
-                    style={[
-                      AddSlotModalStyles.cardField,
-                      {
-                        borderWidth: 1,
-                        borderColor: "#000", // Change this to your desired border color
-                        borderRadius: 10, // Change this to your desired border radius
-                      },
-                    ]}
-                    cardStyle={{
-                      textColor: "#1c1c1c",
-                    }}
-                    onCardChange={(cardDetails) => {
-                      setIsCardComplete(cardDetails.complete);
-                    }}
+              <View style={AddSlotModalStyles.centeredContainer}>
+                {showCountdown && (
+                  <Countdown
+                    duration={90}
+                    onComplete={handleCountdownComplete}
+                    isCheckout={true}
                   />
-                  <View style={AddSlotModalStyles.buttonContainer}>
-                    {!isPaying ? (
-                      <>
-                        <TouchableOpacity
-                          style={AddSlotModalStyles.buttonPay}
-                          onPress={handlePayPress}
-                          disabled={isPaying}
-                        >
-                          <Text style={AddSlotModalStyles.buttonPayText}>
-                            {buttonText}
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={AddSlotModalStyles.buttonCancel}
-                          onPress={cleaningSlot}
-                          disabled={isPaying}
-                        >
-                          <Text style={AddSlotModalStyles.buttonCancelText}>
-                            Cancelar
-                          </Text>
-                        </TouchableOpacity>
-                      </>
-                    ) : (
-                      <LoadingSmall isLoading={true} color="#000" />
-                    )}
-                  </View>
+                )}
+                {!showCountdown && (
+                  <Text style={AddSlotModalStyles.titleValue}>
+                    {startTime ? `Hora seleccionada:` : ""}
+                  </Text>
+                )}
+                <>
+                  {!showTimePicker && (
+                    <TouchableOpacity
+                      style={AddSlotModalStyles.timePickerButton}
+                      onPress={handleShowTimePicker}
+                    >
+                      <Text style={AddSlotModalStyles.timePickerButtonText}>
+                        {startTime ? `${startTime}` : "Selecciona la hora"}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {showTimePicker && (
+                    <TimeSlotPicker
+                      selectedTime={startTime}
+                      onTimeChange={handleTimeChange}
+                      onConfirm={handleConfirmTimePicker}
+                      disabled={isLoading}
+                    />
+                  )}
+                </>
+              </View>
+              {!showTimePicker && (
+                <View style={AddSlotModalStyles.bottomContainer}>
+                  <StripeProvider publishableKey="pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny">
+                    <View style={AddSlotModalStyles.containerCard}>
+                      {showCountdown && (
+                        <Text style={AddSlotModalStyles.titleValueCard}>
+                          Ingresa los datos de tu tarjeta:
+                        </Text>
+                      )}
+                      <CardField
+                        postalCodeEnabled={false}
+                        style={[
+                          AddSlotModalStyles.cardField,
+                          {
+                            borderWidth: 1,
+                            borderColor: "#000", // Change this to your desired border color
+                            borderRadius: 10, // Change this to your desired border radius
+                          },
+                        ]}
+                        cardStyle={{
+                          textColor: "#1c1c1c",
+                        }}
+                        onCardChange={(cardDetails) => {
+                          setIsCardComplete(cardDetails.complete);
+                        }}
+                      />
+                      <View style={AddSlotModalStyles.buttonContainer}>
+                        {!isPaying ? (
+                          <>
+                            <TouchableOpacity
+                              style={AddSlotModalStyles.buttonPay}
+                              onPress={handlePayPress}
+                              disabled={isPaying}
+                            >
+                              <Text style={AddSlotModalStyles.buttonPayText}>
+                                {buttonText}
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={AddSlotModalStyles.buttonCancel}
+                              onPress={cleaningSlot}
+                              disabled={isPaying}
+                            >
+                              <Text style={AddSlotModalStyles.buttonCancelText}>
+                                Cancelar
+                              </Text>
+                            </TouchableOpacity>
+                          </>
+                        ) : (
+                          <LoadingSmall isLoading={true} color="#000" />
+                        )}
+                      </View>
+                    </View>
+                  </StripeProvider>
                 </View>
-              </StripeProvider>
+              )}
             </>
           )}
         </View>

@@ -34,4 +34,20 @@ export const TimeSlotPickerStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
     color: "#ccc",
   },
+  pickerWrapper: {
+    position: "relative",
+    alignItems: "center",
+  },
+  confirmButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    alignItems: "center",
+  },
+  confirmButtonText: {
+    color: "#000",
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
+  },
 });

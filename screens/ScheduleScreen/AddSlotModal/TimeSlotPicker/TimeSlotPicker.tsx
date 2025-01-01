@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TimeSlotPickerStyles } from "./TimeSlotPicker.style";
 import {
@@ -17,17 +23,20 @@ import { fetchgetDisabledSlots } from "../../../../store/effects";
 interface TimeSlotPickerProps {
   selectedTime: string;
   onTimeChange: (time: string) => void;
-  disabled?: boolean; // Add disabled prop
+  onConfirm: () => void; // Add onConfirm prop
+  disabled?: boolean;
 }
 
 const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   selectedTime,
   onTimeChange,
+  onConfirm,
   disabled = false,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const disabledSlots = useSelector(selectDisabledSlots);
   const platformsFields = useSelector(selectPlatformsFields);
+  const [tempSelectedTime, setTempSelectedTime] = useState(selectedTime);
 
   useEffect(() => {
     console.log(
@@ -68,27 +77,40 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   };
 
   return (
-    <View
-      style={
-        disabled
-          ? TimeSlotPickerStyles.pickerContainerDisabled
-          : TimeSlotPickerStyles.pickerContainer
-      }
-    >
-      <Picker
-        selectedValue={selectedTime}
-        onValueChange={(itemValue) => onTimeChange(itemValue)}
-        style={TimeSlotPickerStyles.picker}
-        enabled={!disabled}
+    <View style={TimeSlotPickerStyles.pickerWrapper}>
+      <View
+        style={
+          disabled
+            ? TimeSlotPickerStyles.pickerContainerDisabled
+            : TimeSlotPickerStyles.pickerContainer
+        }
       >
-        {generateTimeSlots(
-          8,
-          23,
-          1.5,
-          disabledSlots.disabledSlots,
-          disabledSlots.today
-        ).map(renderPickerItem)}
-      </Picker>
+        <Picker
+          selectedValue={tempSelectedTime}
+          onValueChange={(itemValue) => setTempSelectedTime(itemValue)}
+          style={TimeSlotPickerStyles.picker}
+          enabled={!disabled}
+        >
+          {generateTimeSlots(
+            8,
+            23,
+            1.5,
+            disabledSlots.disabledSlots,
+            disabledSlots.today
+          )
+            .filter((_, index) => Platform.OS !== "ios" || index !== 0) // Remove the first item if the platform is iOS
+            .map(renderPickerItem)}
+        </Picker>
+      </View>
+      <TouchableOpacity
+        style={TimeSlotPickerStyles.confirmButton}
+        onPress={() => {
+          onTimeChange(tempSelectedTime);
+          onConfirm();
+        }}
+      >
+        <Text style={TimeSlotPickerStyles.confirmButtonText}>Confirmar</Text>
+      </TouchableOpacity>
     </View>
   );
 };
