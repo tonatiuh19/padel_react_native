@@ -60,8 +60,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const [buttonText, setButtonText] = useState("Reservar");
 
   useEffect(() => {
-    console.log("PRICE", price);
-  }, [price]);
+    console.log("PRICE", userInfo);
+  }, [userInfo]);
 
   useEffect(() => {
     setShowTimePicker(false); // Reset showTimePicker to false when the component mounts
@@ -94,7 +94,12 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
     }
 
     setIsPaying(true);
-    const clientSecret = await fetchPaymentIntentClientSecret(550);
+    if (!price?.price) {
+      Alert.alert("Error", "El precio no está disponible");
+      setIsPaying(false);
+      return;
+    }
+    const clientSecret = await fetchPaymentIntentClientSecret(price.price);
     const billingDetails = {
       email: userInfo.info?.email,
     };
@@ -232,7 +237,9 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
               </View>
               {!showTimePicker && (
                 <View style={AddSlotModalStyles.bottomContainer}>
-                  <StripeProvider publishableKey="pk_test_51QIiddAC7jSBO0hEcfV17EolUCfKcLJjQZpO1becuuID8oCrI3xT049f4oYvfhynRQpQhGeBiLG34RaAZwA6lxor00S9cwfSny">
+                  <StripeProvider
+                    publishableKey={userInfo.info?.publishable_key}
+                  >
                     <View style={AddSlotModalStyles.containerCard}>
                       {showCountdown && (
                         <Text style={AddSlotModalStyles.titleValueCard}>
@@ -245,8 +252,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
                           AddSlotModalStyles.cardField,
                           {
                             borderWidth: 1,
-                            borderColor: "#000", // Change this to your desired border color
-                            borderRadius: 10, // Change this to your desired border radius
+                            borderColor: "#fff", // Change this to your desired border color
+                            borderRadius: 22, // Change this to your desired border radius
                           },
                         ]}
                         cardStyle={{

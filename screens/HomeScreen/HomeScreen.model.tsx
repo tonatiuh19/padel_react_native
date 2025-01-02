@@ -75,6 +75,7 @@ export interface UserInfo {
   type: number;
   date_created: string;
   id_platforms: number;
+  publishable_key: string;
 }
 
 export interface PlatformField {

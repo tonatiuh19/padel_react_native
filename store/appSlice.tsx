@@ -61,6 +61,7 @@ const initialState: AppState = {
       type: 0,
       date_created: "",
       id_platforms: 0,
+      publishable_key: "",
     },
   },
   reservations: [],

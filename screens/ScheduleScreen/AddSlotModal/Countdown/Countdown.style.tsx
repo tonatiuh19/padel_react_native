@@ -9,7 +9,8 @@ export const CountdownStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "black",
-    marginBottom: 5,
+    marginBottom: 10,
+    alignSelf: "center",
   },
   timerText: {
     fontSize: 24,

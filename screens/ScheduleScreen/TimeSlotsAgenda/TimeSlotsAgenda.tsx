@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, RefreshControl, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  RefreshControl,
+  Platform,
+} from "react-native";
 import { Agenda, LocaleConfig, AgendaList } from "react-native-calendars";
 import {
   TimeSlotsAgendaCalendarTheme,
@@ -87,6 +93,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   const isDayEmpty = useSelector(selectIsDayEmpty);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(today);
+  const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
 
   const formatTimeRange = (timeRange: string): string => {
     const [start, end] = timeRange
@@ -151,18 +158,24 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     }
   }, [platformsFields]);
 
-  const CustomHeader = (date:any) => {
+  const CustomHeader = (date: any) => {
     return (
       <View style={TimeSlotsAgendaStyles.customHeaderContainer}>
         <Text style={TimeSlotsAgendaStyles.customHeaderText}>
-          {date.date.toString('MMMM yyyy')}
+          {date.date.toString("MMMM yyyy")}
         </Text>
       </View>
     );
   };
 
   return (
-    <View style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 20 : 0, backgroundColor: "#fff" }}>
+    <View
+      style={{
+        flex: 1,
+        paddingBottom: Platform.OS === "ios" ? 20 : 0,
+        backgroundColor: "#fff",
+      }}
+    >
       <Agenda
         items={items}
         renderItem={(item: any) => (
@@ -173,7 +186,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           />
         )}
         style={TimeSlotsAgendaStyles.agenda}
-        renderHeader={(date:any) => <CustomHeader date={date} />}
+        renderHeader={(date: any) => <CustomHeader date={date} />}
         renderEmptyDate={() => (
           <View>
             <Text>renderEmptyDate</Text>
@@ -205,8 +218,11 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
           onDayPress(day.dateString);
         }}
         markedDates={markedDates}
+        onCalendarToggled={(calendarOpened: boolean) => {
+          setIsCalendarExpanded(calendarOpened);
+        }}
       />
-      {!isDayEmpty && (
+      {!isDayEmpty && !isCalendarExpanded && (
         <TouchableOpacity
           style={TimeSlotsAgendaStyles.fab}
           onPress={handleAddSlot}
