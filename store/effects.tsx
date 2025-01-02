@@ -85,13 +85,18 @@ const GET_RESERVATIONS_BY_USER_ID = `${DOMAIN}/getReservationsByUserId.php`;
 const GET_ADS_BY_ID = `${DOMAIN}/getAdsById.php`;
 const GET_PRICE_BY_ID = `${DOMAIN}/getPriceByIdAndTime.php`;
 
-export const fetchPaymentIntentClientSecret = async (amount: number) => {
+export const fetchPaymentIntentClientSecret = async (
+  amount: number,
+  customerId: string,
+  id_platforms_date_time_slot: number
+) => {
   try {
     const response = await axios.post(
       CREATE_PAYMENT_INTENT,
       {
-        items: [{ id: "id" }],
+        items: [{ id: id_platforms_date_time_slot, quantity: 1 }],
         amount: amount * 100,
+        customer: customerId,
       },
       {
         headers: { "Content-Type": "application/json" },
@@ -468,7 +473,7 @@ export const getUserInfoById =
   };
 
 export const updatePlatformDateTimeSlot =
-  (id_platforms_date_time_slot: number, active: number) =>
+  (id_platforms_date_time_slot: number, active: number, stripe_id = "") =>
   async (
     dispatch: (arg0: {
       payload: any;
@@ -483,6 +488,7 @@ export const updatePlatformDateTimeSlot =
       const response = await axios.post<any>(UPDATE_PLATFORM_DATE_TIME_SLOT, {
         id_platforms_date_time_slot,
         active,
+        stripe_id,
       });
       dispatch(updatePlatformDateTimeSlotSuccess(response.data));
     } catch (error) {
