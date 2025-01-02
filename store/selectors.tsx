@@ -30,3 +30,5 @@ export const selectAds = (state: RootState) => state.app.ads;
 
 export const selectLastReservation = (state: RootState) =>
   state.app.last_reservation;
+
+export const selectPrice = (state: RootState) => state.app.price;

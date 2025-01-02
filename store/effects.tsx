@@ -54,6 +54,9 @@ import {
   getAdsByIdStart,
   getAdsByIdSuccess,
   getAdsByIdFailure,
+  getPriceByIdAndTimeStart,
+  getPriceByIdAndTimeSuccess,
+  getPriceByIdAndTimeFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -80,6 +83,7 @@ const GET_USER_INFO_BY_ID = `${DOMAIN}/getUserInfoById.php`;
 const UPDATE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/updatePlatformDateTimeSlot.php`;
 const GET_RESERVATIONS_BY_USER_ID = `${DOMAIN}/getReservationsByUserId.php`;
 const GET_ADS_BY_ID = `${DOMAIN}/getAdsById.php`;
+const GET_PRICE_BY_ID = `${DOMAIN}/getPriceByIdAndTime.php`;
 
 export const fetchPaymentIntentClientSecret = async (amount: number) => {
   try {
@@ -530,5 +534,29 @@ export const getAdsById =
     } catch (error) {
       console.log("Error", error);
       dispatch(getAdsByIdFailure());
+    }
+  };
+
+export const getPriceByIdAndTime =
+  (id_platforms: number, time: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getPriceByIdAndTimeStart"
+        | "app/getPriceByIdAndTimeSuccess"
+        | "app/getPriceByIdAndTimeFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getPriceByIdAndTimeStart());
+      const response = await axios.post<any>(GET_PRICE_BY_ID, {
+        id_platforms,
+        time,
+      });
+      dispatch(getPriceByIdAndTimeSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getPriceByIdAndTimeFailure());
     }
   };

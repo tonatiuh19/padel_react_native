@@ -156,3 +156,10 @@ export const formatTime = (dateTimeString: string): string => {
 
   return `${formattedHours}:${formattedMinutes} ${ampm}`;
 };
+
+export const formatCurrency = (amount: number, currency: string = "USD") => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
+};

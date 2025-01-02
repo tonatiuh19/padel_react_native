@@ -12,6 +12,7 @@ import {
 import {
   deletePlatformDateTimeSlot,
   fetchPaymentIntentClientSecret,
+  getPriceByIdAndTime,
   insertPlatformDateTimeSlot,
   updatePlatformDateTimeSlot,
 } from "../../../store/effects";
@@ -22,12 +23,18 @@ import {
   selectIsLoading,
   selectPayment,
   selectPlatformsFields,
+  selectPrice,
   selectUserInfo,
 } from "../../../store/selectors";
-import { formatDate, generateDateTime } from "../../../utils/UtilsFunctions";
+import {
+  formatDate,
+  generateDateTime,
+  formatCurrency,
+} from "../../../utils/UtilsFunctions";
 import LoadingSmall from "../../HomeScreen/shared/components/LoadingSmall/LoadingSmall";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/AppNavigator/AppNavigator";
+import { resetPrice } from "../../../store/appSlice";
 
 interface AddSlotModalProps {
   visible: boolean;
@@ -42,6 +49,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const platformsFields = useSelector(selectPlatformsFields);
   const disabledSlots = useSelector(selectDisabledSlots);
   const payment = useSelector(selectPayment);
+  const price = useSelector(selectPrice);
 
   const [startTime, setStartTime] = useState("");
   const [showCountdown, setShowCountdown] = useState(false);
@@ -50,6 +58,10 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   const [isPaying, setIsPaying] = useState(false);
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [buttonText, setButtonText] = useState("Reservar");
+
+  useEffect(() => {
+    console.log("PRICE", price);
+  }, [price]);
 
   useEffect(() => {
     setShowTimePicker(false); // Reset showTimePicker to false when the component mounts
@@ -110,6 +122,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   };
 
   const handleTimeChange = (time: string) => {
+    console.log("Time selected", userInfo.info?.id_platforms, time);
+    dispatch(getPriceByIdAndTime(userInfo.info?.id_platforms, time));
     setShowCountdown(true);
     dispatch(
       insertPlatformDateTimeSlot(
@@ -127,6 +141,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
     dispatch(
       deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
     );
+    dispatch(resetPrice());
     setShowCountdown(false);
     setStartTime("");
     setShowTimePicker(false);
@@ -134,6 +149,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
   };
 
   const handleShowTimePicker = () => {
+    setShowCountdown(false);
+    setStartTime("");
     setShowTimePicker(true);
     dispatch(
       deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
@@ -169,6 +186,17 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({ visible, onClose }) => {
                 </Text>
               </View>
               <View style={AddSlotModalStyles.centeredContainer}>
+                {!showTimePicker && (
+                  <>
+                    {price && (
+                      <View style={AddSlotModalStyles.priceContainer}>
+                        <Text style={AddSlotModalStyles.priceText}>
+                          {formatCurrency(price.price)}
+                        </Text>
+                      </View>
+                    )}
+                  </>
+                )}
                 {showCountdown && (
                   <Countdown
                     duration={90}

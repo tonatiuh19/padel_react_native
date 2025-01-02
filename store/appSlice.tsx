@@ -4,6 +4,7 @@ import {
   EPlatformField,
   PaymentState,
   PlatformField,
+  PriceModel,
   ReservationCardAdsProps,
   Reservations,
   UserInfo,
@@ -65,6 +66,7 @@ const initialState: AppState = {
   reservations: [],
   ads: [],
   last_reservation: null,
+  price: null,
 };
 
 const appSlice = createSlice({
@@ -345,6 +347,21 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getPriceByIdAndTimeStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getPriceByIdAndTimeSuccess(state, action: PayloadAction<PriceModel>) {
+      state.isLoading = false;
+      state.price = action.payload;
+    },
+    getPriceByIdAndTimeFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    resetPrice(state) {
+      state.price = null;
+    },
   },
 });
 
@@ -406,6 +423,10 @@ export const {
   getAdsByIdStart,
   getAdsByIdSuccess,
   getAdsByIdFailure,
+  getPriceByIdAndTimeStart,
+  getPriceByIdAndTimeSuccess,
+  getPriceByIdAndTimeFailure,
+  resetPrice,
 } = appSlice.actions;
 
 export default appSlice.reducer;

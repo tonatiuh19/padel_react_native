@@ -29,6 +29,7 @@ export interface AppState {
   reservations: Reservations[];
   ads: ReservationCardAdsProps[];
   last_reservation: Reservations | null;
+  price: PriceModel | null;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -140,4 +141,11 @@ export interface Reservations {
   active: number;
   stripe_id: string;
   validated: number;
+}
+
+export interface PriceModel {
+  id_platforms_fields_price: number;
+  id_platforms: number;
+  price: number;
+  active: number;
 }

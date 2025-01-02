@@ -102,11 +102,14 @@ export const AddSlotModalStyles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   loadingText: { marginTop: 10, fontSize: 16, fontFamily: "Kanit-Regular" },
   timePickerButton: {
+    marginTop: 10,
     padding: 10,
     backgroundColor: "#e1dd2a",
     borderRadius: 22,
     alignItems: "center",
     marginVertical: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   timePickerButtonText: {
     color: "#000",
@@ -122,5 +125,17 @@ export const AddSlotModalStyles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
+  },
+  priceContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 25,
+  },
+  priceText: {
+    fontSize: 32,
+    fontWeight: "bold",
+    fontFamily: "Kanit-Regular",
   },
 });
