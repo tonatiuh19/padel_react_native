@@ -13,6 +13,18 @@ export const ReservationCardStyles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+  cardEvent: {
+    width: "90%",
+    padding: 20,
+    marginVertical: 10,
+    backgroundColor: "#292928",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
   cardValidated: {
     width: "90%",
     padding: 20,

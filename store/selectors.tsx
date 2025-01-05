@@ -24,7 +24,11 @@ export const selectUserInfo = (state: RootState) => state.app.userInfo;
 export const selectIsUserExist = (state: RootState) =>
   state.app.userInfo.isUserExist;
 
-export const selectReservations = (state: RootState) => state.app.reservations;
+export const selectReservations = (state: RootState) =>
+  state.app.reservations.reservations;
+
+export const selectEventReservations = (state: RootState) =>
+  state.app.reservations.eventReservations;
 
 export const selectAds = (state: RootState) => state.app.ads;
 
@@ -32,3 +36,7 @@ export const selectLastReservation = (state: RootState) =>
   state.app.last_reservation;
 
 export const selectPrice = (state: RootState) => state.app.price;
+
+export const selectEventPrice = (state: RootState) => state.app.eventPrice;
+
+export const selectPaymentEvent = (state: RootState) => state.app.paymentEvent;

@@ -14,7 +14,7 @@ import { setIsDayEmpty, setMarkedActiveDay } from "../../../../store/appSlice";
 import { selectMarkedActiveDay } from "../../../../store/selectors";
 
 interface EmptyDataViewProps {
-  onAddSlot: () => void;
+  onAddSlot: (isSpecialEvent: boolean) => void;
   onRefresh: () => void;
   refreshing: boolean;
 }
@@ -49,7 +49,7 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
           <Text style={EmptyDataViewStyles.text}>Este dia esta libre</Text>
           <TouchableOpacity
             style={EmptyDataViewStyles.button}
-            onPress={onAddSlot}
+            onPress={() => onAddSlot(false)}
           >
             <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
           </TouchableOpacity>
@@ -65,7 +65,7 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
           </Text>
           <TouchableOpacity
             style={EmptyDataViewStyles.button}
-            onPress={onAddSlot}
+            onPress={() => onAddSlot(false)}
           >
             <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
           </TouchableOpacity>
@@ -77,15 +77,17 @@ const EmptyDataView: React.FC<EmptyDataViewProps> = ({
           </Text>
           <TouchableOpacity
             style={EmptyDataViewStyles.buttonSpecial}
-            onPress={onAddSlot}
+            onPress={() => onAddSlot(false)}
           >
             <Text style={EmptyDataViewStyles.buttonText}>Agendar cancha</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={EmptyDataViewStyles.buttonSpecial}
-            onPress={onAddSlot}
+            onPress={() => onAddSlot(true)}
           >
-            <Text style={EmptyDataViewStyles.buttonText}>Inscripción a evento</Text>
+            <Text style={EmptyDataViewStyles.buttonText}>
+              Inscripción a evento
+            </Text>
           </TouchableOpacity>
         </>
       ) : null}

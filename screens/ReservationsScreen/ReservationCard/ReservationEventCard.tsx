@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { ReservationCardStyles } from "./ReservationCard.style";
-import { Reservation, Reservations } from "../../HomeScreen/HomeScreen.model";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import {
   formatDate,
   formatFullDate,
@@ -11,13 +9,16 @@ import {
 import QRCode from "react-native-qrcode-svg";
 import TicketModal from "./TicketModal/TicketModal";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ReservationCardStyles } from "./ReservationCard.style";
+import { EventReservation } from "../../HomeScreen/HomeScreen.model";
+import TicketEventModal from "./TicketModal/TicketEventModal";
 
-interface ReservationCardProps {
-  reservation: Reservation; // Adjust the type according to your reservation data structure
+interface ReservationEventCardProps {
+  reservationEvent: EventReservation; // Adjust the type according to your reservation event data structure
 }
 
-const ReservationCardList: React.FC<ReservationCardProps> = ({
-  reservation,
+const ReservationEventCard: React.FC<ReservationEventCardProps> = ({
+  reservationEvent,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -32,8 +33,8 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
   return (
     <View
       style={
-        reservation.validated === 0
-          ? ReservationCardStyles.card
+        reservationEvent.validated === 0
+          ? ReservationCardStyles.cardEvent
           : ReservationCardStyles.cardValidated
       }
     >
@@ -41,11 +42,11 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
         <View style={ReservationCardStyles.column30}>
           <View style={ReservationCardStyles.row}>
             <Text style={ReservationCardStyles.cardTextTitleNumber}>
-              {reservation.id_platforms_field}
+              {reservationEvent.id_platforms_field}
             </Text>
           </View>
           <View style={ReservationCardStyles.row}>
-            <Text style={ReservationCardStyles.cardTextTitle}>CANCHA</Text>
+            <Text style={ReservationCardStyles.cardTextTitle}>Cancha</Text>
           </View>
         </View>
         <View style={ReservationCardStyles.verticalLine} />
@@ -53,24 +54,24 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
           <View style={ReservationCardStyles.row}>
             <Text style={ReservationCardStyles.cardText}>Fecha:</Text>
             <Text style={ReservationCardStyles.cardTextValue}>
-              {formatShortDate(reservation.platforms_date_time_start)}
+              {formatShortDate(reservationEvent.start_date_time)}
             </Text>
           </View>
           <View style={ReservationCardStyles.row}>
             <Text style={ReservationCardStyles.cardText}>Hora Inicio:</Text>
             <Text style={ReservationCardStyles.cardTextValue}>
-              {formatTime(reservation.platforms_date_time_start)}
+              {formatTime(reservationEvent.start_date_time)}
             </Text>
           </View>
           <View style={ReservationCardStyles.row}>
             <Text style={ReservationCardStyles.cardText}>Hora Fin:</Text>
             <Text style={ReservationCardStyles.cardTextValue}>
-              {formatTime(reservation.platforms_date_time_end)}
+              {formatTime(reservationEvent.end_date_time)}
             </Text>
           </View>
           {/* Add more rows as needed */}
         </View>
-        {reservation.validated === 0 ? (
+        {reservationEvent.validated === 0 ? (
           <TouchableOpacity
             onPress={openTicket}
             style={ReservationCardStyles.column20}
@@ -86,7 +87,7 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
               </Text>
             </View>
             <View style={ReservationCardStyles.row}>
-              <Text style={ReservationCardStyles.cardText}>Ver pase</Text>
+              <Text style={ReservationCardStyles.cardText}>Evento</Text>
             </View>
           </TouchableOpacity>
         ) : (
@@ -103,13 +104,13 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
         )}
       </View>
 
-      <TicketModal
+      <TicketEventModal
         visible={modalVisible}
         onClose={closeTicket}
-        reservation={reservation}
+        reservationEvent={reservationEvent}
       />
     </View>
   );
 };
 
-export default ReservationCardList;
+export default ReservationEventCard;

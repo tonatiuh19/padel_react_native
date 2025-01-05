@@ -12,6 +12,7 @@ interface CountdownProps {
     timerTextRed?: TextStyle;
   };
   isCheckout?: boolean;
+  isEvent?: boolean;
 }
 
 const Countdown: React.FC<CountdownProps> = ({
@@ -20,6 +21,7 @@ const Countdown: React.FC<CountdownProps> = ({
   reset,
   style,
   isCheckout = false,
+  isEvent = false,
 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
 
@@ -54,7 +56,9 @@ const Countdown: React.FC<CountdownProps> = ({
     <View style={[CountdownStyles.container, style?.container]}>
       {isCheckout && (
         <Text style={[CountdownStyles.timerTextTitle]}>
-          Tienes el siguiente tiempo para completar tu reserva:
+          {isEvent
+            ? "Tienes el siguiente tiempo para completar tu registro:"
+            : "Tienes el siguiente tiempo para completar tu reserva:"}
         </Text>
       )}
       <Text

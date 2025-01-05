@@ -57,6 +57,18 @@ import {
   getPriceByIdAndTimeStart,
   getPriceByIdAndTimeSuccess,
   getPriceByIdAndTimeFailure,
+  getEventPricebyDateAndIdPlatformStart,
+  getEventPricebyDateAndIdPlatformSuccess,
+  getEventPricebyDateAndIdPlatformFailure,
+  insertEventUserStart,
+  insertEventUserSuccess,
+  insertEventUserFailure,
+  deleteEventUserByIdStart,
+  deleteEventUserByIdSuccess,
+  deleteEventUserByIdFailure,
+  updateEventUserByIdStart,
+  updateEventUserByIdSuccess,
+  updateEventUserByIdFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -84,6 +96,10 @@ const UPDATE_PLATFORM_DATE_TIME_SLOT = `${DOMAIN}/updatePlatformDateTimeSlot.php
 const GET_RESERVATIONS_BY_USER_ID = `${DOMAIN}/getReservationsByUserId.php`;
 const GET_ADS_BY_ID = `${DOMAIN}/getAdsById.php`;
 const GET_PRICE_BY_ID = `${DOMAIN}/getPriceByIdAndTime.php`;
+const GET_EVENT_PRICE_BY_ID = `${DOMAIN}/getEventPricebyDateAndIdPlatform.php`;
+const INSERT_EVENT_USER = `${DOMAIN}/insertEventUser.php`;
+const DELETE_EVENT_USER = `${DOMAIN}/deleteEventUserById.php`;
+const UPDATE_EVENT_USER = `${DOMAIN}/updateEventUserById.php`;
 
 export const fetchPaymentIntentClientSecret = async (
   amount: number,
@@ -564,5 +580,110 @@ export const getPriceByIdAndTime =
     } catch (error) {
       console.log("Error", error);
       dispatch(getPriceByIdAndTimeFailure());
+    }
+  };
+
+export const getEventPricebyDateAndIdPlatform =
+  (id_platforms_field: number, platforms_fields_price_start_time: string) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getEventPricebyDateAndIdPlatformStart"
+        | "app/getEventPricebyDateAndIdPlatformSuccess"
+        | "app/getEventPricebyDateAndIdPlatformFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getEventPricebyDateAndIdPlatformStart());
+      const response = await axios.post<any>(GET_EVENT_PRICE_BY_ID, {
+        id_platforms_field,
+        platforms_fields_price_start_time,
+      });
+      dispatch(getEventPricebyDateAndIdPlatformSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getEventPricebyDateAndIdPlatformFailure());
+    }
+  };
+
+export const insertEventUser =
+  (
+    id_platforms_user: number,
+    id_platforms_disabled_date: number,
+    active: number
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/insertEventUserStart"
+        | "app/insertEventUserSuccess"
+        | "app/insertEventUserFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(insertEventUserStart());
+      const response = await axios.post<any>(INSERT_EVENT_USER, {
+        id_platforms_user,
+        id_platforms_disabled_date,
+        active,
+      });
+      dispatch(insertEventUserSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(insertEventUserFailure());
+    }
+  };
+
+export const deleteEventUserById =
+  (id_platforms_fields_events_users: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/deleteEventUserByIdStart"
+        | "app/deleteEventUserByIdSuccess"
+        | "app/deleteEventUserByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(deleteEventUserByIdStart());
+      const response = await axios.post<any>(DELETE_EVENT_USER, {
+        id_platforms_fields_events_users,
+      });
+      dispatch(deleteEventUserByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(deleteEventUserByIdFailure());
+    }
+  };
+
+export const updateEventUserById =
+  (
+    id_platforms_fields_events_users: number,
+    active: number,
+    stripe_id: string
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/updateEventUserByIdStart"
+        | "app/updateEventUserByIdSuccess"
+        | "app/updateEventUserByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(updateEventUserByIdStart());
+      const response = await axios.post<any>(UPDATE_EVENT_USER, {
+        id_platforms_fields_events_users,
+        active,
+        stripe_id,
+      });
+      dispatch(updateEventUserByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(updateEventUserByIdFailure());
     }
   };

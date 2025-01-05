@@ -17,6 +17,8 @@ import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectDisabledSlots,
+  selectEventPrice,
   selectIsDayEmpty,
   selectPlatformsFields,
 } from "../../../store/selectors";
@@ -25,6 +27,7 @@ import { AppDispatch } from "../../../store";
 import { setMarkedActiveDay, setSelectedDay } from "../../../store/appSlice";
 import AddSlotModal from "../AddSlotModal/AddSlotModal";
 import { getDisabledSlots } from "../../../utils/UtilsFunctions";
+import { getEventPricebyDateAndIdPlatform } from "../../../store/effects";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -91,9 +94,12 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   const dispatch: AppDispatch = useDispatch();
   const platformsFields = useSelector(selectPlatformsFields);
   const isDayEmpty = useSelector(selectIsDayEmpty);
+  const disabledSlots = useSelector(selectDisabledSlots);
+  const eventPrice = useSelector(selectEventPrice);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(today);
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
+  const [isEvent, setIsEvent] = useState(false);
 
   const formatTimeRange = (timeRange: string): string => {
     const [start, end] = timeRange
@@ -114,15 +120,24 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     console.log("handlePress", item);
   };
 
-  const handleAddSlot = () => {
-    setModalVisible(true);
-  };
-
   const now = new Date(today);
   const minDate = now.toISOString().split("T")[0];
   const maxDate = new Date(now.setDate(now.getDate() + 30))
     .toISOString()
     .split("T")[0];
+
+  const handleAddSlot = (isSpecialEvent: boolean) => {
+    if (isSpecialEvent) {
+      dispatch(
+        getEventPricebyDateAndIdPlatform(
+          platformsFields.id_platforms_field,
+          disabledSlots.today
+        )
+      );
+    }
+    setIsEvent(isSpecialEvent);
+    setModalVisible(true);
+  };
 
   const getActiveStatus = (
     markedDates: { [key: string]: MarkedDate },
@@ -157,6 +172,20 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
       });
     }
   }, [platformsFields]);
+
+  useEffect(() => {
+    const hasActive3 = Object.keys(markedDates).some((key) => {
+      return markedDates[key].active === 3 && key === date;
+    });
+    if (hasActive3) {
+      console.log(
+        "There is an active day with value 3 and matching start_date_time"
+      );
+      setIsEvent(true);
+    } else {
+      setIsEvent(false);
+    }
+  }, [markedDates, date]);
 
   const CustomHeader = (date: any) => {
     return (
@@ -223,15 +252,32 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         }}
       />
       {!isDayEmpty && !isCalendarExpanded && (
-        <TouchableOpacity
-          style={TimeSlotsAgendaStyles.fab}
-          onPress={handleAddSlot}
-        >
-          <FontAwesome6 name="plus" size={16} color="#000" />
-          <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
-        </TouchableOpacity>
+        <View style={TimeSlotsAgendaStyles.fabContainer}>
+          <TouchableOpacity
+            style={TimeSlotsAgendaStyles.fab}
+            onPress={() => handleAddSlot(false)}
+          >
+            <FontAwesome6 name="plus" size={16} color="#000" />
+            <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
+          </TouchableOpacity>
+          {isEvent && (
+            <TouchableOpacity
+              style={TimeSlotsAgendaStyles.fab}
+              onPress={() => handleAddSlot(true)}
+            >
+              <FontAwesome6 name="calendar" size={16} color="#000" />
+              <Text style={TimeSlotsAgendaStyles.fabText}>
+                Registro a evento
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       )}
-      <AddSlotModal visible={modalVisible} onClose={handleCloseModal} />
+      <AddSlotModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        isEvent={isEvent}
+      />
     </View>
   );
 };

@@ -11,6 +11,7 @@ import { ReservationsScreenStyles } from "./ReservationsScreen.style";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectEventReservations,
   selectPlatformFields,
   selectReservations,
 } from "../../store/selectors";
@@ -24,12 +25,14 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
+import ReservationEventCard from "./ReservationCard/ReservationEventCard";
 
 export default function ReservationsScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch: AppDispatch = useDispatch();
   const platformFields = useSelector(selectPlatformFields);
   const reservations = useSelector(selectReservations);
+  const eventReservations = useSelector(selectEventReservations);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchReservations = async () => {
@@ -42,6 +45,10 @@ export default function ReservationsScreen() {
       console.error("Failed to refresh reservations", error);
     }
   };
+
+  useEffect(() => {
+    console.log(eventReservations);
+  }, [eventReservations]);
 
   useEffect(() => {
     fetchReservations();
@@ -94,6 +101,21 @@ export default function ReservationsScreen() {
           </View>
         ) : (
           <>
+            {eventReservations.map((reservation, index) => (
+              <ReservationEventCard
+                key={index}
+                reservationEvent={reservation}
+              />
+            ))}
+            {eventReservations.length > 1 && (
+              <View
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginVertical: 10,
+                }}
+              />
+            )}
             {reservations.map((reservation, index) => (
               <ReservationCardList key={index} reservation={reservation} />
             ))}

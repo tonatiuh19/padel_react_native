@@ -26,10 +26,12 @@ export interface AppState {
   payment: PaymentState;
   disabledSlots: DisabledSlotsState;
   userInfo: UserState;
-  reservations: Reservations[];
+  reservations: Reservations;
   ads: ReservationCardAdsProps[];
-  last_reservation: Reservations | null;
+  last_reservation: Reservation | null;
   price: PriceModel | null;
+  eventPrice: PriceEventModel | null;
+  paymentEvent: PaymentEventState;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -134,6 +136,24 @@ export interface Slot {
 }
 
 export interface Reservations {
+  reservations: Reservation[];
+  eventReservations: EventReservation[];
+}
+
+export interface EventReservation {
+  id_platforms_fields_events_users: number;
+  id_platforms_user: number;
+  id_platforms_disabled_date: number;
+  stripe_id: string;
+  active: number;
+  validated: number;
+  platforms_fields_events_users_inserted: string;
+  start_date_time: string;
+  end_date_time: string;
+  id_platforms_field: number;
+}
+
+export interface Reservation {
   id_platforms_date_time_slot: number;
   id_platforms_field: number;
   id_platforms_user: number;
@@ -149,4 +169,24 @@ export interface PriceModel {
   id_platforms: number;
   price: number;
   active: number;
+}
+
+export interface PriceEventModel {
+  id_platforms_fields_price: number;
+  id_platforms: number;
+  id_platforms_field: number;
+  id_platforms_disabled_date: number;
+  price: number;
+  platforms_fields_price_start_time: string;
+  platforms_fields_price_end_time: string;
+  slots: number;
+  available_slots: number;
+}
+
+export interface PaymentEventState {
+  id_platforms_fields_events_users: number;
+  id_platforms_user: number;
+  id_platforms_disabled_date: number;
+  active: number;
+  platforms_fields_events_users_inserted: string;
 }

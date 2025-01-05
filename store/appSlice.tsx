@@ -2,9 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AppState,
   EPlatformField,
+  PaymentEventState,
   PaymentState,
   PlatformField,
+  PriceEventModel,
   PriceModel,
+  Reservation,
   ReservationCardAdsProps,
   Reservations,
   UserInfo,
@@ -64,10 +67,21 @@ const initialState: AppState = {
       publishable_key: "",
     },
   },
-  reservations: [],
+  reservations: {
+    reservations: [],
+    eventReservations: [],
+  },
   ads: [],
   last_reservation: null,
   price: null,
+  eventPrice: null,
+  paymentEvent: {
+    id_platforms_fields_events_users: 0,
+    id_platforms_user: 0,
+    id_platforms_disabled_date: 0,
+    active: 0,
+    platforms_fields_events_users_inserted: "",
+  },
 };
 
 const appSlice = createSlice({
@@ -325,10 +339,7 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    getReservationsByUserIdSuccess(
-      state,
-      action: PayloadAction<Reservations[]>
-    ) {
+    getReservationsByUserIdSuccess(state, action: PayloadAction<Reservations>) {
       state.isLoading = false;
       state.reservations = action.payload;
     },
@@ -362,6 +373,68 @@ const appSlice = createSlice({
     },
     resetPrice(state) {
       state.price = null;
+      state.eventPrice = null;
+    },
+    getEventPricebyDateAndIdPlatformStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getEventPricebyDateAndIdPlatformSuccess(
+      state,
+      action: PayloadAction<PriceEventModel>
+    ) {
+      state.isLoading = false;
+      state.eventPrice = action.payload;
+    },
+    getEventPricebyDateAndIdPlatformFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    insertEventUserStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    insertEventUserSuccess(state, action: PayloadAction<PaymentEventState>) {
+      state.isLoading = false;
+      state.paymentEvent = action.payload;
+    },
+    insertEventUserFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    deleteEventUserByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    deleteEventUserByIdSuccess(state, action: PayloadAction<any>) {
+      console.log("Action Payload", action.payload);
+      state.isLoading = false;
+      state.paymentEvent = {
+        id_platforms_fields_events_users: 0,
+        id_platforms_user: 0,
+        id_platforms_disabled_date: 0,
+        active: 0,
+        platforms_fields_events_users_inserted: "",
+      };
+    },
+    deleteEventUserByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    updateEventUserByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    updateEventUserByIdSuccess(
+      state,
+      action: PayloadAction<PaymentEventState>
+    ) {
+      state.isLoading = false;
+      state.paymentEvent = action.payload;
+    },
+    updateEventUserByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });
@@ -428,6 +501,18 @@ export const {
   getPriceByIdAndTimeSuccess,
   getPriceByIdAndTimeFailure,
   resetPrice,
+  getEventPricebyDateAndIdPlatformStart,
+  getEventPricebyDateAndIdPlatformSuccess,
+  getEventPricebyDateAndIdPlatformFailure,
+  insertEventUserStart,
+  insertEventUserSuccess,
+  insertEventUserFailure,
+  deleteEventUserByIdStart,
+  deleteEventUserByIdSuccess,
+  deleteEventUserByIdFailure,
+  updateEventUserByIdStart,
+  updateEventUserByIdSuccess,
+  updateEventUserByIdFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
