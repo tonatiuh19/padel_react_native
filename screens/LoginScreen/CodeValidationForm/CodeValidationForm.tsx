@@ -98,8 +98,8 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
       }) => (
         <>
           <Text style={LoginScreenStyles.label}>
-            Para garantizar la seguridad de tu cuenta, hemos enviado un código
-            de seis dígitos a tu correo. Insértalo a continuación:
+            Para garantizar la seguridad de tu cuenta, enviaremos un código de
+            seis dígitos a tu correo. Insértalo a continuación:
           </Text>
           {true && (
             <>
@@ -199,14 +199,22 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
             Al registrarte o iniciar sesión, aceptas nuestros{" "}
             <Text
               style={LoginScreenStyles.linkText}
-              onPress={() => Linking.openURL("https://example.com/terms")}
+              onPress={() =>
+                Linking.openURL(
+                  "https://intelipadel.com/terminosycondiciones/padelroom"
+                )
+              }
             >
               Términos y Condiciones
             </Text>{" "}
             y{" "}
             <Text
               style={LoginScreenStyles.linkText}
-              onPress={() => Linking.openURL("https://example.com/privacy")}
+              onPress={() =>
+                Linking.openURL(
+                  "https://intelipadel.com/avisodeprivacidad/padelroom"
+                )
+              }
             >
               Política de Privacidad
             </Text>

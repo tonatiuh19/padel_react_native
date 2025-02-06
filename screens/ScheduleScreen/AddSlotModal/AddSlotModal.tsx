@@ -84,7 +84,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
         insertEventUser(
           userInfo.info?.id_platforms_user,
           eventPrice.id_platforms_disabled_date,
-          2
+          2,
+          eventPrice.price
         )
       );
       hasDispatchedInsertEventUser.current = true;
@@ -155,7 +156,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
         updatePlatformDateTimeSlot(
           payment.id_platforms_date_time_slot ?? 0,
           1,
-          paymentIntent.id
+          paymentIntent.id,
+          price.price
         )
       );
       dispatch(resetPrice());

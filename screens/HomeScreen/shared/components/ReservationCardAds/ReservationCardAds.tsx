@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "@ui-kitten/components";
 import { ReservationCardAdsProps } from "../../../HomeScreen.model";
 import { View, Image, TouchableOpacity } from "react-native";
@@ -10,33 +10,46 @@ import {
   ReservationCardAdsStyles,
   ReservationCardAdsWidth,
 } from "./ReservationCardAds.style";
+import AdImageModal from "./AdImageModal/AdImageModal";
 
 const ReservationCardAds: React.FC<ReservationCardAdsProps> = ({
   id_platforms_ad,
   platforms_ad_title,
   platforms_ad_image,
 }) => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlePress = () => {
-    //navigation.navigate("Schedule", field);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      style={[
-        ReservationCardAdsStyles.card,
-        { height: ReservationCardAdsHeight },
-      ]}
-    >
-      <Image
-        source={{
-          uri: platforms_ad_image,
-        }}
-        style={ReservationCardAdsStyles.carouselImage}
+    <View>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={[
+          ReservationCardAdsStyles.card,
+          { height: ReservationCardAdsHeight },
+        ]}
+      >
+        <Image
+          source={{
+            uri: platforms_ad_image,
+          }}
+          style={ReservationCardAdsStyles.carouselImage}
+        />
+      </TouchableOpacity>
+
+      <AdImageModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        imageUrl={platforms_ad_image}
       />
-    </TouchableOpacity>
+    </View>
   );
 };
 

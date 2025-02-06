@@ -6,7 +6,7 @@ export const ReservationCardWidth = width;
 
 export const ReservationCardStyles = StyleSheet.create({
   card: {
-    marginBottom: 8, // Only apply margin to the bottom
+    marginBottom: 8,
     width: "100%",
     borderRadius: 22,
     overflow: "hidden",

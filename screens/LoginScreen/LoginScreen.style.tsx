@@ -288,6 +288,7 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   datePickerContainer: {
     marginLeft: 20, // Example margin
+    marginRight: 20, // Example margin
     marginBottom: 20, // Example margin
     borderColor: "#e1dd2a", // Dark gray border
     backgroundColor: "#000000", // Black background for phone number container

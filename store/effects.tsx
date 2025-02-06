@@ -489,7 +489,12 @@ export const getUserInfoById =
   };
 
 export const updatePlatformDateTimeSlot =
-  (id_platforms_date_time_slot: number, active: number, stripe_id = "") =>
+  (
+    id_platforms_date_time_slot: number,
+    active: number,
+    stripe_id = "",
+    priceTotal = 0
+  ) =>
   async (
     dispatch: (arg0: {
       payload: any;
@@ -505,6 +510,7 @@ export const updatePlatformDateTimeSlot =
         id_platforms_date_time_slot,
         active,
         stripe_id,
+        priceTotal,
       });
       dispatch(updatePlatformDateTimeSlotSuccess(response.data));
     } catch (error) {
@@ -611,7 +617,8 @@ export const insertEventUser =
   (
     id_platforms_user: number,
     id_platforms_disabled_date: number,
-    active: number
+    active: number,
+    priceTotal: number
   ) =>
   async (
     dispatch: (arg0: {
@@ -628,6 +635,7 @@ export const insertEventUser =
         id_platforms_user,
         id_platforms_disabled_date,
         active,
+        priceTotal,
       });
       dispatch(insertEventUserSuccess(response.data));
     } catch (error) {

@@ -47,7 +47,7 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
 
   const timeSlots = generateTimeSlots(
     8,
-    23,
+    22,
     1.5,
     disabledSlots.disabledSlots,
     disabledSlots.today
