@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -6,6 +7,8 @@ import LoadingMask from "./screens/HomeScreen/shared/components/LoadingMask/Load
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import AppContent from "./AppContent";
+
+SplashScreen.preventAutoHideAsync();
 
 const loadFonts = () => {
   return Font.loadAsync({
@@ -16,14 +19,28 @@ const loadFonts = () => {
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    //SplashScreen.preventAutoHideAsync();
-    loadFonts().then(() => {
-      setFontsLoaded(true);
-      //SplashScreen.hideAsync();
-    });
+    async function prepare() {
+      try {
+        await loadFonts();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setFontsLoaded(true);
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
   }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
 
   if (!fontsLoaded) {
     return <LoadingMask isLoading={true} />;
@@ -32,7 +49,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <AppContent />
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <AppContent />
+        </View>
       </NavigationContainer>
     </Provider>
   );

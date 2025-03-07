@@ -32,11 +32,19 @@ const SignInForm: React.FC<any> = ({
 
   useEffect(() => {
     console.log("isUserExist", isUserExist);
+    console.log("userInfo", userInfo.info.active);
     setUserExists(isUserExist); // Update the parent state when isUserExist changes
   }, [isUserExist, setUserExists]);
 
   const onChange = (event: any, selectedDate: any, setFieldValue: any) => {
     const currentDate = selectedDate || date;
+    if (Platform.OS !== "ios") {
+      console.log(
+        "Current Date",
+        currentDate.setDate(currentDate.getDate() - 1)
+      );
+      setShow(false);
+    }
     setDate(currentDate);
     setFieldValue("dateOfBirth", formatDate(currentDate)); // Update dateOfBirth field
   };
@@ -76,7 +84,7 @@ const SignInForm: React.FC<any> = ({
         <>
           {!isUserExist ? (
             <>
-              {!isSettingDateOfBirth && (
+              {!isSettingDateOfBirth && Platform.OS !== "ios" && (
                 <>
                   <TextInput
                     style={
@@ -122,7 +130,9 @@ const SignInForm: React.FC<any> = ({
                   }
                   onPress={() => {
                     setShow(true);
-                    return setIsSettingDateOfBirth(true);
+                    if (Platform.OS === "ios") {
+                      return setIsSettingDateOfBirth(true);
+                    }
                   }}
                 >
                   <TextInput
@@ -205,7 +215,15 @@ const SignInForm: React.FC<any> = ({
             </>
           ) : (
             <>
-              <CodeValidationForm setNextSection={setNextSection} />
+              {userInfo.info.active === 0 ? (
+                <CodeValidationForm setNextSection={setNextSection} />
+              ) : (
+                <View style={LoginScreenStyles.generalContainer}>
+                  <Text style={LoginScreenStyles.phoneNumberText}>
+                    Tu cuenta ha sido eliminada. Por favor, contacta a soporte.
+                  </Text>
+                </View>
+              )}
             </>
           )}
         </>

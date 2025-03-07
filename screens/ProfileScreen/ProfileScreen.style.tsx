@@ -63,6 +63,15 @@ export const ProfileScreenStyles = StyleSheet.create({
     backgroundColor: "#e1dd2a",
     borderRadius: 22,
   },
+  deActivateButton: {
+    marginTop: 10,
+    width: ProfileScreenWidth * 0.8,
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#fff",
+    borderRadius: 22,
+  },
   buttonText: {
     color: "#000",
     fontSize: 16,

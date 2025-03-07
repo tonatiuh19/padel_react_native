@@ -9,7 +9,7 @@ import SignInForm from "./SignInForm/SignInForm";
 import LoginForm from "./LoginForm/LoginForm";
 import { getFlagImage } from "../../utils/UtilsFunctions";
 import { useFocusEffect } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const LoginScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -55,10 +55,11 @@ const LoginScreen: React.FC = () => {
 
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{ flexGrow: 1,  backgroundColor: "#000000" }}
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: "#000000" }}
       enableOnAndroid={true}
       extraHeight={65}
       extraScrollHeight={65}
+      scrollEnabled={false}
     >
       <View style={LoginScreenStyles.container}>
         <View style={LoginScreenStyles.logoContainer}>

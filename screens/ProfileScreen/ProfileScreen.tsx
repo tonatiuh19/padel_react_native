@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { ProfileScreenStyles } from "./ProfileScreen.style";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
@@ -10,12 +16,14 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
 import Icon from "react-native-vector-icons/FontAwesome";
 import EditProfileForm from "./EditProfileForm/EditProfileForm";
+import ConfirmationModal from "./ConfirmationModal/ConfirmationModal";
 
 export default function ProfileScreen() {
   const dispatch: AppDispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [isEditing, setIsEditing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem("id_platforms_user");
@@ -25,9 +33,14 @@ export default function ProfileScreen() {
     navigation.navigate("Main");
   };
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+  const handleDeleteAccount = () => {
+    // Add your delete account logic here
+    setModalVisible(false);
+    handleLogout();
+    Linking.openURL(
+      `https://intelipadel.com/desactivarcuenta/${userInfo.info?.id_platforms_user}`
+    );
+  };
 
   return (
     <View style={ProfileScreenStyles.container}>
@@ -87,7 +100,18 @@ export default function ProfileScreen() {
         >
           <Text style={ProfileScreenStyles.buttonText}>Cerrar Sesión</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={ProfileScreenStyles.deActivateButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={ProfileScreenStyles.buttonText}>Eliminar mi cuenta</Text>
+        </TouchableOpacity>
       </View>
+      <ConfirmationModal
+        visible={modalVisible}
+        onConfirm={handleDeleteAccount}
+        onCancel={() => setModalVisible(false)}
+      />
     </View>
   );
 }

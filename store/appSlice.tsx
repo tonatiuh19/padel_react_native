@@ -61,6 +61,7 @@ const initialState: AppState = {
       phone_number: "",
       phone_number_code: "",
       stripe_id: "",
+      active: 0,
       type: 0,
       date_created: "",
       id_platforms: 0,
