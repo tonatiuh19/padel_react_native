@@ -5,6 +5,8 @@ import ReservationsScreen from "../../screens/ReservationsScreen/ReservationsScr
 import BottomTabBar from "../BottomTabBar/BottomTabBar";
 import ProfileButton from "./ProfileButton/ProfileButton";
 import { Image, StyleSheet } from "react-native";
+import ClasesScreen from "../../screens/ClasesScreen/ClasesScreen";
+import MembresiasScreen from "../../screens/MembresiasScreen/MembresiasScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -41,7 +43,33 @@ const TabNavigator = () => (
           fontSize: 30,
           fontFamily: "Kanit-Regular",
           fontWeight: "bold",
-          color: "#000", // Customize the color
+          color: "#000",
+        },
+      }}
+    />
+    <Screen
+      name="Clases"
+      component={ClasesScreen}
+      options={{
+        headerTitle: "Clases",
+        headerTitleStyle: {
+          fontSize: 30,
+          fontFamily: "Kanit-Regular",
+          fontWeight: "bold",
+          color: "#000",
+        },
+      }}
+    />
+    <Screen
+      name="Membresias"
+      component={MembresiasScreen}
+      options={{
+        headerTitle: "Membresías",
+        headerTitleStyle: {
+          fontSize: 30,
+          fontFamily: "Kanit-Regular",
+          fontWeight: "bold",
+          color: "#000",
         },
       }}
     />
@@ -50,8 +78,8 @@ const TabNavigator = () => (
 
 const styles = StyleSheet.create({
   headerImage: {
-    width: 250, // Adjust the width as needed
-    height: 200, // Adjust the height as needed
+    width: 250,
+    height: 200,
   },
 });
 

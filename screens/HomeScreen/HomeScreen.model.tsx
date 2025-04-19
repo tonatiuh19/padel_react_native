@@ -32,6 +32,11 @@ export interface AppState {
   price: PriceModel | null;
   eventPrice: PriceEventModel | null;
   paymentEvent: PaymentEventState;
+  classes: ClassesModel[];
+  selectedClass: ClassesModel | null;
+  paymentClass: PaymentClassModel | null;
+  classesReservations: ClassesReservationModel[];
+  isScheduleClass: boolean;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -105,6 +110,7 @@ export interface EPlatformField {
   active_slots?: ESlot[];
   idle_slots?: ESlot[];
   slots: { [key: string]: Slot[] };
+  classes: { [key: string]: Slot[] };
 }
 
 export interface MarkedDate {
@@ -190,4 +196,42 @@ export interface PaymentEventState {
   id_platforms_disabled_date: number;
   active: number;
   platforms_fields_events_users_inserted: string;
+}
+
+export interface ClassesModel {
+  id_platforms_disabled_date: number;
+  start_date_time: string;
+  end_date_time: string;
+  active: number;
+  title: string;
+  id_platforms_field: number;
+  event_title: string;
+  type: number;
+  price: string;
+}
+
+export interface PaymentClassModel {
+  id_platforms_fields_classes_users: number;
+  id_platforms_user: number;
+  id_platforms_disabled_date: number;
+  platforms_date_time_start: string;
+  platforms_date_time_end: string;
+  price: number;
+  active: number;
+  validated: number;
+  platforms_fields_classes_users_inserted: string;
+}
+
+export interface ClassesReservationModel {
+  id_platforms_fields_classes_users: number;
+  id_platforms_user: number;
+  id_platforms_disabled_date: number;
+  platforms_date_time_start: string;
+  platforms_date_time_end: string;
+  price: number;
+  stripe_id: string;
+  validated: number;
+  id_platforms_field: number;
+  cancha: string;
+  event_title: string;
 }

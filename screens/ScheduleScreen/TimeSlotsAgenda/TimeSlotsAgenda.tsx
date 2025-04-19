@@ -17,14 +17,20 @@ import EmptyDataView from "./EmptyDataView/EmptyDataView";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectClasses,
   selectDisabledSlots,
   selectEventPrice,
   selectIsDayEmpty,
+  selectIsScheduleClass,
   selectPlatformsFields,
 } from "../../../store/selectors";
-import { MarkedDate } from "../../HomeScreen/HomeScreen.model";
+import { ClassesModel, MarkedDate } from "../../HomeScreen/HomeScreen.model";
 import { AppDispatch } from "../../../store";
-import { setMarkedActiveDay, setSelectedDay } from "../../../store/appSlice";
+import {
+  setMarkedActiveDay,
+  setSelectedClass,
+  setSelectedDay,
+} from "../../../store/appSlice";
 import AddSlotModal from "../AddSlotModal/AddSlotModal";
 import { getDisabledSlots } from "../../../utils/UtilsFunctions";
 import { getEventPricebyDateAndIdPlatform } from "../../../store/effects";
@@ -96,6 +102,8 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
   const isDayEmpty = useSelector(selectIsDayEmpty);
   const disabledSlots = useSelector(selectDisabledSlots);
   const eventPrice = useSelector(selectEventPrice);
+  const isScheduleClass = useSelector(selectIsScheduleClass);
+  const classes = useSelector(selectClasses);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(today);
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
@@ -127,7 +135,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
     .split("T")[0];
 
   const handleAddSlot = (isSpecialEvent: boolean) => {
-    if (isSpecialEvent) {
+    if (isSpecialEvent && !isScheduleClass) {
       dispatch(
         getEventPricebyDateAndIdPlatform(
           platformsFields.id_platforms_field,
@@ -149,6 +157,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
       year: number;
     }
   ) => {
+    console.log("getActiveStatus", date.dateString);
     if (markedDates[date.dateString]) {
       dispatch(setMarkedActiveDay(markedDates[date.dateString].active));
     } else {
@@ -225,6 +234,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
         renderEmptyData={() => (
           <EmptyDataView
             onAddSlot={handleAddSlot}
+            isScheduleClass={isScheduleClass}
             onRefresh={onRefresh}
             refreshing={refreshing}
           />
@@ -253,14 +263,16 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
       />
       {!isDayEmpty && !isCalendarExpanded && (
         <View style={TimeSlotsAgendaStyles.fabContainer}>
-          <TouchableOpacity
-            style={TimeSlotsAgendaStyles.fab}
-            onPress={() => handleAddSlot(false)}
-          >
-            <FontAwesome6 name="plus" size={16} color="#000" />
-            <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
-          </TouchableOpacity>
-          {isEvent && (
+          {!isScheduleClass && (
+            <TouchableOpacity
+              style={TimeSlotsAgendaStyles.fab}
+              onPress={() => handleAddSlot(false)}
+            >
+              <FontAwesome6 name="plus" size={16} color="#000" />
+              <Text style={TimeSlotsAgendaStyles.fabText}>Agendar cancha</Text>
+            </TouchableOpacity>
+          )}
+          {isEvent && !isScheduleClass && (
             <TouchableOpacity
               style={TimeSlotsAgendaStyles.fab}
               onPress={() => handleAddSlot(true)}
@@ -270,6 +282,25 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
                 Registro a evento
               </Text>
             </TouchableOpacity>
+          )}
+          {isScheduleClass && (
+            <>
+              {classes.map((item: ClassesModel, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={TimeSlotsAgendaStyles.fab}
+                  onPress={() => {
+                    dispatch(setSelectedClass(item));
+                    handleAddSlot(false);
+                  }}
+                >
+                  <FontAwesome6 name="graduation-cap" size={16} color="#000" />
+                  <Text style={TimeSlotsAgendaStyles.fabText}>
+                    {item.event_title}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </>
           )}
         </View>
       )}

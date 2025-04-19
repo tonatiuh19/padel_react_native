@@ -8,7 +8,12 @@ import BottomTabBarStyles from "./BottomTabBar.style";
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
   <BottomNavigation
     selectedIndex={state.index}
-    onSelect={(index) => navigation.navigate(state.routeNames[index])}
+    onSelect={(index) => {
+      if (state.routeNames[index] === "Membresias") {
+        return; // Prevent navigation for "Membresías"
+      }
+      navigation.navigate(state.routeNames[index]);
+    }}
     style={BottomTabBarStyles.bottomNavigation}
     indicatorStyle={BottomTabBarStyles.indicatorStyle}
   >
@@ -19,6 +24,10 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
         iconName = state.index === index ? "tennisball" : "tennisball-outline";
       } else if (route === "Reservations") {
         iconName = state.index === index ? "calendar" : "calendar-outline";
+      } else if (route === "Clases") {
+        iconName = state.index === index ? "school" : "school-outline";
+      } else if (route === "Membresias") {
+        iconName = state.index === index ? "card" : "card-outline";
       } else {
         iconName = "home"; // default icon name
       }
@@ -30,15 +39,21 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
 
       const titleStyle =
         state.index === index
-          ? BottomTabBarStyles.titleSelected
-          : BottomTabBarStyles.titleUnselected;
+          ? [BottomTabBarStyles.titleSelected, styles.centeredText]
+          : [BottomTabBarStyles.titleUnselected, styles.centeredText];
 
       return (
         <BottomNavigationTab
           key={route}
           title={(props) => (
             <Text style={titleStyle}>
-              {route === "Home" ? "Inicio" : "Mis Reservas"}
+              {route === "Home"
+                ? "Inicio"
+                : route === "Reservations"
+                ? "Reservas"
+                : route === "Clases"
+                ? "Clases"
+                : "Membresías (Próximamente)"}
             </Text>
           )}
           icon={(props: any) => (
@@ -54,5 +69,11 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
     })}
   </BottomNavigation>
 );
+
+const styles = StyleSheet.create({
+  centeredText: {
+    textAlign: "center", // Center the text horizontally
+  },
+});
 
 export default BottomTabBar;

@@ -1,10 +1,10 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 export const ReservationsScreenHeight = height;
 export const ReservationsScreenWidth = width;
 
-export const ReservationsScreenStyles = StyleSheet.create({
+const ClasesScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
@@ -62,10 +62,16 @@ export const ReservationsScreenStyles = StyleSheet.create({
     borderRadius: 22,
     alignItems: "center",
   },
+  buttonDisabled: {
+    backgroundColor: "#ccc", // Gray background for disabled buttons
+  },
   buttonReservationText: {
     color: "#000",
     fontSize: 16,
     fontFamily: "Kanit-Regular",
+  },
+  textDisabled: {
+    color: "#888", // Gray text for disabled buttons
   },
 
   buttonContainer: {
@@ -85,10 +91,18 @@ export const ReservationsScreenStyles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
+  actionButtondisabled: {
+    backgroundColor: "#ccc",
+  },
   actionButtonText: {
     color: "#000",
     fontSize: 16,
     fontFamily: "Kanit-Regular",
     textAlign: "center",
   },
+  actionButtonTextDisabled: {
+    color: "#888",
+  },
 });
+
+export default ClasesScreenStyles;

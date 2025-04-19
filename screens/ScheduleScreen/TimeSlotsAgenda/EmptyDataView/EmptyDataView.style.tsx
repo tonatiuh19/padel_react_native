@@ -27,6 +27,14 @@ export const EmptyDataViewStyles = StyleSheet.create({
     backgroundColor: "#e1dd2a",
     borderRadius: 22,
   },
+  buttonClass: {
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    margin: 10,
+  },
   buttonSpecial: {
     marginTop: 10,
     padding: 10,

@@ -69,6 +69,24 @@ import {
   updateEventUserByIdStart,
   updateEventUserByIdSuccess,
   updateEventUserByIdFailure,
+  getClassesByIdPlatformStart,
+  getClassesByIdPlatformSuccess,
+  getClassesByIdPlatformFailure,
+  getClassesByIdFieldStart,
+  getClassesByIdFieldSuccess,
+  getClassesByIdFieldFailure,
+  insertPlatformFieldClassUsersStart,
+  insertPlatformFieldClassUsersSuccess,
+  insertPlatformFieldClassUsersFailure,
+  deletePlatformFieldClassUsersStart,
+  deletePlatformFieldClassUsersSuccess,
+  deletePlatformFieldClassUsersFailure,
+  updatePlatformFieldClassUserByIdStart,
+  updatePlatformFieldClassUserByIdSuccess,
+  updatePlatformFieldClassUserByIdFailure,
+  getClassesByUserIdStart,
+  getClassesByUserIdSuccess,
+  getClassesByUserIdFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -100,6 +118,12 @@ const GET_EVENT_PRICE_BY_ID = `${DOMAIN}/getEventPricebyDateAndIdPlatform.php`;
 const INSERT_EVENT_USER = `${DOMAIN}/insertEventUser.php`;
 const DELETE_EVENT_USER = `${DOMAIN}/deleteEventUserById.php`;
 const UPDATE_EVENT_USER = `${DOMAIN}/updateEventUserById.php`;
+const GET_CLASSES = `${DOMAIN}/getClassesByIdPlatform.php`;
+const GET_CLASSES_BY_FIELD = `${DOMAIN}/getClassesByIdField.php`;
+const INSERT_CLASS = `${DOMAIN}/insertPlatformFieldClassUser.php`;
+const DELETE_CLASS = `${DOMAIN}/deletePlatformFieldClassUser.php`;
+const UPDATE_CLASS_STATUS = `${DOMAIN}/updatePlatformFieldClassUserById.php`;
+const GET_CLASSES_RESERVATIONS = `${DOMAIN}/getClassesByUserId.php`;
 
 export const fetchPaymentIntentClientSecret = async (
   amount: number,
@@ -693,5 +717,161 @@ export const updateEventUserById =
     } catch (error) {
       console.log("Error", error);
       dispatch(updateEventUserByIdFailure());
+    }
+  };
+
+export const getClassesByIdPlatform =
+  (id_platform: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getClassesByIdPlatformStart"
+        | "app/getClassesByIdPlatformSuccess"
+        | "app/getClassesByIdPlatformFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getClassesByIdPlatformStart());
+      const response = await axios.post<any>(GET_CLASSES, {
+        id_platform,
+      });
+      dispatch(getClassesByIdPlatformSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getClassesByIdPlatformFailure());
+    }
+  };
+
+export const getClassesByIdField =
+  (id_platforms_field: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getClassesByIdFieldStart"
+        | "app/getClassesByIdFieldSuccess"
+        | "app/getClassesByIdFieldFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getClassesByIdFieldStart());
+      const response = await axios.post<any>(GET_CLASSES_BY_FIELD, {
+        id_platforms_field,
+      });
+      dispatch(getClassesByIdFieldSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getClassesByIdFieldFailure());
+    }
+  };
+
+export const insertPlatformFieldClassUser =
+  (
+    id_platforms_user: number,
+    id_platforms_disabled_date: number,
+    platforms_date_time_start: string,
+    price: number,
+    active: number,
+    validated: number
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/insertPlatformFieldClassUsersStart"
+        | "app/insertPlatformFieldClassUsersSuccess"
+        | "app/insertPlatformFieldClassUsersFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(insertPlatformFieldClassUsersStart());
+      const response = await axios.post<any>(INSERT_CLASS, {
+        id_platforms_user,
+        id_platforms_disabled_date,
+        platforms_date_time_start,
+        price,
+        active,
+        validated,
+      });
+      dispatch(insertPlatformFieldClassUsersSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(insertPlatformFieldClassUsersFailure());
+    }
+  };
+
+export const deletePlatformFieldClassUser =
+  (id_platforms_fields_classes_users: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/deletePlatformFieldClassUsersStart"
+        | "app/deletePlatformFieldClassUsersSuccess"
+        | "app/deletePlatformFieldClassUsersFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(deletePlatformFieldClassUsersStart());
+      const response = await axios.post<any>(DELETE_CLASS, {
+        id_platforms_fields_classes_users,
+      });
+      dispatch(deletePlatformFieldClassUsersSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(deletePlatformFieldClassUsersFailure());
+    }
+  };
+
+export const updatePlatformFieldClassUserById =
+  (
+    id_platforms_fields_classes_users: number,
+    active: number,
+    stripe_id: string
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/updatePlatformFieldClassUserByIdStart"
+        | "app/updatePlatformFieldClassUserByIdSuccess"
+        | "app/updatePlatformFieldClassUserByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(updatePlatformFieldClassUserByIdStart());
+      const response = await axios.post<any>(UPDATE_CLASS_STATUS, {
+        id_platforms_fields_classes_users,
+        active,
+        stripe_id,
+      });
+      dispatch(updatePlatformFieldClassUserByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(updatePlatformFieldClassUserByIdFailure());
+    }
+  };
+
+export const getClassesByUserId =
+  (id_platforms_user: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getClassesByUserIdStart"
+        | "app/getClassesByUserIdSuccess"
+        | "app/getClassesByUserIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getClassesByUserIdStart());
+      const response = await axios.post<any>(GET_CLASSES_RESERVATIONS, {
+        id_platforms_user,
+      });
+      dispatch(getClassesByUserIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getClassesByUserIdFailure());
     }
   };

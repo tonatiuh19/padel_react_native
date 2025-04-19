@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, RefreshControl } from "react-native";
 import { ScheduleScreenStyles } from "./ScheduleScreen.style";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
 import TimeSlotsAgenda from "./TimeSlotsAgenda/TimeSlotsAgenda";
 import {
   selectDisabledSlots,
+  selectIsScheduleClass,
   selectPlatformsFields,
 } from "../../store/selectors";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPlatformsFields } from "../../store/effects";
+import { fetchPlatformsFields, getClassesByIdField } from "../../store/effects";
 import { getTodayDate, isEmptyObject } from "../../utils/UtilsFunctions";
+import { setisScheduleClass } from "../../store/appSlice";
 
 type ScheduleScreenRouteProp = RouteProp<RootStackParamList, "Schedule">;
 
@@ -19,19 +21,26 @@ const ScheduleScreen: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const platformsFields = useSelector(selectPlatformsFields);
   const disabledSlots = useSelector(selectDisabledSlots);
+  const isScheduleClass = useSelector(selectIsScheduleClass);
   const [refreshing, setRefreshing] = useState(false);
 
   const route = useRoute<ScheduleScreenRouteProp>();
   const { today, id_platforms_field } = route.params;
 
   useEffect(() => {
-    console.log("Platforms Fields", getTodayDate());
     dispatch(fetchPlatformsFields(id_platforms_field, getTodayDate()));
+    if (!!isScheduleClass) {
+      dispatch(getClassesByIdField(id_platforms_field));
+    }
   }, [dispatch, id_platforms_field]);
 
   const onRefresh = () => {
-    console.log("Refreshing", disabledSlots.today);
     setRefreshing(true);
+
+    if (!!isScheduleClass) {
+      dispatch(getClassesByIdField(id_platforms_field));
+    }
+
     dispatch(
       fetchPlatformsFields(id_platforms_field, disabledSlots.today)
     ).finally(() => {
@@ -50,7 +59,13 @@ const ScheduleScreen: React.FC = () => {
     <View style={ScheduleScreenStyles.container}>
       <TimeSlotsAgenda
         items={
-          isEmptyObject(platformsFields.slots) ? {} : platformsFields.slots
+          isScheduleClass
+            ? isEmptyObject(platformsFields.classes)
+              ? {}
+              : platformsFields.classes
+            : isEmptyObject(platformsFields.slots)
+            ? {}
+            : platformsFields.slots
         }
         markedDates={platformsFields.markedDates}
         today={today}

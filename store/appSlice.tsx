@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AppState,
+  ClassesModel,
+  ClassesReservationModel,
   EPlatformField,
+  PaymentClassModel,
   PaymentEventState,
   PaymentState,
   PlatformField,
@@ -28,6 +31,7 @@ const initialState: AppState = {
     today: "",
     markedDates: {},
     slots: {},
+    classes: {},
   },
   schedule: {
     isDayEmpty: false,
@@ -83,6 +87,11 @@ const initialState: AppState = {
     active: 0,
     platforms_fields_events_users_inserted: "",
   },
+  classes: [],
+  isScheduleClass: false,
+  selectedClass: null,
+  paymentClass: null,
+  classesReservations: [],
 };
 
 const appSlice = createSlice({
@@ -375,6 +384,7 @@ const appSlice = createSlice({
     resetPrice(state) {
       state.price = null;
       state.eventPrice = null;
+      state.selectedClass = null;
     },
     getEventPricebyDateAndIdPlatformStart(state) {
       state.isLoading = true;
@@ -434,6 +444,95 @@ const appSlice = createSlice({
       state.paymentEvent = action.payload;
     },
     updateEventUserByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getClassesByIdPlatformStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getClassesByIdPlatformSuccess(
+      state,
+      action: PayloadAction<ClassesModel[]>
+    ) {
+      state.isLoading = false;
+      state.classes = action.payload;
+    },
+    getClassesByIdPlatformFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    setisScheduleClass(state, action: PayloadAction<boolean>) {
+      state.isScheduleClass = action.payload;
+    },
+    getClassesByIdFieldStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getClassesByIdFieldSuccess(state, action: PayloadAction<ClassesModel[]>) {
+      state.isLoading = false;
+      state.classes = action.payload;
+    },
+    getClassesByIdFieldFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    setSelectedClass(state, action: PayloadAction<ClassesModel | null>) {
+      state.selectedClass = action.payload;
+    },
+    insertPlatformFieldClassUsersStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    insertPlatformFieldClassUsersSuccess(
+      state,
+      action: PayloadAction<PaymentClassModel>
+    ) {
+      state.isLoading = false;
+      state.paymentClass = action.payload;
+    },
+    insertPlatformFieldClassUsersFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    deletePlatformFieldClassUsersStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    deletePlatformFieldClassUsersSuccess(state) {
+      state.isLoading = false;
+      state.paymentClass = null;
+    },
+    deletePlatformFieldClassUsersFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    updatePlatformFieldClassUserByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    updatePlatformFieldClassUserByIdSuccess(
+      state,
+      action: PayloadAction<PaymentClassModel>
+    ) {
+      state.isLoading = false;
+    },
+    updatePlatformFieldClassUserByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getClassesByUserIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getClassesByUserIdSuccess(
+      state,
+      action: PayloadAction<ClassesReservationModel[]>
+    ) {
+      state.isLoading = false;
+      state.classesReservations = action.payload;
+    },
+    getClassesByUserIdFailure(state) {
       state.isLoading = false;
       state.isError = true;
     },
@@ -514,6 +613,26 @@ export const {
   updateEventUserByIdStart,
   updateEventUserByIdSuccess,
   updateEventUserByIdFailure,
+  getClassesByIdPlatformStart,
+  getClassesByIdPlatformSuccess,
+  getClassesByIdPlatformFailure,
+  setisScheduleClass,
+  getClassesByIdFieldStart,
+  getClassesByIdFieldSuccess,
+  getClassesByIdFieldFailure,
+  setSelectedClass,
+  insertPlatformFieldClassUsersStart,
+  insertPlatformFieldClassUsersSuccess,
+  insertPlatformFieldClassUsersFailure,
+  deletePlatformFieldClassUsersStart,
+  deletePlatformFieldClassUsersSuccess,
+  deletePlatformFieldClassUsersFailure,
+  updatePlatformFieldClassUserByIdStart,
+  updatePlatformFieldClassUserByIdSuccess,
+  updatePlatformFieldClassUserByIdFailure,
+  getClassesByUserIdStart,
+  getClassesByUserIdSuccess,
+  getClassesByUserIdFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

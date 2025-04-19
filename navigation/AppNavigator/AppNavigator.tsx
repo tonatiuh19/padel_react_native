@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Login: undefined;
   Schedule: PlatformsField;
+  Clases: undefined;
 };
 
 const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
@@ -47,20 +48,6 @@ const AppNavigator = () => {
 
     checkUserSession();
   }, [userInfo]);
-
-  /* useEffect(() => {
-    console.log(userInfo);
-    if (userInfo.isSignedIn) {
-      AsyncStorage.setItem(
-        "id_platforms_user",
-        userInfo.info?.id_platforms_user.toString() ?? ""
-      );
-      setIsAuthenticated(true);
-    } else {
-      dispatch(validateUserSession(userInfo.info?.id_platforms_user ?? 0));
-      setIsAuthenticated(false);
-    }
-  }, [userInfo]);*/
 
   return (
     <Navigator>

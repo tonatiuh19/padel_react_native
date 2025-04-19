@@ -40,3 +40,16 @@ export const selectPrice = (state: RootState) => state.app.price;
 export const selectEventPrice = (state: RootState) => state.app.eventPrice;
 
 export const selectPaymentEvent = (state: RootState) => state.app.paymentEvent;
+
+export const selectClasses = (state: RootState) => state.app.classes;
+
+export const selectIsScheduleClass = (state: RootState) =>
+  state.app.isScheduleClass;
+
+export const selectSelectedClass = (state: RootState) =>
+  state.app.selectedClass;
+
+export const selectPaymentClass = (state: RootState) => state.app.paymentClass;
+
+export const selectClassesReservations = (state: RootState) =>
+  state.app.classesReservations;

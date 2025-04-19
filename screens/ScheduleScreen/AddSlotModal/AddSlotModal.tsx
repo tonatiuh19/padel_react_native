@@ -12,13 +12,16 @@ import {
 import {
   deleteEventUserById,
   deletePlatformDateTimeSlot,
+  deletePlatformFieldClassUser,
   fetchPaymentIntentClientSecret,
   getEventPricebyDateAndIdPlatform,
   getPriceByIdAndTime,
   insertEventUser,
   insertPlatformDateTimeSlot,
+  insertPlatformFieldClassUser,
   updateEventUserById,
   updatePlatformDateTimeSlot,
+  updatePlatformFieldClassUserById,
 } from "../../../store/effects";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store";
@@ -26,10 +29,13 @@ import {
   selectDisabledSlots,
   selectEventPrice,
   selectIsLoading,
+  selectIsScheduleClass,
   selectPayment,
+  selectPaymentClass,
   selectPaymentEvent,
   selectPlatformsFields,
   selectPrice,
+  selectSelectedClass,
   selectUserInfo,
 } from "../../../store/selectors";
 import {
@@ -49,6 +55,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 interface AddSlotModalProps {
   visible: boolean;
   isEvent: boolean;
+  id_platforms_disabled_date?: number;
   onClose: () => void;
 }
 
@@ -56,6 +63,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
   visible,
   onClose,
   isEvent,
+  id_platforms_disabled_date,
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -67,6 +75,9 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
   const price = useSelector(selectPrice);
   const eventPrice = useSelector(selectEventPrice);
   const paymentEvent = useSelector(selectPaymentEvent);
+  const isScheduleClass = useSelector(selectIsScheduleClass);
+  const selectedClass = useSelector(selectSelectedClass);
+  const paymentClass = useSelector(selectPaymentClass);
 
   const [startTime, setStartTime] = useState("");
   const [showCountdown, setShowCountdown] = useState(false);
@@ -79,7 +90,11 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
   const hasDispatchedInsertEventUser = useRef(false);
 
   useEffect(() => {
-    if (eventPrice?.price && !hasDispatchedInsertEventUser.current) {
+    if (
+      eventPrice?.price &&
+      !isScheduleClass &&
+      !hasDispatchedInsertEventUser.current
+    ) {
       dispatch(
         insertEventUser(
           userInfo.info?.id_platforms_user,
@@ -133,9 +148,11 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       return;
     }
     const clientSecret = await fetchPaymentIntentClientSecret(
-      price.price,
+      isScheduleClass ? Number(selectedClass?.price ?? 0) : price.price,
       userInfo.info.stripe_id,
-      payment.id_platforms_date_time_slot ?? 0
+      isScheduleClass
+        ? paymentClass?.id_platforms_fields_classes_users ?? 0
+        : payment.id_platforms_date_time_slot ?? 0
     );
     const billingDetails = {
       email: userInfo.info?.email,
@@ -152,20 +169,34 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       Alert.alert("El pago no se pudo procesar", "Por favor, intenta de nuevo");
     } else if (paymentIntent) {
       console.log("Success", paymentIntent);
-      dispatch(
-        updatePlatformDateTimeSlot(
-          payment.id_platforms_date_time_slot ?? 0,
-          1,
-          paymentIntent.id,
-          price.price
-        )
-      );
+      if (isScheduleClass) {
+        dispatch(
+          updatePlatformFieldClassUserById(
+            paymentClass?.id_platforms_fields_classes_users ?? 0,
+            1,
+            paymentIntent.id
+          )
+        );
+      } else {
+        dispatch(
+          updatePlatformDateTimeSlot(
+            payment.id_platforms_date_time_slot ?? 0,
+            1,
+            paymentIntent.id,
+            price.price
+          )
+        );
+      }
       dispatch(resetPrice());
       setIsPaying(false);
       setShowCountdown(false);
       setStartTime("");
       onClose();
-      navigation.navigate("Reservations");
+      if (isScheduleClass) {
+        navigation.navigate("Clases");
+      } else {
+        navigation.navigate("Reservations");
+      }
     }
   };
 
@@ -185,7 +216,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       return;
     }
     const clientSecret = await fetchPaymentIntentClientSecret(
-      eventPrice?.price,
+      Number(eventPrice?.price),
       userInfo.info.stripe_id,
       payment.id_platforms_date_time_slot ?? 0
     );
@@ -233,22 +264,46 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       )
     );
     setShowCountdown(true);
-    dispatch(
-      insertPlatformDateTimeSlot(
-        platformsFields.id_platforms_field,
-        generateDateTime(disabledSlots.today, time),
-        2,
-        userInfo.info?.id_platforms_user
-      )
-    );
+    console.log("Time selected", generateDateTime(disabledSlots.today, time));
+    if (isScheduleClass) {
+      dispatch(
+        insertPlatformFieldClassUser(
+          userInfo.info?.id_platforms_user,
+          selectedClass?.id_platforms_disabled_date ?? 0,
+          generateDateTime(disabledSlots.today, time),
+          Number(selectedClass?.price ?? 0),
+          2,
+          0
+        )
+      );
+    } else {
+      dispatch(
+        insertPlatformDateTimeSlot(
+          platformsFields.id_platforms_field,
+          generateDateTime(disabledSlots.today, time),
+          2,
+          userInfo.info?.id_platforms_user
+        )
+      );
+    }
+
     setStartTime(time);
   };
 
   const cleaningSlot = () => {
-    console.log("Cleaning slot", payment.id_platforms_date_time_slot);
-    dispatch(
-      deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
-    );
+    console.log("Cleaning slot", paymentClass);
+    if (isScheduleClass) {
+      dispatch(
+        deletePlatformFieldClassUser(
+          paymentClass?.id_platforms_fields_classes_users ?? 0
+        )
+      );
+    } else {
+      dispatch(
+        deletePlatformDateTimeSlot(payment.id_platforms_date_time_slot ?? 0)
+      );
+    }
+
     dispatch(resetPrice());
     setShowCountdown(false);
     setStartTime("");
@@ -326,9 +381,15 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                 {loading ? (
                   <View style={AddSlotModalStyles.loadingContainer}>
                     <LoadingSmall isLoading={true} color="#000" />
-                    <Text style={AddSlotModalStyles.loadingText}>
-                      Procesando reserva
-                    </Text>
+                    {isScheduleClass ? (
+                      <Text style={AddSlotModalStyles.loadingText}>
+                        Procesando clase
+                      </Text>
+                    ) : (
+                      <Text style={AddSlotModalStyles.loadingText}>
+                        Procesando reserva
+                      </Text>
+                    )}
                   </View>
                 ) : (
                   <>
@@ -437,9 +498,21 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                     ) : (
                       <>
                         <View style={AddSlotModalStyles.titleContainer}>
-                          <Text style={AddSlotModalStyles.title}>
-                            Reservar cancha
-                          </Text>
+                          {isScheduleClass && (
+                            <>
+                              <Text style={AddSlotModalStyles.title}>
+                                Inscripción a
+                              </Text>
+                              <Text style={AddSlotModalStyles.title}>
+                                {selectedClass?.event_title}
+                              </Text>
+                            </>
+                          )}
+                          {!isScheduleClass && (
+                            <Text style={AddSlotModalStyles.title}>
+                              Reservar cancha
+                            </Text>
+                          )}
                           <Text style={AddSlotModalStyles.titleValue}>
                             {formatDate(new Date(disabledSlots.today))}
                           </Text>
@@ -450,7 +523,11 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                               {price && (
                                 <View style={AddSlotModalStyles.priceContainer}>
                                   <Text style={AddSlotModalStyles.priceText}>
-                                    {formatCurrency(price.price)}
+                                    {isScheduleClass
+                                      ? formatCurrency(
+                                          Number(selectedClass?.price ?? 0)
+                                        )
+                                      : formatCurrency(price.price)}
                                   </Text>
                                 </View>
                               )}

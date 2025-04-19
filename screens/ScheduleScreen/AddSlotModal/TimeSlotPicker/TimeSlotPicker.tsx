@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { View, Platform, Text, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { TimeSlotPickerStyles } from "./TimeSlotPicker.style";
-import { generateTimeSlots } from "../../../../utils/UtilsFunctions";
+import {
+  generateFilteredTimeSlots,
+  generateTimeSlots,
+  getEndHour,
+} from "../../../../utils/UtilsFunctions";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../../store";
 import {
   selectDisabledSlots,
+  selectIsScheduleClass,
   selectPlatformsFields,
+  selectSelectedClass,
 } from "../../../../store/selectors";
 import { fetchgetDisabledSlots } from "../../../../store/effects";
 import LoadingSmall from "../../../HomeScreen/shared/components/LoadingSmall/LoadingSmall";
@@ -28,14 +34,14 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   const dispatch: AppDispatch = useDispatch();
   const disabledSlots = useSelector(selectDisabledSlots);
   const platformsFields = useSelector(selectPlatformsFields);
+  const isScheduleClass = useSelector(selectIsScheduleClass);
+  const selectedClass = useSelector(selectSelectedClass);
   const [tempSelectedTime, setTempSelectedTime] = useState(selectedTime);
 
   useEffect(() => {
     console.log(
       "Disabled Slots",
-      disabledSlots.today,
-      disabledSlots.fullToday,
-      platformsFields.id_platforms_field
+      getEndHour(selectedClass?.end_date_time || "")
     );
     dispatch(
       fetchgetDisabledSlots(
@@ -47,11 +53,35 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
 
   const timeSlots = generateTimeSlots(
     8,
-    22,
+    isScheduleClass ? getEndHour(selectedClass?.end_date_time || "") : 22,
     1.5,
     disabledSlots.disabledSlots,
     disabledSlots.today
-  ).filter((_, index) => Platform.OS !== "ios" || index !== 0); // Remove the first item if the platform is iOS
+  ).filter((_, index) => Platform.OS !== "ios" || index !== 0);
+
+  const timeSlotsTemp = generateFilteredTimeSlots(
+    8,
+    isScheduleClass ? getEndHour(selectedClass?.end_date_time || "") : 22,
+    1.5,
+    disabledSlots.disabledSlots,
+    disabledSlots.today
+  ).filter((_, index) => Platform.OS !== "ios" || index !== 0);
+
+  const timeClassesSlots = generateFilteredTimeSlots(
+    8,
+    getEndHour(selectedClass?.end_date_time || ""),
+    1,
+    disabledSlots.disabledSlots,
+    disabledSlots.today
+  ).filter((_, index) => Platform.OS !== "ios" || index !== 0);
+
+  const minTimeSlot = timeSlotsTemp.length > 0 ? timeSlotsTemp[0] : null;
+
+  const mergedTimeClassesSlots = minTimeSlot
+    ? timeClassesSlots.filter((time) => time >= minTimeSlot)
+    : timeClassesSlots;
+
+  const mergedSlots = isScheduleClass ? mergedTimeClassesSlots : timeSlotsTemp;
 
   const renderPickerItem = (slot: string) => {
     if (slot === "") {
@@ -95,13 +125,17 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
               style={TimeSlotPickerStyles.picker}
               enabled={!disabled}
             >
-              {timeSlots.map(renderPickerItem)}
+              {mergedSlots.map(renderPickerItem)}
             </Picker>
           </View>
           <TouchableOpacity
             style={TimeSlotPickerStyles.confirmButton}
             onPress={() => {
-              const selectedTime = tempSelectedTime || timeSlots[0];
+              const selectedTime =
+                tempSelectedTime ||
+                (isScheduleClass
+                  ? mergedTimeClassesSlots[0]
+                  : timeSlotsTemp[0]);
               onTimeChange(selectedTime);
               onConfirm();
             }}

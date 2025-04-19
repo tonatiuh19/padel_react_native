@@ -70,6 +70,44 @@ export const generateTimeSlots = (
   return slots;
 };
 
+export const generateFilteredTimeSlots = (
+  start: number,
+  end: number,
+  range: number,
+  disabledSlots: string[],
+  selectedDate: string
+): string[] => {
+  const slots = [];
+  const rangeInMilliseconds = range * 60 * 60 * 1000;
+
+  slots.push("");
+  for (let hour = start; hour <= end; hour += range) {
+    const fullHour = Math.floor(hour);
+    const minutes = (hour % 1) * 60;
+    const formattedHour = fullHour < 10 ? `0${fullHour}` : fullHour;
+    const formattedMinutes = minutes === 0 ? "00" : minutes;
+    const time = `${formattedHour}:${formattedMinutes}:00`;
+    const slotStart = new Date(`1970-01-01T${time}`).getTime();
+    const slotEnd = slotStart + rangeInMilliseconds;
+
+    // Check if the current slot overlaps with any disabled slot
+    const overlaps = disabledSlots.some((disabledTime) => {
+      const disabledStart = new Date(`1970-01-01T${disabledTime}`).getTime();
+      const disabledEnd = disabledStart + rangeInMilliseconds;
+
+      // Overlap condition: Check both ways
+      return (
+        (slotStart < disabledEnd && slotEnd > disabledStart) || // Slot overlaps with disabled slot
+        (disabledStart < slotEnd && disabledEnd > slotStart) // Disabled slot overlaps with slot
+      );
+    });
+    if (!disabledSlots.includes(time) && !overlaps) {
+      slots.push(time);
+    }
+  }
+  return slots;
+};
+
 export const getFlagImage = (zone: string) => {
   switch (zone) {
     case "+52":
@@ -178,4 +216,9 @@ export const formatDateTime = (dateTimeString: string): string => {
   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
   return `${day}-${month}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
+};
+
+export const getEndHour = (endDateTime: string): number => {
+  const date = new Date(endDateTime); // Parse the string into a Date object
+  return date.getHours(); // Extract the hour as a number
 };

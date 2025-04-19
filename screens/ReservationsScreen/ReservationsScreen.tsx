@@ -26,6 +26,7 @@ import {
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
 import ReservationEventCard from "./ReservationCard/ReservationEventCard";
+import { setisScheduleClass } from "../../store/appSlice";
 
 export default function ReservationsScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -39,6 +40,7 @@ export default function ReservationsScreen() {
     try {
       const storedUserId = await AsyncStorage.getItem("id_platforms_user");
       if (storedUserId) {
+        dispatch(setisScheduleClass(false));
         await dispatch(getReservationsByUserId(Number(storedUserId)));
       }
     } catch (error) {
@@ -122,6 +124,23 @@ export default function ReservationsScreen() {
           </>
         )}
       </ScrollView>
+      {reservations.length > 0 && (
+        <View style={ReservationsScreenStyles.buttonContainer}>
+          {platformFields.map((field: PlatformsField) => {
+            return (
+              <TouchableOpacity
+                key={field.id_platforms_field}
+                style={[ReservationsScreenStyles.actionButton]}
+                onPress={() => handlePress(field)}
+              >
+                <Text style={[ReservationsScreenStyles.actionButtonText]}>
+                  Reservar Cancha {field.id_platforms_field}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }
