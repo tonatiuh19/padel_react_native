@@ -18,7 +18,7 @@ export const TimeSlotPickerStyles = StyleSheet.create({
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "#99998b",
+    backgroundColor: "#555555",
     borderRadius: 22,
     marginBottom: 10,
   },
@@ -28,11 +28,12 @@ export const TimeSlotPickerStyles = StyleSheet.create({
   pickerItem: {
     fontSize: 16,
     fontFamily: "Kanit-Regular",
+    color: "#000",
   },
   pickerItemDisabled: {
     fontSize: 16,
     fontFamily: "Kanit-Regular",
-    color: "#ccc",
+    color: "#999999",
   },
   pickerWrapper: {
     position: "relative",

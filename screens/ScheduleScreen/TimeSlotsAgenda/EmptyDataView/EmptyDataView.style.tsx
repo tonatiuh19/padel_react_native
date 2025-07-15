@@ -8,6 +8,7 @@ export const EmptyDataViewStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: "#121212",
   },
   textContainer: {
     justifyContent: "center",
@@ -16,7 +17,7 @@ export const EmptyDataViewStyles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: "#808080",
+    color: "#cccccc",
     fontFamily: "Kanit-Regular",
     textAlign: "center",
   },

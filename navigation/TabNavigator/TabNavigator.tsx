@@ -53,11 +53,11 @@ const TabNavigator = () => {
         ),
         headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: "#000",
+          backgroundColor: "#121212",
           shadowColor: "transparent",
           elevation: 0,
           borderBottomWidth: 1, // Add line thickness
-          borderBottomColor: "#e1dd2a", // Add line color (yellow)
+          borderBottomColor: "#ffd700", // Add line color (gold)
         },
         headerTitleStyle: {
           color: "#fff", // Move the color here for the title text

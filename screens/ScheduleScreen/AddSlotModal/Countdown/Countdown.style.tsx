@@ -8,16 +8,16 @@ export const CountdownStyles = StyleSheet.create({
   timerTextTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "#ffffff",
     marginBottom: 10,
     alignSelf: "center",
   },
   timerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "black",
+    color: "#ffffff",
   },
   timerTextRed: {
-    color: "red",
+    color: "#ff6b6b",
   },
 });

@@ -5,9 +5,11 @@ const { width } = Dimensions.get("window");
 export const TimeSlotsAgendaStyles = StyleSheet.create({
   agenda: {
     width: width,
+    backgroundColor: "#121212",
   },
   contentContainer: {
     marginTop: 1000,
+    backgroundColor: "#121212",
   },
   fabContainer: {
     position: "absolute",
@@ -49,21 +51,21 @@ export const TimeSlotsAgendaStyles = StyleSheet.create({
 });
 
 export const TimeSlotsAgendaCalendarTheme = {
-  backgroundColor: "#ffffff",
-  calendarBackground: "#ffffff",
-  textSectionTitleColor: "#000",
-  textSectionTitleDisabledColor: "#e5e8d9",
+  backgroundColor: "#121212",
+  calendarBackground: "#1e1e1e",
+  textSectionTitleColor: "#ffffff",
+  textSectionTitleDisabledColor: "#666666",
   selectedDayBackgroundColor: "#e1dd2a",
   selectedDayTextColor: "#000",
   todayTextColor: "#e1dd2a",
-  dayTextColor: "#2d4150",
-  textDisabledColor: "#e5e8d9",
+  dayTextColor: "#ffffff",
+  textDisabledColor: "#666666",
   dotColor: "#e1dd2a",
   selectedDotColor: "#000",
-  arrowColor: "orange",
-  disabledArrowColor: "#e5e8d9",
-  monthTextColor: "#000",
-  indicatorColor: "#000",
+  arrowColor: "#e1dd2a",
+  disabledArrowColor: "#666666",
+  monthTextColor: "#ffffff",
+  indicatorColor: "#ffffff",
   textDayFontFamily: "Kanit-Regular",
   textMonthFontFamily: "Kanit-Regular",
   textDayHeaderFontFamily: "Kanit-Regular",

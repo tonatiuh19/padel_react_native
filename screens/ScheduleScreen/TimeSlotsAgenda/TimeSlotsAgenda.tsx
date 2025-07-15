@@ -211,7 +211,7 @@ const TimeSlotsAgenda: React.FC<TimeSlotsAgendaProps> = ({
       style={{
         flex: 1,
         paddingBottom: Platform.OS === "ios" ? 20 : 0,
-        backgroundColor: "#fff",
+        backgroundColor: "#121212",
       }}
     >
       <Agenda

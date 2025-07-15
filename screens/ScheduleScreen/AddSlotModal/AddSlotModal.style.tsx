@@ -8,13 +8,13 @@ export const AddSlotModalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContainer: {
     width: width * 0.9,
     height: height * 0.8,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#1e1e1e",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "space-between", // Distribute space between elements
@@ -28,12 +28,14 @@ export const AddSlotModalStyles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontFamily: "Kanit-Regular",
+    color: "#ffffff",
   },
   titleValue: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
     fontFamily: "Kanit-Regular",
+    color: "#ffffff",
   },
   titleValueCard: {
     fontSize: 18,
@@ -41,12 +43,15 @@ export const AddSlotModalStyles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Kanit-Regular",
     alignSelf: "center",
+    color: "#ffffff",
   },
   input: {
     width: "100%",
     padding: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#666666",
+    backgroundColor: "#2d2d2d",
+    color: "#ffffff",
     borderRadius: 5,
     marginBottom: 10,
   },
@@ -64,8 +69,9 @@ export const AddSlotModalStyles = StyleSheet.create({
   cardField: {
     height: 60,
     borderRadius: 22,
-    borderColor: "red", // Add border color
+    borderColor: "#ff6b6b", // Add border color
     borderWidth: 1,
+    backgroundColor: "#2d2d2d",
   },
   buttonPay: {
     marginTop: 15,
@@ -73,7 +79,7 @@ export const AddSlotModalStyles = StyleSheet.create({
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "#47914a",
+    backgroundColor: "#4caf50",
     borderRadius: 22,
   },
   buttonPayText: {
@@ -88,19 +94,24 @@ export const AddSlotModalStyles = StyleSheet.create({
     padding: 8,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#1e1e1e",
     borderRadius: 22,
-    borderColor: "red", // Add border color
+    borderColor: "#ff6b6b", // Add border color
     borderWidth: 1,
   },
   buttonCancelText: {
-    color: "red",
+    color: "#ff6b6b",
     fontSize: 12,
     fontFamily: "Kanit-Regular",
     alignSelf: "center",
   },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  loadingText: { marginTop: 10, fontSize: 16, fontFamily: "Kanit-Regular" },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
+    color: "#ffffff",
+  },
   timePickerButton: {
     marginTop: 10,
     padding: 10,
@@ -137,5 +148,6 @@ export const AddSlotModalStyles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     fontFamily: "Kanit-Regular",
+    color: "#ffffff",
   },
 });

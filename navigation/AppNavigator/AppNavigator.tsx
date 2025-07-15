@@ -67,7 +67,14 @@ const AppNavigator = () => {
                 fontSize: 30,
                 fontFamily: "Kanit-Regular",
                 fontWeight: "bold",
-                color: "#000", // Customize the color
+                color: "#fff", // Customize the color
+              },
+              headerStyle: {
+                backgroundColor: "#121212",
+                shadowColor: "transparent",
+                elevation: 0,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ffd700",
               },
               headerLeft: () => (
                 <BackButton onPress={() => navigation.goBack()} />
@@ -83,7 +90,14 @@ const AppNavigator = () => {
                 fontSize: 30,
                 fontFamily: "Kanit-Regular",
                 fontWeight: "bold",
-                color: "#000", // Customize the color
+                color: "#fff", // Customize the color
+              },
+              headerStyle: {
+                backgroundColor: "#121212",
+                shadowColor: "transparent",
+                elevation: 0,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ffd700",
               },
               headerLeft: () => (
                 <BackButton onPress={() => navigation.goBack()} />
