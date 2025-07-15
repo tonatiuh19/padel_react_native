@@ -29,14 +29,24 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
     setModalVisible(false);
   };
 
+  const isExpired = () => {
+    const now = new Date();
+    const reservationEndTime = new Date(reservation.platforms_date_time_end);
+    return now > reservationEndTime;
+  };
+
+  const getCardStyle = () => {
+    if (isExpired()) {
+      return ReservationCardStyles.cardExpired;
+    } else if (reservation.validated === 1) {
+      return ReservationCardStyles.cardValidated;
+    } else {
+      return ReservationCardStyles.card;
+    }
+  };
+
   return (
-    <View
-      style={
-        reservation.validated === 0
-          ? ReservationCardStyles.card
-          : ReservationCardStyles.cardValidated
-      }
-    >
+    <View style={getCardStyle()}>
       <View style={ReservationCardStyles.columnContainer}>
         <View style={ReservationCardStyles.column30}>
           <View style={ReservationCardStyles.row}>
@@ -70,7 +80,18 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
           </View>
           {/* Add more rows as needed */}
         </View>
-        {reservation.validated === 0 ? (
+        {isExpired() ? (
+          <View style={ReservationCardStyles.column20}>
+            <View style={ReservationCardStyles.row}>
+              <Text style={ReservationCardStyles.cardTextTitleNumber}>
+                <FontAwesome name="clock-o" size={24} color="#e1dd2a" />
+              </Text>
+            </View>
+            <View style={ReservationCardStyles.row}>
+              <Text style={ReservationCardStyles.cardText}>Expirado</Text>
+            </View>
+          </View>
+        ) : reservation.validated === 0 ? (
           <TouchableOpacity
             onPress={openTicket}
             style={ReservationCardStyles.column20}
@@ -79,7 +100,7 @@ const ReservationCardList: React.FC<ReservationCardProps> = ({
               <Text style={ReservationCardStyles.cardTextTitleNumber}>
                 <QRCode
                   value="https://intelipadel.com/"
-                  backgroundColor="#000"
+                  backgroundColor="#292929"
                   color="#e1dd2a"
                   size={45}
                 />

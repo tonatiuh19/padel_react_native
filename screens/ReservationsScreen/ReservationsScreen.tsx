@@ -72,6 +72,24 @@ export default function ReservationsScreen() {
     navigation.navigate("Schedule", field);
   };
 
+  const sortReservations = (reservations: any[]) => {
+    return reservations.sort((a, b) => {
+      const now = new Date();
+      const aEndTime = new Date(a.platforms_date_time_end);
+      const bEndTime = new Date(b.platforms_date_time_end);
+
+      const aExpired = now > aEndTime;
+      const bExpired = now > bEndTime;
+
+      // Non-expired reservations come first
+      if (aExpired && !bExpired) return 1;
+      if (!aExpired && bExpired) return -1;
+
+      // If both have same expiration status, sort by date (newest first)
+      return bEndTime.getTime() - aEndTime.getTime();
+    });
+  };
+
   return (
     <View style={ReservationsScreenStyles.container}>
       <ScrollView
@@ -118,7 +136,7 @@ export default function ReservationsScreen() {
                 }}
               />
             )}
-            {reservations.map((reservation, index) => (
+            {sortReservations([...reservations]).map((reservation, index) => (
               <ReservationCardList key={index} reservation={reservation} />
             ))}
           </>

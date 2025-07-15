@@ -8,13 +8,14 @@ export const ReservationsScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: "#000",
+    backgroundColor: "#121212",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
+    color: "#ffffff",
   },
   scrollContainer: {
     alignItems: "center",
@@ -28,7 +29,7 @@ export const ReservationsScreenStyles = StyleSheet.create({
     width: "90%",
     padding: 20,
     marginVertical: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#292929",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -38,6 +39,7 @@ export const ReservationsScreenStyles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
+    color: "#ffffff",
   },
   cardReservationEmpty: {
     width: ReservationsScreenWidth - 40,
@@ -47,7 +49,7 @@ export const ReservationsScreenStyles = StyleSheet.create({
   },
   cardReservationText: {
     fontSize: 18,
-    color: "#000",
+    color: "#ffffff",
     fontWeight: "bold",
     marginBottom: 5,
     fontFamily: "Kanit-Regular",
@@ -72,9 +74,9 @@ export const ReservationsScreenStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#1e1e1e",
     borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopColor: "#333333",
   },
   actionButton: {
     backgroundColor: "#e1dd2a",
