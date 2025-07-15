@@ -15,7 +15,7 @@ export const AddSlotModalStyles = StyleSheet.create({
     maxHeight: height * 0.85,
     padding: 20,
     paddingTop: 10,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f5f5f5ff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: "center",
@@ -86,7 +86,7 @@ export const AddSlotModalStyles = StyleSheet.create({
     borderRadius: 22,
     borderColor: "#cccccc",
     borderWidth: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f5f5f5ff",
   },
   buttonPay: {
     marginTop: 15,
@@ -113,7 +113,7 @@ export const AddSlotModalStyles = StyleSheet.create({
     padding: 8,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f5f5f5ff",
     borderRadius: 22,
   },
   buttonCancelText: {

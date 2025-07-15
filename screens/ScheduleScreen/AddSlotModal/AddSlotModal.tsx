@@ -631,7 +631,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                   ]}
                                   cardStyle={{
                                     textColor: "#000000",
-                                    backgroundColor: "#ffffff",
+                                    backgroundColor: "#f5f5f5ff",
                                   }}
                                   onCardChange={(cardDetails) => {
                                     setIsCardComplete(cardDetails.complete);
