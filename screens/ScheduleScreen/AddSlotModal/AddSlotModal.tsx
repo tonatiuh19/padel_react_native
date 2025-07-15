@@ -360,6 +360,9 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       >
         <View style={AddSlotModalStyles.backdrop}>
           <View style={AddSlotModalStyles.modalContainer}>
+            {/* Drag handle */}
+            <View style={AddSlotModalStyles.dragHandle} />
+
             {eventPrice && eventPrice.available_slots === 0 ? (
               <View style={AddSlotModalStyles.centeredContainer}>
                 <View style={AddSlotModalStyles.priceContainer}>
@@ -379,8 +382,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
             ) : (
               <>
                 {loading ? (
-                  <View style={AddSlotModalStyles.loadingContainer}>
-                    <LoadingSmall isLoading={true} color="#000" />
+                  <View style={AddSlotModalStyles.centeredContainer}>
+                    <LoadingSmall isLoading={true} color="#e1dd2a" />
                     {isScheduleClass ? (
                       <Text style={AddSlotModalStyles.loadingText}>
                         Procesando clase
@@ -638,7 +641,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                   ) : (
                                     <LoadingSmall
                                       isLoading={true}
-                                      color="#000"
+                                      color="#e1dd2a"
                                     />
                                   )}
                                 </View>

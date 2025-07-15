@@ -75,4 +75,10 @@ export const TimeSlotsAgendaCalendarTheme = {
   textDayFontSize: 16,
   textMonthFontSize: 16,
   textDayHeaderFontSize: 16,
+  agendaBackgroundColor: "#121212",
+  agendaKnobColor: "#666666",
+  agendaDayTextColor: "#ffffff",
+  agendaDayNumColor: "#ffffff",
+  agendaTodayColor: "#e1dd2a",
+  reservationsBackgroundColor: "#121212",
 };

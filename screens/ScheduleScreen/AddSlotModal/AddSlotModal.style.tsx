@@ -6,24 +6,32 @@ export const AddSlotModalWidth = width;
 export const AddSlotModalStyles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContainer: {
-    width: width * 0.9,
-    height: height * 0.8,
+    width: width,
+    maxHeight: height * 0.85,
     padding: 20,
+    paddingTop: 10,
     backgroundColor: "#1e1e1e",
-    borderRadius: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     alignItems: "center",
-    justifyContent: "space-between", // Distribute space between elements
   },
   titleContainer: {
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 20,
+  },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: "#666666",
+    borderRadius: 2,
+    marginBottom: 15,
   },
   title: {
     fontSize: 32,
@@ -69,13 +77,13 @@ export const AddSlotModalStyles = StyleSheet.create({
   cardField: {
     height: 60,
     borderRadius: 22,
-    borderColor: "#ff6b6b", // Add border color
+    borderColor: "#ffffff",
     borderWidth: 1,
-    backgroundColor: "#2d2d2d",
+    backgroundColor: "#ffffff",
   },
   buttonPay: {
     marginTop: 15,
-    width: AddSlotModalWidth * 0.6,
+    width: width * 0.8,
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
@@ -90,13 +98,13 @@ export const AddSlotModalStyles = StyleSheet.create({
   },
   buttonCancel: {
     marginTop: 10,
-    width: AddSlotModalWidth * 0.6,
+    width: width * 0.8,
     padding: 8,
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: "#1e1e1e",
     borderRadius: 22,
-    borderColor: "#ff6b6b", // Add border color
+    borderColor: "#ff6b6b",
     borderWidth: 1,
   },
   buttonCancelText: {
@@ -105,7 +113,12 @@ export const AddSlotModalStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
     alignSelf: "center",
   },
-  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  loadingContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 40,
+  },
   loadingText: {
     marginTop: 10,
     fontSize: 16,
@@ -128,9 +141,10 @@ export const AddSlotModalStyles = StyleSheet.create({
     fontFamily: "Kanit-Regular",
   },
   centeredContainer: {
-    flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 10,
   },
   bottomContainer: {
     width: "100%",
