@@ -33,14 +33,24 @@ const ClassReservationCard: React.FC<ClassReservationProps> = ({
     setModalVisible(false);
   };
 
+  const isExpired = () => {
+    const now = new Date();
+    const classEndTime = new Date(classReservation.platforms_date_time_end);
+    return now > classEndTime;
+  };
+
+  const getCardStyle = () => {
+    if (isExpired()) {
+      return ClassReservationStyles.cardExpired;
+    } else if (classReservation.validated === 1) {
+      return ClassReservationStyles.cardValidated;
+    } else {
+      return ClassReservationStyles.card;
+    }
+  };
+
   return (
-    <View
-      style={
-        classReservation.validated === 0
-          ? ClassReservationStyles.card
-          : ClassReservationStyles.cardValidated
-      }
-    >
+    <View style={getCardStyle()}>
       <View style={ClassReservationStyles.columnContainer}>
         <View style={ClassReservationStyles.column30}>
           <View style={ClassReservationStyles.row}>
@@ -77,7 +87,18 @@ const ClassReservationCard: React.FC<ClassReservationProps> = ({
           </View>
           {/* Add more rows as needed */}
         </View>
-        {classReservation.validated === 0 ? (
+        {isExpired() ? (
+          <View style={ClassReservationStyles.column20}>
+            <View style={ClassReservationStyles.row}>
+              <Text style={ClassReservationStyles.cardTextTitleNumber}>
+                <FontAwesome name="clock-o" size={24} color="#e1dd2a" />
+              </Text>
+            </View>
+            <View style={ClassReservationStyles.row}>
+              <Text style={ClassReservationStyles.cardText}>Expirado</Text>
+            </View>
+          </View>
+        ) : classReservation.validated === 0 ? (
           <TouchableOpacity
             onPress={openTicket}
             style={ClassReservationStyles.column20}
@@ -86,7 +107,7 @@ const ClassReservationCard: React.FC<ClassReservationProps> = ({
               <Text style={ClassReservationStyles.cardTextTitleNumber}>
                 <QRCode
                   value="https://intelipadel.com/"
-                  backgroundColor="#000"
+                  backgroundColor="#292929"
                   color="#e1dd2a"
                   size={45}
                 />

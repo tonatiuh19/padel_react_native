@@ -8,13 +8,14 @@ const ClasesScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#121212",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
+    color: "#ffffff",
   },
   scrollContainer: {
     alignItems: "center",
@@ -28,7 +29,7 @@ const ClasesScreenStyles = StyleSheet.create({
     width: "90%",
     padding: 20,
     marginVertical: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#292929",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -38,6 +39,7 @@ const ClasesScreenStyles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
+    color: "#ffffff",
   },
   cardReservationEmpty: {
     width: ReservationsScreenWidth - 40,
@@ -47,7 +49,7 @@ const ClasesScreenStyles = StyleSheet.create({
   },
   cardReservationText: {
     fontSize: 18,
-    color: "#000",
+    color: "#ffffff",
     fontWeight: "bold",
     marginBottom: 5,
     fontFamily: "Kanit-Regular",
@@ -63,7 +65,7 @@ const ClasesScreenStyles = StyleSheet.create({
     alignItems: "center",
   },
   buttonDisabled: {
-    backgroundColor: "#ccc", // Gray background for disabled buttons
+    backgroundColor: "#4a4a4a", // Dark gray background for disabled buttons
   },
   buttonReservationText: {
     color: "#000",
@@ -78,9 +80,9 @@ const ClasesScreenStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#1e1e1e",
     borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopColor: "#333333",
   },
   actionButton: {
     backgroundColor: "#e1dd2a",
@@ -92,7 +94,7 @@ const ClasesScreenStyles = StyleSheet.create({
     marginHorizontal: 5,
   },
   actionButtondisabled: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#4a4a4a",
   },
   actionButtonText: {
     color: "#000",

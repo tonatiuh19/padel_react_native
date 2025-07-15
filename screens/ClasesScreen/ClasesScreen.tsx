@@ -104,6 +104,24 @@ const ClasesScreen: React.FC = () => {
     });
   };
 
+  const sortClassReservations = (classReservations: any[]) => {
+    return classReservations.sort((a, b) => {
+      const now = new Date();
+      const aEndTime = new Date(a.platforms_date_time_end);
+      const bEndTime = new Date(b.platforms_date_time_end);
+
+      const aExpired = now > aEndTime;
+      const bExpired = now > bEndTime;
+
+      // Non-expired classes come first
+      if (aExpired && !bExpired) return 1;
+      if (!aExpired && bExpired) return -1;
+
+      // If both have same expiration status, sort by date (newest first)
+      return bEndTime.getTime() - aEndTime.getTime();
+    });
+  };
+
   return (
     <View style={ClasesScreenStyles.container}>
       <ScrollView
@@ -139,7 +157,7 @@ const ClasesScreen: React.FC = () => {
                       isDisabled && ClasesScreenStyles.textDisabled, // Apply disabled text style
                     ]}
                   >
-                    Reservar en Cancha {field.id_platforms_field}
+                    Agendar en Cancha {field.id_platforms_field}
                   </Text>
                 </TouchableOpacity>
               );
@@ -147,12 +165,14 @@ const ClasesScreen: React.FC = () => {
           </View>
         ) : (
           <>
-            {classesReservations.map((classReservation, index) => (
-              <ClassReservationCard
-                key={index}
-                classReservation={classReservation}
-              />
-            ))}
+            {sortClassReservations([...classesReservations]).map(
+              (classReservation, index) => (
+                <ClassReservationCard
+                  key={index}
+                  classReservation={classReservation}
+                />
+              )
+            )}
           </>
         )}
       </ScrollView>
@@ -176,7 +196,7 @@ const ClasesScreen: React.FC = () => {
                     isDisabled && ClasesScreenStyles.actionButtonTextDisabled, // Apply disabled text style
                   ]}
                 >
-                  Reservar en Cancha {field.id_platforms_field}
+                  Agendar en Cancha {field.id_platforms_field}
                 </Text>
               </TouchableOpacity>
             );
