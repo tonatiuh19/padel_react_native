@@ -72,7 +72,7 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
                   ? "Reservas"
                   : route === "Clases"
                   ? "Clases"
-                  : "Membresías (Próximamente)"}
+                  : "Membresías"}
               </Text>
             )}
             icon={(props: any) => (
