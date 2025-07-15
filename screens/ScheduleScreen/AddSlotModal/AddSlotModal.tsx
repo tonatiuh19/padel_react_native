@@ -1,8 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Modal, Text, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Modal,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Linking,
+} from "react-native";
 import { AddSlotModalStyles } from "./AddSlotModal.style";
 import TimeSlotPicker from "./TimeSlotPicker/TimeSlotPicker";
 import Countdown from "./Countdown/Countdown";
+import { FontAwesome6 } from "@expo/vector-icons";
 import {
   StripeProvider,
   CardField,
@@ -349,8 +357,8 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="slide"
-      onRequestClose={onClose}
+      animationType="none"
+      onRequestClose={() => {}} // Disable hardware back button on Android
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -360,9 +368,6 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
       >
         <View style={AddSlotModalStyles.backdrop}>
           <View style={AddSlotModalStyles.modalContainer}>
-            {/* Drag handle */}
-            <View style={AddSlotModalStyles.dragHandle} />
-
             {eventPrice && eventPrice.available_slots === 0 ? (
               <View style={AddSlotModalStyles.centeredContainer}>
                 <View style={AddSlotModalStyles.priceContainer}>
@@ -419,6 +424,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                             )}
                           </Text>
                         </View>
+                        <View style={AddSlotModalStyles.separator} />
                         <View style={AddSlotModalStyles.centeredContainer}>
                           <View style={AddSlotModalStyles.priceContainer}>
                             <Text style={AddSlotModalStyles.titleValue}>
@@ -451,18 +457,31 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                   AddSlotModalStyles.cardField,
                                   {
                                     borderWidth: 1,
-                                    borderColor: "#fff", // Change this to your desired border color
-                                    borderRadius: 22, // Change this to your desired border radius
+                                    borderColor: "#cccccc",
+                                    borderRadius: 22,
                                   },
                                 ]}
                                 cardStyle={{
-                                  textColor: "#ffffff",
-                                  backgroundColor: "#1c1c1c",
+                                  textColor: "#000000",
+                                  backgroundColor: "#ffffff",
                                 }}
                                 onCardChange={(cardDetails) => {
                                   setIsCardComplete(cardDetails.complete);
                                 }}
                               />
+                              <Text style={AddSlotModalStyles.termsText}>
+                                Al pagar acepto los{" "}
+                                <Text
+                                  style={AddSlotModalStyles.termsLink}
+                                  onPress={() =>
+                                    Linking.openURL(
+                                      "https://intelipadel.com/terminosycondiciones/padelroom"
+                                    )
+                                  }
+                                >
+                                  términos y condiciones
+                                </Text>
+                              </Text>
                               <View style={AddSlotModalStyles.buttonContainer}>
                                 {!isPaying ? (
                                   <>
@@ -471,6 +490,11 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                       onPress={handleEventPayPress}
                                       disabled={isPaying}
                                     >
+                                      <FontAwesome6
+                                        name="lock"
+                                        size={16}
+                                        color="#fff"
+                                      />
                                       <Text
                                         style={AddSlotModalStyles.buttonPayText}
                                       >
@@ -521,6 +545,12 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                             {formatDate(new Date(disabledSlots.today))}
                           </Text>
                         </View>
+                        <View
+                          style={[
+                            AddSlotModalStyles.separator,
+                            { marginBottom: 20 },
+                          ]}
+                        />
                         <View style={AddSlotModalStyles.centeredContainer}>
                           {!showTimePicker && (
                             <>
@@ -595,16 +625,37 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                     AddSlotModalStyles.cardField,
                                     {
                                       borderWidth: 1,
-                                      borderColor: "#fff", // Change this to your desired border color
-                                      borderRadius: 22, // Change this to your desired border radius
+                                      borderColor: "#cccccc",
+                                      borderRadius: 22,
                                     },
                                   ]}
                                   cardStyle={{
-                                    textColor: "#1c1c1c",
+                                    textColor: "#000000",
+                                    backgroundColor: "#ffffff",
                                   }}
                                   onCardChange={(cardDetails) => {
                                     setIsCardComplete(cardDetails.complete);
                                   }}
+                                />
+                                <Text style={AddSlotModalStyles.termsText}>
+                                  Al pagar acepto los{" "}
+                                  <Text
+                                    style={AddSlotModalStyles.termsLink}
+                                    onPress={() =>
+                                      Linking.openURL(
+                                        "https://intelipadel.com/terminosycondiciones/padelroom"
+                                      )
+                                    }
+                                  >
+                                    términos y condiciones
+                                  </Text>
+                                  .
+                                </Text>
+                                <View
+                                  style={[
+                                    AddSlotModalStyles.separator,
+                                    { marginTop: 20, marginBottom: 10 },
+                                  ]}
                                 />
                                 <View
                                   style={AddSlotModalStyles.buttonContainer}
@@ -616,6 +667,11 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                         onPress={handlePayPress}
                                         disabled={isPaying}
                                       >
+                                        <FontAwesome6
+                                          name="lock"
+                                          size={16}
+                                          color="#fff"
+                                        />
                                         <Text
                                           style={
                                             AddSlotModalStyles.buttonPayText

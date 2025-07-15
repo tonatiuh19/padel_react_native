@@ -8,14 +8,14 @@ export const CountdownStyles = StyleSheet.create({
   timerTextTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#000",
     marginBottom: 10,
     alignSelf: "center",
   },
   timerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#000000",
   },
   timerTextRed: {
     color: "#ff6b6b",
