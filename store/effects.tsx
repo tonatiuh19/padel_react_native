@@ -87,6 +87,9 @@ import {
   getClassesByUserIdStart,
   getClassesByUserIdSuccess,
   getClassesByUserIdFailure,
+  getPlatformSectionsByIdStart,
+  getPlatformSectionsByIdSuccess,
+  getPlatformSectionsByIdFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -124,6 +127,7 @@ const INSERT_CLASS = `${DOMAIN}/insertPlatformFieldClassUser.php`;
 const DELETE_CLASS = `${DOMAIN}/deletePlatformFieldClassUser.php`;
 const UPDATE_CLASS_STATUS = `${DOMAIN}/updatePlatformFieldClassUserById.php`;
 const GET_CLASSES_RESERVATIONS = `${DOMAIN}/getClassesByUserId.php`;
+const GET_SECTIONS = `${DOMAIN}/getPlatformSectionsById.php`;
 
 export const fetchPaymentIntentClientSecret = async (
   amount: number,
@@ -873,5 +877,28 @@ export const getClassesByUserId =
     } catch (error) {
       console.log("Error", error);
       dispatch(getClassesByUserIdFailure());
+    }
+  };
+
+export const getPlatformSectionsById =
+  (id_platform: number) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/getPlatformSectionsByIdStart"
+        | "app/getPlatformSectionsByIdSuccess"
+        | "app/getPlatformSectionsByIdFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(getPlatformSectionsByIdStart());
+      const response = await axios.post<any>(GET_SECTIONS, {
+        id_platform,
+      });
+      dispatch(getPlatformSectionsByIdSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(getPlatformSectionsByIdFailure());
     }
   };

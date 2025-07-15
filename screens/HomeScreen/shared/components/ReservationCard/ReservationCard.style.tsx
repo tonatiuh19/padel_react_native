@@ -10,7 +10,7 @@ export const ReservationCardStyles = StyleSheet.create({
     width: "100%",
     borderRadius: 22,
     overflow: "hidden",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#ddd",
     backgroundColor: "#fff",
   },

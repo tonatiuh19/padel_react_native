@@ -5,20 +5,29 @@ import {
   View,
   Text,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import { HomeScreenStyles, HomeScreenWidth } from "./HomeScreen.style";
+import {
+  HomeScreenHeight,
+  HomeScreenStyles,
+  HomeScreenWidth,
+} from "./HomeScreen.style";
 import ReservationCard from "./shared/components/ReservationCard/ReservationCard";
 import { Layout } from "@ui-kitten/components";
 import {
   selectAds,
+  selectHomeClasses,
+  selectLastClass,
   selectLastReservation,
   selectPlatformFields,
   selectPlatformsFields,
+  selectSections,
 } from "../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPlatformFields,
   getAdsById,
+  getPlatformSectionsById,
   getUserInfoById,
 } from "../../store/effects";
 import { AppDispatch } from "../../store";
@@ -32,16 +41,21 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigation/AppNavigator/AppNavigator";
-import { PlatformsField } from "./HomeScreen.model";
+import CustomPaginationDots from "./shared/components/CustomPaginationDots/CustomPaginationDots";
+import ActionCard from "./shared/components/ActionCard/ActionCard";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch: AppDispatch = useDispatch();
   const platformFields = useSelector(selectPlatformFields);
   const lastReservation = useSelector(selectLastReservation);
+  const lastClass = useSelector(selectLastClass);
+  const homeClasses = useSelector(selectHomeClasses);
   const ads = useSelector(selectAds);
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const fetchUserInfo = async () => {
     try {
@@ -50,6 +64,7 @@ export default function HomeScreen() {
         setUserId(Number(storedUserId));
         dispatch(getUserInfoById(Number(storedUserId)));
         dispatch(fetchPlatformFields(1, Number(storedUserId)));
+        dispatch(getPlatformSectionsById(1));
       }
     } catch (error) {
       console.error("Failed to load user session", error);
@@ -77,45 +92,75 @@ export default function HomeScreen() {
     });
   };
 
-  const renderCarouselItem = ({ item }: { item: any }) => (
-    <View
-      style={{
-        flex: 1,
-        borderRadius: 22,
-        justifyContent: "center",
-      }}
-    >
-      <ReservationCard
-        key={item.id_platforms_field}
-        id_platforms_field={item.id_platforms_field}
-        title={item.title}
-        field={item}
-        time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
-        player="John Doe" // Example player, replace with actual data if available
-        images={item.carrouselImages.map((image: any) => ({ uri: image.path }))}
-      />
-    </View>
-  );
+  const renderCarouselItem = ({
+    item,
+    index,
+  }: {
+    item: any;
+    index: number;
+  }) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          borderRadius: 22,
+          justifyContent: "center",
+        }}
+      >
+        <ReservationCard
+          key={item.id_platforms_field}
+          id_platforms_field={item.id_platforms_field}
+          title={item.title}
+          field={item}
+          time="10:00 AM - 11:00 AM" // Example time, replace with actual data if available
+          player="John Doe" // Example player, replace with actual data if available
+          images={item.carrouselImages.map((image: any) => ({
+            uri: image.path,
+          }))}
+        />
+      </View>
+    );
+  };
 
-  const renderCarouselItemAd = ({ item }: { item: any }) => (
-    <View
-      style={{
-        flex: 1,
-        borderRadius: 22,
-        justifyContent: "center",
-      }}
-    >
-      <ReservationCardAds
-        key={item.id_platforms_ad}
-        id_platforms_ad={item.id_platforms_ad}
-        platforms_ad_title={item.platforms_ad_title}
-        platforms_ad_image={item.platforms_ad_image}
-      />
-    </View>
-  );
+  const cardsData = [
+    ...(lastReservation
+      ? [
+          {
+            id: 1,
+            icon: "calendar" as keyof typeof Ionicons.glyphMap,
+            title: "Tu próxima reserva",
+            subtitle: lastReservation.title,
+            reservation: lastReservation,
+            isTicketModal: true, // Example: Use reservation title
+          },
+        ]
+      : []),
+    ...(lastClass
+      ? [
+          {
+            id: 2,
+            icon: "school" as keyof typeof Ionicons.glyphMap,
+            title: "Tu próxima clase",
+            subtitle: lastClass.title,
+            reservation: lastClass,
+            isTicketModal: true, // Example: Use class title
+          },
+        ]
+      : []),
+    {
+      id: 3,
+      icon: "tennisball" as keyof typeof Ionicons.glyphMap,
+      title: "Explorar Canchas",
+    },
+    {
+      id: 4,
+      icon: "card" as keyof typeof Ionicons.glyphMap,
+      title: "Membresías",
+    },
+  ];
 
-  const handlePress = (field: PlatformsField) => {
-    navigation.navigate("Schedule", field);
+  const handleCardButtonPress = (id: number) => {
+    console.log(`Floating button pressed for card ${id}`);
   };
 
   return (
@@ -128,11 +173,10 @@ export default function HomeScreen() {
       >
         <View style={{ flex: 1 }}>
           <Carousel
-            loop
+            loop={false}
             width={HomeScreenWidth}
-            height={HomeScreenWidth / 2}
+            height={250}
             pagingEnabled={true}
-            autoPlay={true}
             data={platformFields}
             scrollAnimationDuration={1800}
             mode="parallax"
@@ -140,46 +184,30 @@ export default function HomeScreen() {
               parallaxScrollingScale: 0.9,
               parallaxScrollingOffset: 50,
             }}
+            onProgressChange={(_, absoluteProgress) => {
+              const newIndex = Math.round(absoluteProgress);
+              setActiveIndex(newIndex);
+            }}
             renderItem={renderCarouselItem}
           />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Carousel
-            loop
-            width={HomeScreenWidth}
-            height={HomeScreenWidth / 2}
-            autoPlay={true}
-            data={ads}
-            scrollAnimationDuration={2500}
-            mode="parallax"
-            modeConfig={{
-              parallaxScrollingScale: 0.9,
-              parallaxScrollingOffset: 50,
-            }}
-            renderItem={renderCarouselItemAd}
+          <CustomPaginationDots
+            activeIndex={activeIndex}
+            totalItems={platformFields.length}
           />
         </View>
         <View style={{ flex: 1 }}>
-          <View style={HomeScreenStyles.cardReservations}>
-            {lastReservation ? (
-              <>
-                <Text style={HomeScreenStyles.cardReservationText}>
-                  Tu próxima reserva:
-                </Text>
-                <ReservationCardList reservation={lastReservation} />
-              </>
-            ) : (
-              <View style={HomeScreenStyles.cardReservationEmpty}>
-                <Text style={HomeScreenStyles.cardReservationText}>
-                  Aún no tienes reservas
-                </Text>
-                <View style={HomeScreenStyles.cardNoReservationTextContainer}>
-                  <Text style={HomeScreenStyles.cardNoReservationText}>
-                    Selecciona una cancha para reservar en la sección de arriba
-                  </Text>
-                </View>
-              </View>
-            )}
+          <View style={HomeScreenStyles.cardsGrid}>
+            {cardsData.map((item) => (
+              <ActionCard
+                key={item.id}
+                icon={item.icon}
+                title={item.title}
+                subtitle={item.subtitle}
+                reservation={item.reservation}
+                isTicketModal={item.isTicketModal}
+                onPressButton={() => handleCardButtonPress(item.id)}
+              />
+            ))}
           </View>
         </View>
       </ScrollView>

@@ -29,13 +29,16 @@ export interface AppState {
   reservations: Reservations;
   ads: ReservationCardAdsProps[];
   last_reservation: Reservation | null;
+  last_class: Reservation | null;
   price: PriceModel | null;
   eventPrice: PriceEventModel | null;
   paymentEvent: PaymentEventState;
   classes: ClassesModel[];
+  homeClasses: ClassesModel[];
   selectedClass: ClassesModel | null;
   paymentClass: PaymentClassModel | null;
   classesReservations: ClassesReservationModel[];
+  sections: SectionsModel[];
   isScheduleClass: boolean;
   isLoading?: boolean;
   isError?: boolean;
@@ -169,6 +172,8 @@ export interface Reservation {
   active: number;
   stripe_id: string;
   validated: number;
+  title?: string;
+  event_title?: string;
 }
 
 export interface PriceModel {
@@ -234,4 +239,10 @@ export interface ClassesReservationModel {
   id_platforms_field: number;
   cancha: string;
   event_title: string;
+}
+
+export interface SectionsModel {
+  id_platforms_sections: number;
+  section: string;
+  active: number;
 }

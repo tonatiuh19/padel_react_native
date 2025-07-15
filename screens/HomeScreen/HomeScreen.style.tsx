@@ -7,16 +7,41 @@ export const HomeScreenWidth = width;
 export const HomeScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
   },
   scrollView: {
-    flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
   },
   carouselContainer: {
     marginBottom: 20,
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    fontSize: 22,
+    marginLeft: 10,
+    color: "#e1dd2a",
+    fontFamily: "Kanit-Regular",
+  },
+  divisorLine: {
+    width: "100%",
+    height: 2,
+    backgroundColor: "#e1dd2a",
+    marginVertical: 10,
+    borderRadius: 5,
+    shadowColor: "#000", // Black shadow
+    shadowOffset: {
+      width: 0,
+      height: 4, // Vertical shadow
+    },
+    shadowOpacity: 0.3, // Shadow transparency
+    shadowRadius: 4.65, // Shadow blur
+    elevation: 8, // Android shadow
+    padding: 20, // Padding inside the container
+    justifyContent: "center", // Center content vertically
+    alignItems: "center", // Center content horizontally
   },
   cardReservations: {
     width: HomeScreenWidth - 40,
@@ -73,6 +98,26 @@ export const HomeScreenStyles = StyleSheet.create({
     height: 1,
     backgroundColor: "#ccc",
     marginVertical: 20,
+  },
+  shadowContainer: {
+    backgroundColor: "#000", // Black background
+    borderRadius: 22, // Rounded corners
+    shadowColor: "#000", // Black shadow
+    shadowOffset: {
+      width: 0,
+      height: 4, // Vertical shadow
+    },
+    shadowOpacity: 0.3, // Shadow transparency
+    shadowRadius: 4.65, // Shadow blur
+    elevation: 8, // Android shadow
+    padding: 20, // Padding inside the container
+    justifyContent: "center", // Center content vertically
+    alignItems: "center", // Center content horizontally
+  },
+  cardsGrid: {
+    flexDirection: "row", // Arrange items in a row
+    flexWrap: "wrap", // Allow wrapping to the next row
+    justifyContent: "space-between", // Add space between cards
   },
 });
 

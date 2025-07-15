@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const BackButton: React.FC<{ onPress: () => void }> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress} style={{ marginLeft: 16 }}>
-    <Ionicons name="arrow-back" size={24} color="black" />
+    <Ionicons name="arrow-back" size={24} color="#000" />
   </TouchableOpacity>
 );
 

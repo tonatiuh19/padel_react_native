@@ -78,6 +78,7 @@ const initialState: AppState = {
   },
   ads: [],
   last_reservation: null,
+  last_class: null,
   price: null,
   eventPrice: null,
   paymentEvent: {
@@ -88,10 +89,12 @@ const initialState: AppState = {
     platforms_fields_events_users_inserted: "",
   },
   classes: [],
+  homeClasses: [],
   isScheduleClass: false,
   selectedClass: null,
   paymentClass: null,
   classesReservations: [],
+  sections: [],
 };
 
 const appSlice = createSlice({
@@ -115,7 +118,9 @@ const appSlice = createSlice({
       console.log("Action Payload", action.payload);
       state.isLoading = false;
       state.last_reservation = action.payload.last_reservation;
+      state.last_class = action.payload.last_class;
       state.platformFields = action.payload;
+      state.homeClasses = action.payload.classes;
     },
     fetchPlatformFieldsFailure(state) {
       state.isLoading = false;
@@ -536,6 +541,18 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getPlatformSectionsByIdStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getPlatformSectionsByIdSuccess(state, action: PayloadAction<any[]>) {
+      state.isLoading = false;
+      state.sections = action.payload;
+    },
+    getPlatformSectionsByIdFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -633,6 +650,9 @@ export const {
   getClassesByUserIdStart,
   getClassesByUserIdSuccess,
   getClassesByUserIdFailure,
+  getPlatformSectionsByIdStart,
+  getPlatformSectionsByIdSuccess,
+  getPlatformSectionsByIdFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;
