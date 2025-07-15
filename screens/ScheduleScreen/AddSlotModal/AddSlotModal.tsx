@@ -424,6 +424,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                             )}
                           </Text>
                         </View>
+
                         <View style={AddSlotModalStyles.separator} />
                         <View style={AddSlotModalStyles.centeredContainer}>
                           <View style={AddSlotModalStyles.priceContainer}>
@@ -541,70 +542,130 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                               Reservar cancha
                             </Text>
                           )}
-                          <Text style={AddSlotModalStyles.titleValue}>
-                            {formatDate(new Date(disabledSlots.today))}
-                          </Text>
                         </View>
-                        <View
-                          style={[
-                            AddSlotModalStyles.separator,
-                            { marginBottom: 20 },
-                          ]}
-                        />
-                        <View style={AddSlotModalStyles.centeredContainer}>
-                          {!showTimePicker && (
-                            <>
-                              {price && (
-                                <View style={AddSlotModalStyles.priceContainer}>
-                                  <Text style={AddSlotModalStyles.priceText}>
-                                    {isScheduleClass
-                                      ? formatCurrency(
-                                          Number(selectedClass?.price ?? 0)
-                                        )
-                                      : formatCurrency(price.price)}
-                                  </Text>
-                                </View>
-                              )}
-                            </>
-                          )}
-                          {showCountdown && (
-                            <Countdown
-                              duration={90}
-                              onComplete={handleCountdownComplete}
-                              isCheckout={true}
-                            />
-                          )}
-                          {!showCountdown && (
-                            <Text style={AddSlotModalStyles.titleValue}>
-                              {startTime ? `Hora seleccionada:` : ""}
-                            </Text>
-                          )}
-                          <>
-                            {!showTimePicker && (
+
+                        <View style={AddSlotModalStyles.separator} />
+
+                        {!showTimePicker && (
+                          <View style={AddSlotModalStyles.summaryCard}>
+                            <View style={AddSlotModalStyles.summaryHeader}>
+                              <Text style={AddSlotModalStyles.summaryTitle}>
+                                {isScheduleClass ? "Clase" : "Reserva"}:{" "}
+                                {platformsFields.title}
+                              </Text>
                               <TouchableOpacity
-                                style={AddSlotModalStyles.timePickerButton}
+                                style={AddSlotModalStyles.changeButton}
                                 onPress={handleShowTimePicker}
                               >
+                                {startTime && (
+                                  <FontAwesome6
+                                    name="pencil"
+                                    size={12}
+                                    color="#121212"
+                                    style={{ marginRight: 6 }}
+                                  />
+                                )}
                                 <Text
-                                  style={
-                                    AddSlotModalStyles.timePickerButtonText
-                                  }
+                                  style={AddSlotModalStyles.changeButtonText}
                                 >
                                   {startTime
                                     ? `${startTime}`
                                     : "Selecciona la hora"}
                                 </Text>
                               </TouchableOpacity>
+                            </View>
+                            <View style={AddSlotModalStyles.summaryDetails}>
+                              <Text style={AddSlotModalStyles.summaryLabel}>
+                                {isScheduleClass
+                                  ? "Detalles de la Clase"
+                                  : "Detalles de la Reserva"}
+                              </Text>
+                              <Text style={AddSlotModalStyles.summaryValue}>
+                                {formatDate(new Date(disabledSlots.today))}
+                              </Text>
+                              {startTime && (
+                                <Text style={AddSlotModalStyles.summaryValue}>
+                                  Hora: {startTime}
+                                </Text>
+                              )}
+                            </View>
+                            {(price || isScheduleClass) && (
+                              <>
+                                <View style={AddSlotModalStyles.summaryPrice}>
+                                  <Text
+                                    style={AddSlotModalStyles.summaryPriceLabel}
+                                  >
+                                    Precio Total
+                                  </Text>
+                                  {showCountdown && (
+                                    <View
+                                      style={
+                                        AddSlotModalStyles.summaryPriceRight
+                                      }
+                                    >
+                                      <Countdown
+                                        duration={90}
+                                        onComplete={handleCountdownComplete}
+                                        isCheckout={true}
+                                      />
+                                    </View>
+                                  )}
+                                  <View
+                                    style={AddSlotModalStyles.summaryPriceRow}
+                                  >
+                                    <View
+                                      style={
+                                        AddSlotModalStyles.summaryPriceLeft
+                                      }
+                                    >
+                                      <Text
+                                        style={
+                                          AddSlotModalStyles.summaryPriceValue
+                                        }
+                                      >
+                                        {isScheduleClass
+                                          ? formatCurrency(
+                                              Number(selectedClass?.price ?? 0)
+                                            )
+                                          : formatCurrency(price?.price ?? 0)}
+                                      </Text>
+                                      <Text
+                                        style={
+                                          AddSlotModalStyles.summaryPriceSubtext
+                                        }
+                                      >
+                                        Incluye impuestos
+                                      </Text>
+                                    </View>
+                                  </View>
+                                </View>
+                                <Text style={AddSlotModalStyles.termsText}>
+                                  Al pagar acepto los{" "}
+                                  <Text
+                                    style={AddSlotModalStyles.termsLink}
+                                    onPress={() =>
+                                      Linking.openURL(
+                                        "https://intelipadel.com/terminosycondiciones/padelroom"
+                                      )
+                                    }
+                                  >
+                                    términos y condiciones
+                                  </Text>
+                                  .
+                                </Text>
+                              </>
                             )}
-                            {showTimePicker && (
-                              <TimeSlotPicker
-                                selectedTime={startTime}
-                                onTimeChange={handleTimeChange}
-                                onConfirm={handleConfirmTimePicker}
-                                disabled={isLoading}
-                              />
-                            )}
-                          </>
+                          </View>
+                        )}
+                        <View style={AddSlotModalStyles.centeredContainer}>
+                          {showTimePicker && (
+                            <TimeSlotPicker
+                              selectedTime={startTime}
+                              onTimeChange={handleTimeChange}
+                              onConfirm={handleConfirmTimePicker}
+                              disabled={isLoading}
+                            />
+                          )}
                         </View>
                         {!showTimePicker && (
                           <View style={AddSlotModalStyles.bottomContainer}>
@@ -637,20 +698,6 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                     setIsCardComplete(cardDetails.complete);
                                   }}
                                 />
-                                <Text style={AddSlotModalStyles.termsText}>
-                                  Al pagar acepto los{" "}
-                                  <Text
-                                    style={AddSlotModalStyles.termsLink}
-                                    onPress={() =>
-                                      Linking.openURL(
-                                        "https://intelipadel.com/terminosycondiciones/padelroom"
-                                      )
-                                    }
-                                  >
-                                    términos y condiciones
-                                  </Text>
-                                  .
-                                </Text>
                                 <View
                                   style={[
                                     AddSlotModalStyles.separator,
