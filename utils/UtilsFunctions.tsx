@@ -218,6 +218,16 @@ export const formatDateTime = (dateTimeString: string): string => {
   return `${day}-${month}-${year} ${formattedHours}:${formattedMinutes} ${ampm}`;
 };
 
+export const formatTimeFrom24Hour = (timeString: string): string => {
+  const [hour, minute] = timeString.split(":");
+  const hourInt = parseInt(hour, 10);
+  const ampm = hourInt >= 12 ? "PM" : "AM";
+  const formattedHour = hourInt % 12 || 12; // Convert 0 to 12 for 12-hour format
+  const formattedMinute = minute;
+
+  return `${formattedHour}:${formattedMinute} ${ampm}`;
+};
+
 export const getEndHour = (endDateTime: string): number => {
   const date = new Date(endDateTime); // Parse the string into a Date object
   return date.getHours(); // Extract the hour as a number

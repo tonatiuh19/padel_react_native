@@ -53,6 +53,7 @@ import {
   formatDateTime,
   formatFullDate,
   formatTime,
+  formatTimeFrom24Hour,
 } from "../../../utils/UtilsFunctions";
 import LoadingSmall from "../../HomeScreen/shared/components/LoadingSmall/LoadingSmall";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -621,7 +622,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                       AddSlotModalStyles.summaryValueHighlighted
                                     }
                                   >
-                                    {startTime}
+                                    {formatTimeFrom24Hour(startTime)}
                                   </Text>
                                 </View>
                               )}

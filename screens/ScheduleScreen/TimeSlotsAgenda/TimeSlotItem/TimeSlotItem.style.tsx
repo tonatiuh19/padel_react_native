@@ -13,7 +13,7 @@ export const TimeSlotItemStyles = StyleSheet.create({
     width: width - 40, // Adjust width to take up full space with some padding
   },
   activeItem: {
-    backgroundColor: "#d4edda",
+    backgroundColor: "#dddcb7ff",
   },
   idleItem: {
     backgroundColor: "#f8d7da",
