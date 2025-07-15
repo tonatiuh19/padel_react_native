@@ -22,9 +22,17 @@ export const AddSlotModalStyles = StyleSheet.create({
   },
   titleContainer: {
     width: "100%",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
+    position: "relative",
+  },
+  closeButton: {
+    position: "absolute",
+    right: 0,
+    padding: 8,
+    zIndex: 1,
   },
   separator: {
     width: width,
@@ -79,14 +87,10 @@ export const AddSlotModalStyles = StyleSheet.create({
   containerCard: {
     width: "100%",
     justifyContent: "center",
-    padding: 8,
   },
   cardField: {
     height: 60,
-    borderRadius: 22,
-    borderColor: "#cccccc",
-    borderWidth: 1,
-    backgroundColor: "#f5f5f5ff",
+    backgroundColor: "#ffffffff",
   },
   buttonPay: {
     marginTop: 15,
@@ -184,11 +188,10 @@ export const AddSlotModalStyles = StyleSheet.create({
   termsLink: {
     fontSize: 12,
     fontFamily: "Kanit-Regular",
-    color: "#007bff",
+    color: "#000000",
     textDecorationLine: "underline",
   },
   summaryCard: {
-    marginTop: 20,
     width: "100%",
     backgroundColor: "#ffffff",
     borderRadius: 12,
@@ -241,13 +244,14 @@ export const AddSlotModalStyles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Kanit-Regular",
     color: "#666666",
-    marginBottom: 4,
+    marginBottom: 10,
   },
   summaryValue: {
     fontSize: 16,
     fontFamily: "Kanit-Regular",
-    color: "#000000",
-    fontWeight: "500",
+  },
+  summaryValueHighlighted: {
+    fontSize: 17,
   },
   summaryPrice: {
     borderTopWidth: 1,

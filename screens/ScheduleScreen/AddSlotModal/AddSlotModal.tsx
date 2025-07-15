@@ -527,6 +527,16 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                     ) : (
                       <>
                         <View style={AddSlotModalStyles.titleContainer}>
+                          <TouchableOpacity
+                            style={AddSlotModalStyles.closeButton}
+                            onPress={cleaningSlot}
+                          >
+                            <FontAwesome6
+                              name="xmark"
+                              size={20}
+                              color="#000000"
+                            />
+                          </TouchableOpacity>
                           {isScheduleClass && (
                             <>
                               <Text style={AddSlotModalStyles.title}>
@@ -544,7 +554,12 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                           )}
                         </View>
 
-                        <View style={AddSlotModalStyles.separator} />
+                        <View
+                          style={[
+                            AddSlotModalStyles.separator,
+                            { marginBottom: 20 },
+                          ]}
+                        />
 
                         {!showTimePicker && (
                           <View style={AddSlotModalStyles.summaryCard}>
@@ -581,12 +596,34 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                   : "Detalles de la Reserva"}
                               </Text>
                               <Text style={AddSlotModalStyles.summaryValue}>
-                                {formatDate(new Date(disabledSlots.today))}
+                                Fecha:{" "}
+                                <Text
+                                  style={
+                                    AddSlotModalStyles.summaryValueHighlighted
+                                  }
+                                >
+                                  {formatDate(new Date(disabledSlots.today))}
+                                </Text>
                               </Text>
                               {startTime && (
-                                <Text style={AddSlotModalStyles.summaryValue}>
-                                  Hora: {startTime}
-                                </Text>
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    marginTop: 4,
+                                  }}
+                                >
+                                  <Text style={AddSlotModalStyles.summaryValue}>
+                                    Hora:{" "}
+                                  </Text>
+                                  <Text
+                                    style={
+                                      AddSlotModalStyles.summaryValueHighlighted
+                                    }
+                                  >
+                                    {startTime}
+                                  </Text>
+                                </View>
                               )}
                             </View>
                             {(price || isScheduleClass) && (
@@ -639,20 +676,6 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                     </View>
                                   </View>
                                 </View>
-                                <Text style={AddSlotModalStyles.termsText}>
-                                  Al pagar acepto los{" "}
-                                  <Text
-                                    style={AddSlotModalStyles.termsLink}
-                                    onPress={() =>
-                                      Linking.openURL(
-                                        "https://intelipadel.com/terminosycondiciones/padelroom"
-                                      )
-                                    }
-                                  >
-                                    términos y condiciones
-                                  </Text>
-                                  .
-                                </Text>
                               </>
                             )}
                           </View>
@@ -673,31 +696,29 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                               publishableKey={userInfo.info?.publishable_key}
                             >
                               <View style={AddSlotModalStyles.containerCard}>
-                                {showCountdown && (
+                                <View style={AddSlotModalStyles.summaryCard}>
                                   <Text
                                     style={AddSlotModalStyles.titleValueCard}
                                   >
                                     Ingresa los datos de tu tarjeta:
                                   </Text>
-                                )}
-                                <CardField
-                                  postalCodeEnabled={false}
-                                  style={[
-                                    AddSlotModalStyles.cardField,
-                                    {
-                                      borderWidth: 1,
-                                      borderColor: "#cccccc",
-                                      borderRadius: 22,
-                                    },
-                                  ]}
-                                  cardStyle={{
-                                    textColor: "#000000",
-                                    backgroundColor: "#f5f5f5ff",
-                                  }}
-                                  onCardChange={(cardDetails) => {
-                                    setIsCardComplete(cardDetails.complete);
-                                  }}
-                                />
+                                  <CardField
+                                    postalCodeEnabled={false}
+                                    style={[
+                                      AddSlotModalStyles.cardField,
+                                      {
+                                        backgroundColor: "#ffffff",
+                                      },
+                                    ]}
+                                    cardStyle={{
+                                      textColor: "#000000",
+                                      backgroundColor: "#ffffff",
+                                    }}
+                                    onCardChange={(cardDetails) => {
+                                      setIsCardComplete(cardDetails.complete);
+                                    }}
+                                  />
+                                </View>
                                 <View
                                   style={[
                                     AddSlotModalStyles.separator,
@@ -727,19 +748,22 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                                           {buttonText}
                                         </Text>
                                       </TouchableOpacity>
-                                      <TouchableOpacity
-                                        style={AddSlotModalStyles.buttonCancel}
-                                        onPress={cleaningSlot}
-                                        disabled={isPaying}
+                                      <Text
+                                        style={AddSlotModalStyles.termsText}
                                       >
+                                        Al pagar acepto los{" "}
                                         <Text
-                                          style={
-                                            AddSlotModalStyles.buttonCancelText
+                                          style={AddSlotModalStyles.termsLink}
+                                          onPress={() =>
+                                            Linking.openURL(
+                                              "https://intelipadel.com/terminosycondiciones/padelroom"
+                                            )
                                           }
                                         >
-                                          Cancelar
+                                          términos y condiciones
                                         </Text>
-                                      </TouchableOpacity>
+                                        .
+                                      </Text>
                                     </>
                                   ) : (
                                     <LoadingSmall
