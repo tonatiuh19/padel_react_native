@@ -59,3 +59,6 @@ export const selectClassesReservations = (state: RootState) =>
 export const selectHomeClasses = (state: RootState) => state.app.homeClasses;
 
 export const selectSections = (state: RootState) => state.app.sections;
+
+export const selectCardInfo = (state: RootState) =>
+  state.app.userInfo.info.card_info;

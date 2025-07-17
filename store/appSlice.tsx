@@ -70,6 +70,7 @@ const initialState: AppState = {
       date_created: "",
       id_platforms: 0,
       publishable_key: "",
+      card_info: null,
     },
   },
   reservations: {
@@ -553,6 +554,20 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    attachPaymentMethodStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    attachPaymentMethodSuccess(state, action: PayloadAction<any>) {
+      if (action.payload !== false) {
+        state.userInfo.info = action.payload;
+        state.isLoading = false;
+      }
+    },
+    attachPaymentMethodFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -653,6 +668,9 @@ export const {
   getPlatformSectionsByIdStart,
   getPlatformSectionsByIdSuccess,
   getPlatformSectionsByIdFailure,
+  attachPaymentMethodStart,
+  attachPaymentMethodSuccess,
+  attachPaymentMethodFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -1,3 +1,6 @@
+// ...existing code...
+// ...existing code...
+// ...existing code...
 import { Dimensions, StyleSheet } from "react-native";
 
 const { height, width } = Dimensions.get("window");
@@ -5,15 +8,173 @@ export const ProfileScreenHeight = height;
 export const ProfileScreenWidth = width;
 
 export const ProfileScreenStyles = StyleSheet.create({
-  container: {
-    flex: 1,
+  bottomActionsContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  cardInfoSection: {
+    width: "100%",
+    backgroundColor: "#f8f9fa",
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 16,
+    marginBottom: 8,
+    alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  cardInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  cardInfoText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#222",
+    fontFamily: "Kanit-Regular",
+  },
+  cardInfoLabel: {
+    fontSize: 13,
+    color: "#888",
+    fontFamily: "Kanit-Regular",
+    marginLeft: 2,
+  },
+  cardFieldLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
+    color: "#000000",
+  },
+  cardField: {
+    height: 60,
+    backgroundColor: "#ffffffff",
+  },
+  cardModalPanel: {
+    backgroundColor: "#f5f5f5ff",
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 32,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    width: "100%",
+    minHeight: 240,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  cardModalDragHandle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#ccc",
+    marginBottom: 12,
+    alignSelf: "center",
+  },
+  cardModalTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  cardModalHeader: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 12,
+    width: "100%",
+    height: 48,
+    position: "relative",
+  },
+  cardModalTitleCentered: {
+    textAlign: "center",
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#222",
+  },
+  cardModalCloseButton: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    padding: 4,
+  },
+  containerCard: {
+    width: "100%",
+    justifyContent: "center",
+  },
+  summaryCard: {
+    width: "100%",
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonPay: {
+    marginTop: 15,
+    width: width * 0.8,
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#121212",
+    borderRadius: 22,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  buttonPayText: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
+  },
+  termsText: {
+    fontSize: 12,
+    fontFamily: "Kanit-Regular",
+    color: "#666666",
+    textAlign: "center",
+
+    marginTop: 20,
+  },
+  termsLink: {
+    fontSize: 12,
+    fontFamily: "Kanit-Regular",
+    color: "#000000",
+    textDecorationLine: "underline",
+  },
+  container: {
+    flex: 1,
     backgroundColor: "#fff",
   },
   profileSection: {
-    flex: 1,
-    justifyContent: "center",
+    width: "100%",
     alignItems: "center",
   },
   profileText: {
@@ -24,8 +185,9 @@ export const ProfileScreenStyles = StyleSheet.create({
   gridContainer: {
     flexDirection: "column",
     width: ProfileScreenWidth * 0.8,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    alignSelf: "center",
   },
   gridRow: {
     flexDirection: "row",

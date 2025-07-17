@@ -87,6 +87,7 @@ export interface UserInfo {
   date_created: string;
   id_platforms: number;
   publishable_key: string;
+  card_info: CardInfoModel | null;
 }
 
 export interface PlatformField {
@@ -245,4 +246,10 @@ export interface SectionsModel {
   id_platforms_sections: number;
   section: string;
   active: number;
+}
+
+export interface CardInfoModel {
+  default_payment_method: string;
+  last4: string;
+  brand: string;
 }

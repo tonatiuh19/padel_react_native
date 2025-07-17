@@ -56,9 +56,6 @@ const SignInForm: React.FC<any> = ({
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required("Nombre completo es requerido"),
-    age: Yup.number()
-      .required("Edad válida es requerida")
-      .typeError("Edad válida es requerida"),
     dateOfBirth: Yup.string().required("Fecha de nacimiento es requerida"),
   });
 
@@ -66,7 +63,6 @@ const SignInForm: React.FC<any> = ({
     <Formik
       initialValues={{
         fullName: "",
-        age: "",
         dateOfBirth: "",
       }}
       validationSchema={validationSchema}
@@ -103,51 +99,54 @@ const SignInForm: React.FC<any> = ({
                       {errors.fullName}
                     </Text>
                   )}
-                  <TextInput
-                    style={
-                      errors.age && touched.age
-                        ? LoginScreenStyles.inputError
-                        : LoginScreenStyles.input
-                    }
-                    placeholder="Edad"
-                    placeholderTextColor="#c7c585"
-                    onChangeText={handleChange("age")}
-                    onBlur={handleBlur("age")}
-                    value={values.age}
-                    keyboardType="numeric"
-                  />
-                  {errors.age && touched.age && (
-                    <Text style={LoginScreenStyles.error}>{errors.age}</Text>
-                  )}
                 </>
               )}
               {!show && (
-                <TouchableOpacity
-                  style={
-                    errors.dateOfBirth && touched.dateOfBirth
-                      ? LoginScreenStyles.generalContainerError
-                      : LoginScreenStyles.generalContainer
-                  }
-                  onPress={() => {
-                    setShow(true);
-                    if (Platform.OS === "ios") {
-                      return setIsSettingDateOfBirth(true);
-                    }
-                  }}
-                >
+                <>
                   <TextInput
                     style={
-                      errors.dateOfBirth && touched.dateOfBirth
+                      errors.fullName && touched.fullName
                         ? LoginScreenStyles.inputError
                         : LoginScreenStyles.input
                     }
-                    placeholder="Fecha de Nacimiento"
+                    placeholder="Nombre Completo"
                     placeholderTextColor="#c7c585"
-                    value={values.dateOfBirth}
-                    editable={false}
-                    pointerEvents="none"
+                    onChangeText={handleChange("fullName")}
+                    onBlur={handleBlur("fullName")}
+                    value={values.fullName}
                   />
-                </TouchableOpacity>
+                  {errors.fullName && touched.fullName && (
+                    <Text style={LoginScreenStyles.error}>
+                      {errors.fullName}
+                    </Text>
+                  )}
+                  <TouchableOpacity
+                    style={
+                      errors.dateOfBirth && touched.dateOfBirth
+                        ? LoginScreenStyles.generalContainerError
+                        : LoginScreenStyles.generalContainer
+                    }
+                    onPress={() => {
+                      setShow(true);
+                      if (Platform.OS === "ios") {
+                        return setIsSettingDateOfBirth(true);
+                      }
+                    }}
+                  >
+                    <TextInput
+                      style={
+                        errors.dateOfBirth && touched.dateOfBirth
+                          ? LoginScreenStyles.inputError
+                          : LoginScreenStyles.input
+                      }
+                      placeholder="Fecha de Nacimiento"
+                      placeholderTextColor="#c7c585"
+                      value={values.dateOfBirth}
+                      editable={false}
+                      pointerEvents="none"
+                    />
+                  </TouchableOpacity>
+                </>
               )}
               {show && (
                 <View

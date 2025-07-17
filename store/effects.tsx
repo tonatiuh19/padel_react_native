@@ -90,6 +90,9 @@ import {
   getPlatformSectionsByIdStart,
   getPlatformSectionsByIdSuccess,
   getPlatformSectionsByIdFailure,
+  attachPaymentMethodStart,
+  attachPaymentMethodSuccess,
+  attachPaymentMethodFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -128,6 +131,7 @@ const DELETE_CLASS = `${DOMAIN}/deletePlatformFieldClassUser.php`;
 const UPDATE_CLASS_STATUS = `${DOMAIN}/updatePlatformFieldClassUserById.php`;
 const GET_CLASSES_RESERVATIONS = `${DOMAIN}/getClassesByUserId.php`;
 const GET_SECTIONS = `${DOMAIN}/getPlatformSectionsById.php`;
+const ATTACH_PAYMENT_METHOD = `${DOMAIN}/attachPaymentMethod.php`;
 
 export const fetchPaymentIntentClientSecret = async (
   amount: number,
@@ -900,5 +904,34 @@ export const getPlatformSectionsById =
     } catch (error) {
       console.log("Error", error);
       dispatch(getPlatformSectionsByIdFailure());
+    }
+  };
+
+export const attachPaymentMethod =
+  (
+    stripe_customer_id: string,
+    payment_method_id: string,
+    id_platforms_user: number
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/attachPaymentMethodStart"
+        | "app/attachPaymentMethodSuccess"
+        | "app/attachPaymentMethodFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(attachPaymentMethodStart());
+      const response = await axios.post<any>(ATTACH_PAYMENT_METHOD, {
+        stripe_customer_id,
+        payment_method_id,
+        id_platforms_user,
+      });
+      dispatch(attachPaymentMethodSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(attachPaymentMethodFailure());
     }
   };

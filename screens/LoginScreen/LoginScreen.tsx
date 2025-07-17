@@ -36,7 +36,7 @@ const LoginScreen: React.FC = () => {
     dispatch(
       insertPlatformUser(
         values.fullName,
-        values.age,
+        0,
         values.dateOfBirth,
         userInfo.info.phone_number_code,
         userInfo.info.phone_number,
