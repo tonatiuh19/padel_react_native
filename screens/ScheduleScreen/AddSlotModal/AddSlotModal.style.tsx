@@ -293,4 +293,45 @@ export const AddSlotModalStyles = StyleSheet.create({
     color: "#666666",
     marginTop: 2,
   },
+  cardInfoSection: {
+    width: "100%",
+    backgroundColor: "#f8f9fa",
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 16,
+    marginBottom: 8,
+    alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+    position: "relative", // <-- add this
+  },
+  cardInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  cardInfoText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#222",
+    fontFamily: "Kanit-Regular",
+  },
+  cardInfoLabel: {
+    fontSize: 13,
+    color: "#888",
+    fontFamily: "Kanit-Regular",
+    marginLeft: 2,
+  },
+  editCardButton: {
+    position: "absolute", // <-- add this
+    top: 10, // <-- adjust as needed
+    right: 10, // <-- adjust as needed
+    padding: 10,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    zIndex: 2,
+  },
 });

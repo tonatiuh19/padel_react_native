@@ -34,6 +34,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../store";
 import {
+  selectCardInfo,
   selectDisabledSlots,
   selectEventPrice,
   selectIsLoading,
@@ -95,6 +96,7 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
   const [isPaying, setIsPaying] = useState(false);
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [buttonText, setButtonText] = useState("Reservar");
+  const cardInfo = useSelector(selectCardInfo);
 
   const hasDispatchedInsertEventUser = useRef(false);
 
@@ -142,10 +144,15 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
   };
 
   const handlePayPress = async () => {
-    if (!isCardComplete || !startTime) {
+    if (!startTime) {
+      Alert.alert("Algo falta por completar", "Por favor, selecciona una hora");
+      return;
+    }
+    // If user does not have a default payment method, validate card completion
+    if (!(cardInfo && cardInfo.default_payment_method) && !isCardComplete) {
       Alert.alert(
         "Algo falta por completar",
-        "Por favor, completa los datos de tu tarjeta y selecciona una hora"
+        "Por favor, completa los datos de tu tarjeta"
       );
       return;
     }
@@ -169,7 +176,14 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
     const { error, paymentIntent } = await confirmPayment(clientSecret, {
       paymentMethodType: "Card",
       paymentMethodData: {
-        billingDetails,
+        ...(cardInfo && cardInfo.default_payment_method
+          ? {
+              paymentMethodId: cardInfo.default_payment_method,
+              billingDetails,
+            }
+          : {
+              billingDetails,
+            }),
       },
     });
 
@@ -697,29 +711,80 @@ const AddSlotModal: React.FC<AddSlotModalProps> = ({
                               publishableKey={userInfo.info?.publishable_key}
                             >
                               <View style={AddSlotModalStyles.containerCard}>
-                                <View style={AddSlotModalStyles.summaryCard}>
-                                  <Text
-                                    style={AddSlotModalStyles.titleValueCard}
+                                {cardInfo && cardInfo.default_payment_method ? (
+                                  <View
+                                    style={AddSlotModalStyles.cardInfoSection}
                                   >
-                                    Ingresa los datos de tu tarjeta:
-                                  </Text>
-                                  <CardField
-                                    postalCodeEnabled={false}
-                                    style={[
-                                      AddSlotModalStyles.cardField,
-                                      {
+                                    <View
+                                      style={AddSlotModalStyles.cardInfoRow}
+                                    >
+                                      <FontAwesome6
+                                        name={
+                                          cardInfo.brand === "visa"
+                                            ? "cc-visa"
+                                            : cardInfo.brand === "mastercard"
+                                            ? "cc-mastercard"
+                                            : cardInfo.brand === "amex"
+                                            ? "cc-amex"
+                                            : cardInfo.brand === "discover"
+                                            ? "cc-discover"
+                                            : "credit-card"
+                                        }
+                                        size={28}
+                                        color="#222"
+                                        style={{ marginRight: 12 }}
+                                      />
+                                      <Text
+                                        style={AddSlotModalStyles.cardInfoText}
+                                      >
+                                        {cardInfo.brand?.toUpperCase()} ••••{" "}
+                                        {cardInfo.last4}
+                                      </Text>
+                                    </View>
+                                    <Text
+                                      style={AddSlotModalStyles.cardInfoLabel}
+                                    >
+                                      Método de pago predeterminado
+                                    </Text>
+                                    <TouchableOpacity
+                                      style={AddSlotModalStyles.editCardButton}
+                                      onPress={() => {
+                                        cleaningSlot();
+                                        navigation.navigate("Profile");
+                                      }}
+                                    >
+                                      <FontAwesome6
+                                        name="pencil"
+                                        size={14}
+                                        color="#222"
+                                      />
+                                    </TouchableOpacity>
+                                  </View>
+                                ) : (
+                                  <View style={AddSlotModalStyles.summaryCard}>
+                                    <Text
+                                      style={AddSlotModalStyles.titleValueCard}
+                                    >
+                                      Ingresa los datos de tu tarjeta:
+                                    </Text>
+                                    <CardField
+                                      postalCodeEnabled={false}
+                                      style={[
+                                        AddSlotModalStyles.cardField,
+                                        {
+                                          backgroundColor: "#ffffff",
+                                        },
+                                      ]}
+                                      cardStyle={{
+                                        textColor: "#000000",
                                         backgroundColor: "#ffffff",
-                                      },
-                                    ]}
-                                    cardStyle={{
-                                      textColor: "#000000",
-                                      backgroundColor: "#ffffff",
-                                    }}
-                                    onCardChange={(cardDetails) => {
-                                      setIsCardComplete(cardDetails.complete);
-                                    }}
-                                  />
-                                </View>
+                                      }}
+                                      onCardChange={(cardDetails) => {
+                                        setIsCardComplete(cardDetails.complete);
+                                      }}
+                                    />
+                                  </View>
+                                )}
                                 <View
                                   style={[
                                     AddSlotModalStyles.separator,

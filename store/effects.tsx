@@ -144,7 +144,7 @@ export const fetchPaymentIntentClientSecret = async (
       {
         items: [{ id: id_platforms_date_time_slot, quantity: 1 }],
         amount: amount * 100,
-        customer: customerId,
+        customer_id: customerId,
       },
       {
         headers: { "Content-Type": "application/json" },
