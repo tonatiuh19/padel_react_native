@@ -88,6 +88,7 @@ export interface UserInfo {
   id_platforms: number;
   publishable_key: string;
   card_info: CardInfoModel | null;
+  subscription: SubscriptionModel | null;
 }
 
 export interface PlatformField {
@@ -252,4 +253,12 @@ export interface CardInfoModel {
   default_payment_method: string;
   last4: string;
   brand: string;
+}
+
+export interface SubscriptionModel {
+  id: number;
+  id_platforms_user: number;
+  created: Date;
+  active: number;
+  stripe_id: string;
 }

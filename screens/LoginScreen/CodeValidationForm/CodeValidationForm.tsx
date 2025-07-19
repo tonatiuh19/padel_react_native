@@ -166,6 +166,7 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
                         }}
                         duration={90}
                         onComplete={() => countDownComplete(resetForm)}
+                        isLogin={true}
                       />
                     </>
                   ) : (

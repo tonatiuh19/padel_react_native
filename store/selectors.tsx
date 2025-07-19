@@ -62,3 +62,6 @@ export const selectSections = (state: RootState) => state.app.sections;
 
 export const selectCardInfo = (state: RootState) =>
   state.app.userInfo.info.card_info;
+
+export const selectSubscription = (state: RootState) =>
+  state.app.userInfo.info.subscription;

@@ -93,6 +93,9 @@ import {
   attachPaymentMethodStart,
   attachPaymentMethodSuccess,
   attachPaymentMethodFailure,
+  createSubscriptionStart,
+  createSubscriptionSuccess,
+  createSubscriptionFailure,
 } from "./appSlice";
 import {
   DOMAIN,
@@ -132,6 +135,7 @@ const UPDATE_CLASS_STATUS = `${DOMAIN}/updatePlatformFieldClassUserById.php`;
 const GET_CLASSES_RESERVATIONS = `${DOMAIN}/getClassesByUserId.php`;
 const GET_SECTIONS = `${DOMAIN}/getPlatformSectionsById.php`;
 const ATTACH_PAYMENT_METHOD = `${DOMAIN}/attachPaymentMethod.php`;
+const CREATE_SUBSCRIPTION = `${DOMAIN}/createSubscription.php`;
 
 export const fetchPaymentIntentClientSecret = async (
   amount: number,
@@ -933,5 +937,36 @@ export const attachPaymentMethod =
     } catch (error) {
       console.log("Error", error);
       dispatch(attachPaymentMethodFailure());
+    }
+  };
+
+export const createSubscription =
+  (
+    customer_id: string,
+    price_id: string,
+    id_platforms_user: number,
+    default_payment_method: string
+  ) =>
+  async (
+    dispatch: (arg0: {
+      payload: any;
+      type:
+        | "app/createSubscriptionStart"
+        | "app/createSubscriptionSuccess"
+        | "app/createSubscriptionFailure";
+    }) => void
+  ) => {
+    try {
+      dispatch(createSubscriptionStart());
+      const response = await axios.post<any>(CREATE_SUBSCRIPTION, {
+        customer_id,
+        price_id,
+        id_platforms_user,
+        default_payment_method,
+      });
+      dispatch(createSubscriptionSuccess(response.data));
+    } catch (error) {
+      console.log("Error", error);
+      dispatch(createSubscriptionFailure());
     }
   };

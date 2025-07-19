@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ProfileScreenStyles } from "./ProfileScreen.style";
 import { Modal } from "react-native";
+import PaymentMethodModal from "./PaymentMethodModal";
 import {
   StripeProvider,
   CardField,
@@ -64,10 +65,6 @@ export default function ProfileScreen() {
       `https://intelipadel.com/desactivarcuenta/${userInfo.info?.id_platforms_user}`
     );
   };
-
-  useEffect(() => {
-    console.log("User Info", cardInfo);
-  }, [cardInfo]);
 
   return (
     <View style={ProfileScreenStyles.container}>
@@ -172,7 +169,9 @@ export default function ProfileScreen() {
           style={ProfileScreenStyles.deActivateButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={ProfileScreenStyles.buttonText}>Eliminar mi cuenta</Text>
+          <Text style={ProfileScreenStyles.deleteButtonText}>
+            Eliminar mi cuenta
+          </Text>
         </TouchableOpacity>
       </View>
       <ConfirmationModal
@@ -181,126 +180,12 @@ export default function ProfileScreen() {
         onCancel={() => setModalVisible(false)}
       />
 
-      {/* Modal for Stripe CardField as bottom sheet panel */}
-      <Modal visible={showCardModal} transparent animationType="slide">
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "flex-end",
-            backgroundColor: "#00000099",
-          }}
-        >
-          <View style={ProfileScreenStyles.cardModalPanel}>
-            <View style={ProfileScreenStyles.cardModalHeader}>
-              <Text style={ProfileScreenStyles.cardModalTitleCentered}>
-                {cardInfo && cardInfo.default_payment_method
-                  ? "Actualizar método de pago"
-                  : "Agregar método de pago"}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowCardModal(false)}
-                style={ProfileScreenStyles.cardModalCloseButton}
-                accessibilityLabel="Cerrar"
-              >
-                <Icon name="close" size={22} color="#222" />
-              </TouchableOpacity>
-            </View>
-            <StripeProvider publishableKey={userInfo.info?.publishable_key}>
-              <View style={ProfileScreenStyles.containerCard}>
-                <View style={ProfileScreenStyles.summaryCard}>
-                  <Text style={ProfileScreenStyles.cardFieldLabel}>
-                    Ingresa los datos de tu tarjeta:
-                  </Text>
-                  <CardField
-                    postalCodeEnabled={false}
-                    style={[
-                      ProfileScreenStyles.cardField,
-                      {
-                        backgroundColor: "#ffffff",
-                      },
-                    ]}
-                    cardStyle={{
-                      textColor: "#000000",
-                      backgroundColor: "#ffffff",
-                    }}
-                    onCardChange={(details) => setCardDetails(details)}
-                  />
-                </View>
-              </View>
-              <View style={{ alignItems: "center", width: "100%" }}>
-                {!isSettingDefaultPaymentMethod ? (
-                  <TouchableOpacity
-                    style={[ProfileScreenStyles.buttonPay, { width: "100%" }]}
-                    onPress={async () => {
-                      setIsSettingDefaultPaymentMethod(true);
-
-                      if (!cardDetails?.complete) {
-                        setIsSettingDefaultPaymentMethod(false);
-                        alert("Por favor, completa los datos de la tarjeta.");
-                        return;
-                      }
-                      const { paymentMethod, error } =
-                        await createPaymentMethod({
-                          paymentMethodType: "Card",
-                          paymentMethodData: {
-                            billingDetails: { email: userInfo.info?.email },
-                          },
-                        });
-
-                      if (error) {
-                        setIsSettingDefaultPaymentMethod(false);
-                        alert("Error al crear el método de pago");
-                        return;
-                      }
-
-                      console.log(
-                        "Payment Method:",
-                        userInfo.info.stripe_id,
-                        paymentMethod.id,
-                        userInfo.info.id_platforms_user
-                      );
-                      // Uncomment and implement this when backend is ready
-                      dispatch(
-                        attachPaymentMethod(
-                          userInfo.info.stripe_id,
-                          paymentMethod.id,
-                          userInfo.info.id_platforms_user
-                        )
-                      );
-
-                      setIsSettingDefaultPaymentMethod(false);
-                      setShowCardModal(false);
-                    }}
-                  >
-                    <Text style={ProfileScreenStyles.buttonPayText}>
-                      <FontAwesome6 name="lock" size={16} color="#fff" />{" "}
-                      {cardInfo && cardInfo.default_payment_method
-                        ? "Actualizar"
-                        : "Guardar"}
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <LoadingSmall isLoading={true} color="#121212" />
-                )}
-                <Text style={ProfileScreenStyles.termsText}>
-                  Al añadir un método de pago, aceptas nuestros{" "}
-                  <Text
-                    style={ProfileScreenStyles.termsLink}
-                    onPress={() =>
-                      Linking.openURL(
-                        "https://intelipadel.com/terminosycondiciones/padelroom"
-                      )
-                    }
-                  >
-                    términos y condiciones
-                  </Text>
-                  .
-                </Text>
-              </View>
-            </StripeProvider>
-          </View>
-        </View>
-      </Modal>
+      {/* Reusable PaymentMethodModal */}
+      <PaymentMethodModal
+        visible={showCardModal}
+        onClose={() => setShowCardModal(false)}
+        isSubscription={false}
+      />
     </View>
   );
 }

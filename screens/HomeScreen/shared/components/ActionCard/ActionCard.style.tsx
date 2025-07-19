@@ -5,13 +5,20 @@ export const ActionCardStyles = StyleSheet.create({
     width: "48%", // Two cards per row with spacing
     backgroundColor: "#1c1c1c",
     borderRadius: 22,
-    borderWidth: 1,
-    borderColor: "#ddd",
+    // Remove border
+    // borderWidth: 1,
+    // borderColor: "#ddd",
     padding: 16,
     marginBottom: 10,
     marginTop: 10,
     position: "relative", // For floating button
     justifyContent: "space-between", // Push content to top and bottom
+    // Add shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 6, // For Android
   },
   floatingButton: {
     position: "absolute",

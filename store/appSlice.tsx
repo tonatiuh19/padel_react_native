@@ -71,6 +71,7 @@ const initialState: AppState = {
       id_platforms: 0,
       publishable_key: "",
       card_info: null,
+      subscription: null,
     },
   },
   reservations: {
@@ -568,6 +569,20 @@ const appSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    createSubscriptionStart(state) {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    createSubscriptionSuccess(state, action: PayloadAction<any>) {
+      if (action.payload !== false) {
+        state.userInfo.info = action.payload;
+        state.isLoading = false;
+      }
+    },
+    createSubscriptionFailure(state) {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 
@@ -671,6 +686,9 @@ export const {
   attachPaymentMethodStart,
   attachPaymentMethodSuccess,
   attachPaymentMethodFailure,
+  createSubscriptionStart,
+  createSubscriptionSuccess,
+  createSubscriptionFailure,
 } = appSlice.actions;
 
 export default appSlice.reducer;

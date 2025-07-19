@@ -22,6 +22,7 @@ import {
   selectPlatformFields,
   selectPlatformsFields,
   selectSections,
+  selectSubscription,
 } from "../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -53,6 +54,7 @@ export default function HomeScreen() {
   const lastClass = useSelector(selectLastClass);
   const homeClasses = useSelector(selectHomeClasses);
   const ads = useSelector(selectAds);
+  const subscription = useSelector(selectSubscription);
   const [refreshing, setRefreshing] = useState(false);
   const [userId, setUserId] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -131,7 +133,7 @@ export default function HomeScreen() {
             title: "Tu próxima reserva",
             subtitle: lastReservation.title,
             reservation: lastReservation,
-            isTicketModal: true, // Example: Use reservation title
+            isTicketModal: true,
           },
         ]
       : []),
@@ -143,7 +145,7 @@ export default function HomeScreen() {
             title: "Tu próxima clase",
             subtitle: lastClass.title,
             reservation: lastClass,
-            isTicketModal: true, // Example: Use class title
+            isTicketModal: true,
           },
         ]
       : []),
@@ -152,14 +154,25 @@ export default function HomeScreen() {
       icon: "tennisball" as keyof typeof Ionicons.glyphMap,
       title: "Explorar Canchas",
     },
-    {
-      id: 4,
-      icon: "card" as keyof typeof Ionicons.glyphMap,
-      title: "Membresías",
-    },
+    ...(!subscription
+      ? []
+      : [
+          {
+            id: 5,
+            icon: "card" as keyof typeof Ionicons.glyphMap,
+            title: "Membresía activa",
+            subtitle: "Padel Room plus",
+            subscription: subscription, // <-- FIXED
+            isTicketModal: true,
+          },
+        ]),
   ];
 
   const handleCardButtonPress = (id: number) => {
+    if (id === 3) {
+      navigation.navigate("Reservations");
+    }
+    // ...other navigation logic...
     console.log(`Floating button pressed for card ${id}`);
   };
 
@@ -203,7 +216,8 @@ export default function HomeScreen() {
                 icon={item.icon}
                 title={item.title}
                 subtitle={item.subtitle}
-                reservation={item.reservation}
+                reservation={item.reservation ?? undefined}
+                subscription={item.subscription ?? undefined} // <-- Pass subscription info
                 isTicketModal={item.isTicketModal}
                 onPressButton={() => handleCardButtonPress(item.id)}
               />

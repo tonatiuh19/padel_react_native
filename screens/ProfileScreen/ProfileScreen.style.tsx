@@ -206,6 +206,15 @@ export const ProfileScreenStyles = StyleSheet.create({
     alignSelf: "flex-end",
     marginTop: 10,
   },
+  editCardButton: {
+    position: "absolute", // <-- add this
+    top: 10, // <-- adjust as needed
+    right: 10, // <-- adjust as needed
+    padding: 10,
+    backgroundColor: "#e1dd2a",
+    borderRadius: 22,
+    zIndex: 2,
+  },
   divider: {
     height: 1,
     backgroundColor: "#ccc",
@@ -237,6 +246,12 @@ export const ProfileScreenStyles = StyleSheet.create({
   buttonText: {
     color: "#000",
     fontSize: 16,
+    fontFamily: "Kanit-Regular",
+    alignSelf: "center",
+  },
+  deleteButtonText: {
+    color: "#000",
+    fontSize: 10,
     fontFamily: "Kanit-Regular",
     alignSelf: "center",
   },

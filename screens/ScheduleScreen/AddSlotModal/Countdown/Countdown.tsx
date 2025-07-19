@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ViewStyle, TextStyle } from "react-native";
-import { CountdownStyles } from "./Countdown.style";
+import { CountdownLoginStyles, CountdownStyles } from "./Countdown.style";
 
 interface CountdownProps {
   duration: number; // Duration in seconds
@@ -13,6 +13,7 @@ interface CountdownProps {
   };
   isCheckout?: boolean;
   isEvent?: boolean;
+  isLogin?: boolean; // Optional prop for login screen
 }
 
 const Countdown: React.FC<CountdownProps> = ({
@@ -22,6 +23,7 @@ const Countdown: React.FC<CountdownProps> = ({
   style,
   isCheckout = false,
   isEvent = false,
+  isLogin = false,
 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
 
@@ -52,20 +54,22 @@ const Countdown: React.FC<CountdownProps> = ({
     }`;
   };
 
+  const styles = isLogin ? CountdownLoginStyles : CountdownStyles;
+
   return (
-    <View style={[CountdownStyles.container, style?.container]}>
+    <View style={[styles.container, style?.container]}>
       {isCheckout && (
-        <Text style={[CountdownStyles.timerTextTitle]}>
+        <Text style={[styles.timerTextTitle]}>
           {isEvent
             ? "Tienes el siguiente tiempo para completar tu registro:"
-            : "Tienes el siguiente tiempo para completar tu reserva:"}
+            : "Tiempo restante para reservar:"}
         </Text>
       )}
       <Text
         style={[
-          CountdownStyles.timerText,
+          styles.timerText,
           style?.timerText,
-          timeLeft < 60 && [CountdownStyles.timerTextRed, style?.timerTextRed],
+          timeLeft < 60 && [styles.timerTextRed, style?.timerTextRed],
         ]}
       >
         {formatTime(timeLeft)}

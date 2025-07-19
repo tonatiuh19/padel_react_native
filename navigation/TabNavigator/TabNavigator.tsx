@@ -57,7 +57,7 @@ const TabNavigator = () => {
           shadowColor: "transparent",
           elevation: 0,
           borderBottomWidth: 1, // Add line thickness
-          borderBottomColor: "#ffd700", // Add line color (gold)
+          borderBottomColor: "#fff", // Add line color (gold)
         },
         headerTitleStyle: {
           color: "#fff", // Move the color here for the title text
@@ -73,7 +73,11 @@ const TabNavigator = () => {
           name={tab.name}
           component={tab.component}
           options={
-            tab.name === "Home"
+            tab.name === "Reservations"
+              ? {
+                  headerTitle: "Reservaciones", // <-- Change here
+                }
+              : tab.name === "Home"
               ? {
                   headerTitle: () => (
                     <Image

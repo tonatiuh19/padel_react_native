@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ActionCardStyles } from "./ActionCard.style";
 import TicketModal from "../../../../ReservationsScreen/ReservationCard/TicketModal/TicketModal";
-import { Reservation } from "../../../HomeScreen.model";
+import { Reservation, SubscriptionModel } from "../../../HomeScreen.model";
 
 interface ActionCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -11,6 +11,7 @@ interface ActionCardProps {
   subtitle?: string;
   isTicketModal?: boolean;
   reservation?: Reservation;
+  subscription?: SubscriptionModel; // <-- Add this prop
   onPressButton: () => void;
 }
 
@@ -20,6 +21,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
   subtitle,
   isTicketModal = false,
   reservation,
+  subscription, // <-- Accept subscription info
   onPressButton,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -41,7 +43,9 @@ const ActionCard: React.FC<ActionCardProps> = ({
           onPress={isTicketModal ? openTicket : onPressButton}
           activeOpacity={0.7}
         >
-          <Text style={ActionCardStyles.floatingButtonText}>{"Ver mas"}</Text>
+          <Text style={ActionCardStyles.floatingButtonText}>
+            {subscription ? "Abrir" : "Ver mas"}
+          </Text>
         </TouchableOpacity>
 
         {/* Icon Row */}
@@ -62,6 +66,14 @@ const ActionCard: React.FC<ActionCardProps> = ({
           visible={modalVisible}
           onClose={closeTicket}
           reservation={reservation}
+        />
+      )}
+
+      {subscription && (
+        <TicketModal
+          visible={modalVisible}
+          onClose={closeTicket}
+          subscription={subscription}
         />
       )}
     </>

@@ -10,9 +10,16 @@ export const ReservationCardStyles = StyleSheet.create({
     width: "100%",
     borderRadius: 22,
     overflow: "hidden",
-    borderWidth: 2,
+    // Remove border
+    borderWidth: 1,
     borderColor: "#ddd",
     backgroundColor: "#fff",
+    // Add shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 6, // For Android
   },
   carouselContainer: {
     height: "70%",
