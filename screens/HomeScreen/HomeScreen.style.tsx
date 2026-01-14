@@ -10,8 +10,6 @@ export const HomeScreenStyles = StyleSheet.create({
     backgroundColor: "#000",
   },
   scrollView: {
-    alignItems: "center",
-    justifyContent: "center",
     padding: 16,
   },
   carouselContainer: {
@@ -117,7 +115,8 @@ export const HomeScreenStyles = StyleSheet.create({
   cardsGrid: {
     flexDirection: "row", // Arrange items in a row
     flexWrap: "wrap", // Allow wrapping to the next row
-    justifyContent: "space-between", // Add space between cards
+    justifyContent: "flex-start", // Align cards to the left
+    width: "100%", // Full width
   },
 });
 

@@ -4,20 +4,18 @@ import TabNavigator from "../TabNavigator/TabNavigator";
 import BackButton from "../TabNavigator/shared/components/BackButton/BackButton";
 import { createStackNavigator } from "@react-navigation/stack";
 import ScheduleScreen from "../../screens/ScheduleScreen/ScheduleScreen";
-import { PlatformsField } from "../../screens/HomeScreen/HomeScreen.model";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/selectors";
 import { AppDispatch } from "../../store";
-import { validateUserSession } from "../../store/effects";
 import LoginScreen from "../../screens/LoginScreen/LoginScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type RootStackParamList = {
-  Main: undefined;
+  Main: { screen?: string } | undefined;
   Reservations: undefined;
   Profile: undefined;
   Login: undefined;
-  Schedule: PlatformsField;
+  Schedule: { bookingType?: "court" | "class" } | undefined;
   Clases: undefined;
 };
 

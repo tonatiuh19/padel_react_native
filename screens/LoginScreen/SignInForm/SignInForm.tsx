@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { LoginScreenStyles } from "../LoginScreen.style";
 import { selectUserInfo } from "../../../store/selectors";
 import { useSelector } from "react-redux";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import CustomDatePicker from "../../../components/CustomDatePicker/CustomDatePicker";
 import { formatDate } from "../../../utils/UtilsFunctions";
 import CodeValidationForm from "../CodeValidationForm/CodeValidationForm";
 import Feather from "@expo/vector-icons/Feather";
@@ -24,45 +24,42 @@ const SignInForm: React.FC<any> = ({
   setNextSection,
   getFlagImage,
   setUserExists,
+  inactiveAccountMessage,
 }) => {
   const userInfo = useSelector(selectUserInfo);
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [isSettingDateOfBirth, setIsSettingDateOfBirth] = useState(false);
 
   useEffect(() => {
-    console.log("isUserExist", isUserExist);
-    console.log("userInfo", userInfo.info.active);
+    console.log("🟣 [SIGNIN FORM] useEffect triggered");
+    console.log("🟣 [SIGNIN FORM] isUserExist:", isUserExist);
+    console.log(
+      "🟣 [SIGNIN FORM] userInfo.info.active (normalized):",
+      userInfo.info.active
+    );
+    console.log("🟣 [SIGNIN FORM] userInfo.info.email:", userInfo.info.email);
+    console.log("🟣 [SIGNIN FORM] userInfo.info.error:", userInfo.info.error);
+    console.log("🟣 [SIGNIN FORM] userInfo.info.exists:", userInfo.info.exists);
+    console.log(
+      "🟣 [SIGNIN FORM] inactiveAccountMessage:",
+      inactiveAccountMessage
+    );
     setUserExists(isUserExist); // Update the parent state when isUserExist changes
-  }, [isUserExist, setUserExists]);
-
-  const onChange = (event: any, selectedDate: any, setFieldValue: any) => {
-    const currentDate = selectedDate || date;
-    if (Platform.OS !== "ios") {
-      console.log(
-        "Current Date",
-        currentDate.setDate(currentDate.getDate() - 1)
-      );
-      setShow(false);
-    }
-    setDate(currentDate);
-    setFieldValue("dateOfBirth", formatDate(currentDate)); // Update dateOfBirth field
-  };
-
-  const handleDateOfBirth = () => {
-    setIsSettingDateOfBirth(false);
-    setShow(false);
-  };
+  }, [isUserExist, setUserExists, userInfo, inactiveAccountMessage]);
 
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required("Nombre completo es requerido"),
-    dateOfBirth: Yup.string().required("Fecha de nacimiento es requerida"),
+    firstName: Yup.string().required("Nombre es requerido"),
+    lastName: Yup.string().required("Apellido es requerido"),
+    phone: Yup.string().required("Teléfono es requerido"),
+    dateOfBirth: Yup.string(), // Optional
   });
 
   return (
     <Formik
       initialValues={{
-        fullName: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
         dateOfBirth: "",
       }}
       validationSchema={validationSchema}
@@ -80,66 +77,81 @@ const SignInForm: React.FC<any> = ({
         <>
           {!isUserExist ? (
             <>
-              {!isSettingDateOfBirth && Platform.OS !== "ios" && (
-                <>
-                  <TextInput
-                    style={
-                      errors.fullName && touched.fullName
-                        ? LoginScreenStyles.inputError
-                        : LoginScreenStyles.input
-                    }
-                    placeholder="Nombre Completo"
-                    placeholderTextColor="#c7c585"
-                    onChangeText={handleChange("fullName")}
-                    onBlur={handleBlur("fullName")}
-                    value={values.fullName}
-                  />
-                  {errors.fullName && touched.fullName && (
-                    <Text style={LoginScreenStyles.error}>
-                      {errors.fullName}
-                    </Text>
-                  )}
-                </>
+              {inactiveAccountMessage && (
+                <View
+                  style={{
+                    backgroundColor: "#fff3cd",
+                    padding: 12,
+                    borderRadius: 8,
+                    marginBottom: 16,
+                    borderLeftWidth: 4,
+                    borderLeftColor: "#ffc107",
+                  }}
+                >
+                  <Text style={{ color: "#856404", fontSize: 14 }}>
+                    ℹ️ {inactiveAccountMessage}
+                  </Text>
+                </View>
               )}
               {!show && (
                 <>
                   <TextInput
                     style={
-                      errors.fullName && touched.fullName
+                      errors.firstName && touched.firstName
                         ? LoginScreenStyles.inputError
                         : LoginScreenStyles.input
                     }
-                    placeholder="Nombre Completo"
+                    placeholder="Nombre"
                     placeholderTextColor="#c7c585"
-                    onChangeText={handleChange("fullName")}
-                    onBlur={handleBlur("fullName")}
-                    value={values.fullName}
+                    onChangeText={handleChange("firstName")}
+                    onBlur={handleBlur("firstName")}
+                    value={values.firstName}
                   />
-                  {errors.fullName && touched.fullName && (
+                  {errors.firstName && touched.firstName && (
                     <Text style={LoginScreenStyles.error}>
-                      {errors.fullName}
+                      {errors.firstName}
                     </Text>
                   )}
-                  <TouchableOpacity
+                  <TextInput
                     style={
-                      errors.dateOfBirth && touched.dateOfBirth
-                        ? LoginScreenStyles.generalContainerError
-                        : LoginScreenStyles.generalContainer
+                      errors.lastName && touched.lastName
+                        ? LoginScreenStyles.inputError
+                        : LoginScreenStyles.input
                     }
-                    onPress={() => {
-                      setShow(true);
-                      if (Platform.OS === "ios") {
-                        return setIsSettingDateOfBirth(true);
-                      }
-                    }}
+                    placeholder="Apellido"
+                    placeholderTextColor="#c7c585"
+                    onChangeText={handleChange("lastName")}
+                    onBlur={handleBlur("lastName")}
+                    value={values.lastName}
+                  />
+                  {errors.lastName && touched.lastName && (
+                    <Text style={LoginScreenStyles.error}>
+                      {errors.lastName}
+                    </Text>
+                  )}
+                  <TextInput
+                    style={
+                      errors.phone && touched.phone
+                        ? LoginScreenStyles.inputError
+                        : LoginScreenStyles.input
+                    }
+                    placeholder="Teléfono"
+                    placeholderTextColor="#c7c585"
+                    keyboardType="phone-pad"
+                    onChangeText={handleChange("phone")}
+                    onBlur={handleBlur("phone")}
+                    value={values.phone}
+                  />
+                  {errors.phone && touched.phone && (
+                    <Text style={LoginScreenStyles.error}>{errors.phone}</Text>
+                  )}
+                  <TouchableOpacity
+                    style={LoginScreenStyles.generalContainer}
+                    onPress={() => setShow(true)}
                   >
                     <TextInput
-                      style={
-                        errors.dateOfBirth && touched.dateOfBirth
-                          ? LoginScreenStyles.inputError
-                          : LoginScreenStyles.input
-                      }
-                      placeholder="Fecha de Nacimiento"
+                      style={LoginScreenStyles.input}
+                      placeholder="Fecha de Nacimiento (opcional)"
                       placeholderTextColor="#c7c585"
                       value={values.dateOfBirth}
                       editable={false}
@@ -149,72 +161,47 @@ const SignInForm: React.FC<any> = ({
                 </>
               )}
               {show && (
-                <View
-                  style={[
-                    LoginScreenStyles.datePickerContainer,
-                    { alignItems: "center" },
-                  ]}
-                >
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    textColor="#e1dd2a"
-                    is24Hour={true}
-                    display={Platform.OS === "ios" ? "spinner" : "default"}
-                    maximumDate={new Date()}
-                    onChange={(event, selectedDate) =>
-                      onChange(event, selectedDate, setFieldValue)
-                    }
-                  />
-                </View>
-              )}
-              {errors.dateOfBirth && touched.dateOfBirth && (
-                <Text style={LoginScreenStyles.error}>
-                  {errors.dateOfBirth}
-                </Text>
+                <CustomDatePicker
+                  value={date}
+                  onChange={(selectedDate) => {
+                    setDate(selectedDate);
+                    setFieldValue("dateOfBirth", formatDate(selectedDate));
+                    setShow(false);
+                  }}
+                  onClose={() => setShow(false)}
+                />
               )}
 
-              {!isSettingDateOfBirth ? (
-                <>
-                  <View style={LoginScreenStyles.generalContainer}>
-                    <View style={LoginScreenStyles.phoneFullNumberContainer}>
-                      <View style={LoginScreenStyles.phoneZoneContainer}>
-                        <Feather name="mail" size={18} color="#e1dd2a" />
-                      </View>
-                      <View style={LoginScreenStyles.phoneNumberContainer}>
-                        <Text style={LoginScreenStyles.phoneNumberText}>
-                          {userInfo.info.email}
-                        </Text>
-                      </View>
-                    </View>
+              <View style={LoginScreenStyles.generalContainer}>
+                <View style={LoginScreenStyles.phoneFullNumberContainer}>
+                  <View style={LoginScreenStyles.phoneZoneContainer}>
+                    <Feather name="mail" size={18} color="#e1dd2a" />
                   </View>
-                  <TouchableOpacity
-                    style={LoginScreenStyles.button}
-                    onPress={() => handleSubmit()}
-                  >
-                    <Text style={LoginScreenStyles.buttonText}>Continuar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={LoginScreenStyles.secondaryButton}
-                    onPress={() => setNextSection(false)}
-                  >
-                    <Text style={LoginScreenStyles.secodnaryButtonText}>
-                      Volver
+                  <View style={LoginScreenStyles.phoneNumberContainer}>
+                    <Text style={LoginScreenStyles.phoneNumberText}>
+                      {userInfo.info.email}
                     </Text>
-                  </TouchableOpacity>
-                </>
-              ) : (
-                <TouchableOpacity
-                  style={LoginScreenStyles.button}
-                  onPress={() => handleDateOfBirth()}
-                >
-                  <Text style={LoginScreenStyles.buttonText}>Aceptar</Text>
-                </TouchableOpacity>
-              )}
+                  </View>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={LoginScreenStyles.button}
+                onPress={() => handleSubmit()}
+              >
+                <Text style={LoginScreenStyles.buttonText}>Continuar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={LoginScreenStyles.secondaryButton}
+                onPress={() => setNextSection(false)}
+              >
+                <Text style={LoginScreenStyles.secodnaryButtonText}>
+                  Volver
+                </Text>
+              </TouchableOpacity>
             </>
           ) : (
             <>
-              {userInfo.info.active === 0 ? (
+              {userInfo.info.active === 1 ? (
                 <CodeValidationForm setNextSection={setNextSection} />
               ) : (
                 <View style={LoginScreenStyles.generalContainer}>

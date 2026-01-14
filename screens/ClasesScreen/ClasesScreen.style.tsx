@@ -1,109 +1,192 @@
-import { Dimensions, StyleSheet } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-export const ReservationsScreenHeight = height;
-export const ReservationsScreenWidth = width;
+import { StyleSheet } from "react-native";
 
 const ClasesScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
-    backgroundColor: "#121212",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-    color: "#ffffff",
+    backgroundColor: "#000000",
   },
   scrollContainer: {
-    alignItems: "center",
+    padding: 16,
+    paddingBottom: 32,
   },
   scrollContainerEmpty: {
-    padding: 20,
-    flexGrow: 1,
-    justifyContent: "center",
-  },
-  card: {
-    width: "90%",
-    padding: 20,
-    marginVertical: 10,
-    backgroundColor: "#292929",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardText: {
-    fontSize: 18,
-    color: "#ffffff",
-  },
-  cardReservationEmpty: {
-    width: ReservationsScreenWidth - 40,
-    height: ReservationsScreenHeight * 0.2,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardReservationText: {
-    fontSize: 18,
-    color: "#ffffff",
-    fontWeight: "bold",
-    marginBottom: 5,
-    fontFamily: "Kanit-Regular",
-  },
-  buttonReservation: {
-    marginTop: 10,
-    width: "60%",
-    padding: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: "#e1dd2a",
-    borderRadius: 22,
-    alignItems: "center",
-  },
-  buttonDisabled: {
-    backgroundColor: "#4a4a4a", // Dark gray background for disabled buttons
-  },
-  buttonReservationText: {
-    color: "#000",
-    fontSize: 16,
-    fontFamily: "Kanit-Regular",
-  },
-  textDisabled: {
-    color: "#888", // Gray text for disabled buttons
-  },
-
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-    backgroundColor: "#1e1e1e",
-    borderTopWidth: 1,
-    borderTopColor: "#333333",
-  },
-  actionButton: {
-    backgroundColor: "#e1dd2a",
-    padding: 10,
-    borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
     flex: 1,
-    marginHorizontal: 5,
+    padding: 16,
   },
-  actionButtondisabled: {
-    backgroundColor: "#4a4a4a",
+  header: {
+    paddingTop: 16,
+    marginBottom: 24,
   },
-  actionButtonText: {
-    color: "#000",
-    fontSize: 16,
-    fontFamily: "Kanit-Regular",
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginBottom: 16,
+  },
+  scheduleButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1f2937",
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 2,
+    borderColor: "#e1dd2a",
+    shadowColor: "#e1dd2a",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  scheduleButtonIcon: {
+    marginRight: 16,
+  },
+  scheduleButtonTextContainer: {
+    flex: 1,
+  },
+  scheduleButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginBottom: 4,
+  },
+  scheduleButtonSubtext: {
+    fontSize: 14,
+    color: "#9ca3af",
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 60,
+  },
+  emptyStateTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginTop: 16,
+    marginBottom: 8,
     textAlign: "center",
   },
-  actionButtonTextDisabled: {
-    color: "#888",
+  emptyStateSubtitle: {
+    fontSize: 14,
+    color: "#9ca3af",
+    textAlign: "center",
+    paddingHorizontal: 32,
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  emptyStateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#8c8a1a",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  emptyStateButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#ffffff",
+    marginLeft: 8,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  modalOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: "center",
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: "#1f2937",
+    borderRadius: 20,
+    maxHeight: "90%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: "#374151",
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  modalBody: {
+    padding: 24,
+  },
+  modalSection: {
+    marginBottom: 24,
+  },
+  modalSectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#e1dd2a",
+    marginBottom: 16,
+    textTransform: "uppercase",
+  },
+  modalDetailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  modalDetailLabel: {
+    fontSize: 14,
+    color: "#9ca3af",
+  },
+  modalDetailValue: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#ffffff",
+    textAlign: "right",
+    flex: 1,
+    marginLeft: 16,
+  },
+  modalPriceValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#10b981",
+  },
+  modalCloseButton: {
+    backgroundColor: "#e1dd2a",
+    padding: 16,
+    margin: 24,
+    marginTop: 0,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  modalCloseButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statusBadgeText: {
+    fontSize: 11,
+    fontWeight: "bold",
+    color: "#ffffff",
   },
 });
 

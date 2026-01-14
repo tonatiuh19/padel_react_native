@@ -4,7 +4,7 @@ import { LoginScreenStyles } from "./LoginScreen.style";
 import { AppDispatch } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsUserExist, selectUserInfo } from "../../store/selectors";
-import { insertPlatformUser, validateUserByEmail } from "../../store/effects";
+import { createUser, checkUserExists } from "../../store/effects";
 import SignInForm from "./SignInForm/SignInForm";
 import LoginForm from "./LoginForm/LoginForm";
 import { getFlagImage } from "../../utils/UtilsFunctions";
@@ -18,10 +18,17 @@ const LoginScreen: React.FC = () => {
   const [nextSection, setNextSection] = useState(false);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [userExists, setUserExists] = useState(false);
+  const [inactiveAccountMessage, setInactiveAccountMessage] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     //console.log("User Info", userInfo);
   }, [userInfo]);
+
+  useEffect(() => {
+    console.log("🔄 [LOGIN SCREEN] isUserExist changed:", isUserExist);
+  }, [isUserExist]);
 
   useFocusEffect(
     useCallback(() => {
@@ -29,28 +36,72 @@ const LoginScreen: React.FC = () => {
       console.log("Focused");
       setNextSection(false);
       setPickerVisible(false);
+      setInactiveAccountMessage(null);
     }, [])
   );
 
-  const handleSignIn = (values: any) => {
-    dispatch(
-      insertPlatformUser(
-        values.fullName,
-        0,
-        values.dateOfBirth,
-        userInfo.info.phone_number_code,
-        userInfo.info.phone_number,
-        1,
-        1,
-        userInfo.info.email
-      )
-    );
-    // Handle sign in logic here
+  const handleSignIn = async (values: any) => {
+    try {
+      console.log("🟢 [LOGIN SCREEN] handleSignIn - Creating user...");
+      const result = await dispatch(
+        createUser(
+          userInfo.info.email,
+          values.firstName,
+          values.lastName,
+          values.phone,
+          values.dateOfBirth,
+          1 // club_id
+        )
+      );
+
+      console.log("🟢 [LOGIN SCREEN] User created:", result);
+
+      // After successful user creation, send verification code
+      if (result?.data?.id) {
+        console.log(
+          "🟢 [LOGIN SCREEN] Sending verification code to user ID:",
+          result.data.id
+        );
+        // The app should now show the code verification screen
+        // because isUserExist is set to true in insertPlatformUserSuccess
+      }
+    } catch (error) {
+      console.error("❌ [LOGIN SCREEN] Error creating user:", error);
+    }
   };
 
-  const handleLogin = (values: any) => {
+  const handleLogin = async (values: any) => {
+    console.log(
+      "🟢 [LOGIN SCREEN] handleLogin called with email:",
+      values.email
+    );
     setNextSection(true);
-    dispatch(validateUserByEmail(values.email));
+    setInactiveAccountMessage(null);
+
+    console.log("🟢 [LOGIN SCREEN] Dispatching checkUserExists...");
+    const result = await dispatch(checkUserExists(values.email, 1)); // club_id = 1
+
+    console.log(
+      "🟢 [LOGIN SCREEN] checkUserExists result:",
+      JSON.stringify(result, null, 2)
+    );
+    console.log("🟢 [LOGIN SCREEN] result.error:", result?.error);
+    console.log("🟢 [LOGIN SCREEN] result.exists:", result?.exists);
+
+    // Check if the response has an error (inactive account)
+    if (result?.error) {
+      console.log("⚠️ [LOGIN SCREEN] Error detected, setting inactive message");
+      setInactiveAccountMessage(
+        "Tu cuenta anterior fue desactivada. Puedes crear una nueva cuenta con este correo."
+      );
+    } else {
+      console.log("✅ [LOGIN SCREEN] No error in result");
+    }
+
+    console.log(
+      "🟢 [LOGIN SCREEN] Current isUserExist from Redux:",
+      isUserExist
+    );
   };
 
   return (
@@ -78,6 +129,7 @@ const LoginScreen: React.FC = () => {
               setPickerVisible={setPickerVisible}
               getFlagImage={getFlagImage}
               setUserExists={setUserExists}
+              inactiveAccountMessage={inactiveAccountMessage}
             />
           ) : (
             <LoginForm

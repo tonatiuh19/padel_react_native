@@ -231,9 +231,30 @@ const appSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    insertPlatformUserSuccess(state, action: PayloadAction<UserInfo>) {
-      state.userInfo.info = action.payload;
-      state.userInfo.isUserExist = true;
+    insertPlatformUserSuccess(state, action: PayloadAction<any>) {
+      console.log(
+        "👤 [REDUX] insertPlatformUserSuccess - User created:",
+        action.payload
+      );
+
+      // API returns { success: true, data: { id, email, name, phone, ... } }
+      if (action.payload?.data) {
+        const userData = action.payload.data;
+        state.userInfo.info = {
+          ...state.userInfo.info,
+          id_platforms_user: userData.id,
+          email: userData.email,
+          full_name: userData.name,
+          phone_number: userData.phone,
+          active: 1, // New users are always active
+          id_platforms: userData.club_id,
+        };
+        state.userInfo.isUserExist = true;
+        console.log(
+          "✅ [REDUX] User data stored, isUserExist set to true, active set to 1"
+        );
+      }
+
       state.isLoading = false;
     },
     insertPlatformUserFailure(state) {
@@ -286,13 +307,68 @@ const appSlice = createSlice({
       state.isError = false;
     },
     validateUserByEmailSuccess(state, action: PayloadAction<any>) {
+      console.log("🔵 [REDUX] validateUserByEmailSuccess called");
+      console.log(
+        "🔵 [REDUX] Payload:",
+        JSON.stringify(action.payload, null, 2)
+      );
+
       if (!action.payload) {
+        console.log(
+          "🔵 [REDUX] Payload is falsy, setting isUserExist to falsy"
+        );
         state.userInfo.isUserExist = action.payload;
       } else {
-        state.userInfo.info = action.payload;
-        state.userInfo.isUserExist = true;
+        // Preserve email when merging response (don't overwrite)
+        const currentEmail = state.userInfo.info.email;
+        state.userInfo.info = { ...state.userInfo.info, ...action.payload };
+        // Restore email if it was lost
+        if (!state.userInfo.info.email && currentEmail) {
+          state.userInfo.info.email = currentEmail;
+        }
+
+        // If there's an error field (inactive/deleted account), treat as non-existent
+        // to allow re-registration
+        if (action.payload.error) {
+          console.log(
+            "⚠️ [REDUX] User account has error field - allowing re-registration"
+          );
+          console.log("⚠️ [REDUX] Error message:", action.payload.error);
+          console.log("⚠️ [REDUX] Setting isUserExist = false");
+          state.userInfo.isUserExist = false;
+        } else {
+          // Use explicit check to avoid false || true = true bug
+          const existsValue =
+            "exists" in action.payload ? action.payload.exists : true;
+          console.log("✅ [REDUX] No error field detected");
+          console.log(
+            "✅ [REDUX] action.payload.exists =",
+            action.payload.exists
+          );
+          console.log("✅ [REDUX] Setting isUserExist =", existsValue);
+          state.userInfo.isUserExist = existsValue;
+        }
+
+        // Also normalize patient data to old structure for backward compatibility
+        if (action.payload.patient) {
+          console.log("👤 [REDUX] Normalizing patient data");
+          const patient = action.payload.patient;
+          state.userInfo.info.email = patient.email;
+          state.userInfo.info.full_name = patient.name;
+          state.userInfo.info.phone_number = patient.phone;
+          state.userInfo.info.stripe_id = patient.stripe_customer_id;
+          state.userInfo.info.active = patient.is_active ? 1 : 0;
+          state.userInfo.info.id_platforms_user = patient.id;
+          state.userInfo.info.id_platforms = patient.club_id;
+        } else {
+          console.log("👤 [REDUX] No patient data to normalize");
+        }
       }
 
+      console.log(
+        "🔵 [REDUX] Final isUserExist value:",
+        state.userInfo.isUserExist
+      );
       state.isLoading = false;
     },
     validateUserByEmailFailure(state) {

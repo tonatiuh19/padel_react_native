@@ -16,7 +16,13 @@ import Feather from "@expo/vector-icons/Feather";
 const LoginForm: React.FC<any> = ({ handleLogin }) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
+      .trim()
       .email("El Correo electrónico no es válido")
+      .test(
+        "no-spaces",
+        "El correo no puede contener espacios",
+        (value) => !value || !/\s/.test(value)
+      )
       .required("Tu Correo electrónico es requerido"),
   });
 
@@ -63,10 +69,14 @@ const LoginForm: React.FC<any> = ({ handleLogin }) => {
               style={LoginScreenStyles.phoneInput}
               placeholder="Tu correo electrónico"
               placeholderTextColor="#c7c585"
-              onChangeText={(text) => handleChange("email")(text.toLowerCase())}
+              onChangeText={(text) =>
+                handleChange("email")(text.toLowerCase().replace(/\s/g, ""))
+              }
               onBlur={handleBlur("email")}
               value={values.email}
               keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
             />
           </View>
           {errors.email && touched.email && (

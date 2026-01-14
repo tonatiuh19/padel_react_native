@@ -7,12 +7,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../../../store/selectors";
 import { AppDispatch } from "../../../store";
-import {
-  sendCode,
-  sendCodeByMail,
-  validateSessionCode,
-} from "../../../store/effects";
-import Countdown from "../../ScheduleScreen/AddSlotModal/Countdown/Countdown";
+import { sendVerificationCode, verifyCode } from "../../../store/effects";
 import {
   CommonActions,
   NavigationProp,
@@ -25,9 +20,28 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
   const [isSendCode, setIsSendCode] = useState(false);
   const [disabledResend, setDisabledResend] = useState(true);
   const [codeInvalid, setCodeInvalid] = useState(false);
+  const [countdown, setCountdown] = useState(90);
   const dispatch: AppDispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
   const navigation = useNavigation();
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (isSendCode && disabledResend && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setDisabledResend(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [isSendCode, disabledResend, countdown]);
 
   useEffect(() => {
     if (userInfo.isIncorrectCode) {
@@ -48,13 +62,13 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
   });
 
   const sendCoding = () => {
+    console.log("📧 [SEND CODING] Email:", userInfo.info.email);
+    console.log("📧 [SEND CODING] User ID:", userInfo.info.id_platforms_user);
     setIsSendCode(true);
+    setDisabledResend(true);
+    setCountdown(90);
     dispatch(
-      sendCodeByMail(
-        userInfo.info.id_platforms_user,
-        userInfo.info.id_platforms,
-        userInfo.info.email
-      )
+      sendVerificationCode(userInfo.info.email, userInfo.info.id_platforms_user)
     );
   };
 
@@ -63,22 +77,27 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
     setDisabledResend(true);
     setIsSendCode(false);
     setSelectedOption(null);
+    setCountdown(90);
     resetForm(); // Reset the form
   };
 
   const handleCodeValidation = (values: any) => {
     console.log("Code Validation", values);
+    console.log("🔑 [VALIDATE CODE] Email:", userInfo.info.email);
+    console.log("🔑 [VALIDATE CODE] User ID:", userInfo.info.id_platforms_user);
     dispatch(
-      validateSessionCode(
-        userInfo.info.id_platforms_user,
-        userInfo.info.id_platforms,
-        values.code
+      verifyCode(
+        userInfo.info.email,
+        values.code,
+        userInfo.info.id_platforms_user
       )
     );
   };
 
-  const countDownComplete = (resetForm: () => void) => {
-    setDisabledResend(false);
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -157,17 +176,17 @@ const CodeValidationForm: React.FC<any> = ({ setNextSection }) => {
                   {disabledResend ? (
                     <>
                       <Text style={LoginScreenStyles.timerResendText}>
-                        1:30 minutos para reenviar nuevo código
+                        {formatTime(countdown)} para reenviar nuevo código
                       </Text>
-                      <Countdown
-                        style={{
-                          timerText: LoginScreenStyles.timerCodeText,
-                          timerTextRed: LoginScreenStyles.timerCodeTextRed,
-                        }}
-                        duration={90}
-                        onComplete={() => countDownComplete(resetForm)}
-                        isLogin={true}
-                      />
+                      <Text
+                        style={
+                          countdown > 10
+                            ? LoginScreenStyles.timerCodeText
+                            : LoginScreenStyles.timerCodeTextRed
+                        }
+                      >
+                        {formatTime(countdown)}
+                      </Text>
                     </>
                   ) : (
                     <>

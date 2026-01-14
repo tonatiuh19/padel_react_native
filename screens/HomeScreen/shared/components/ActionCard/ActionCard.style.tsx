@@ -2,15 +2,14 @@ import { StyleSheet } from "react-native";
 
 export const ActionCardStyles = StyleSheet.create({
   cardContainer: {
-    width: "48%", // Two cards per row with spacing
+    width: "100%", // Take full width of parent wrapper
     backgroundColor: "#1c1c1c",
     borderRadius: 22,
     // Remove border
     // borderWidth: 1,
     // borderColor: "#ddd",
     padding: 16,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 12,
     position: "relative", // For floating button
     justifyContent: "space-between", // Push content to top and bottom
     // Add shadow

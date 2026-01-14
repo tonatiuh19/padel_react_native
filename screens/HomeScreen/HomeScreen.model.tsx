@@ -89,6 +89,9 @@ export interface UserInfo {
   publishable_key: string;
   card_info: CardInfoModel | null;
   subscription: SubscriptionModel | null;
+  // Optional properties from API responses
+  error?: string;
+  exists?: boolean;
 }
 
 export interface PlatformField {
@@ -147,8 +150,10 @@ export interface Slot {
   name: string;
 }
 
+import { Booking } from "../../store/effects";
+
 export interface Reservations {
-  reservations: Reservation[];
+  reservations: Booking[];
   eventReservations: EventReservation[];
 }
 
@@ -230,17 +235,31 @@ export interface PaymentClassModel {
 }
 
 export interface ClassesReservationModel {
-  id_platforms_fields_classes_users: number;
-  id_platforms_user: number;
-  id_platforms_disabled_date: number;
-  platforms_date_time_start: string;
-  platforms_date_time_end: string;
-  price: number;
-  stripe_id: string;
-  validated: number;
-  id_platforms_field: number;
-  cancha: string;
-  event_title: string;
+  id: number;
+  booking_number: string;
+  class_date: string;
+  start_time: string;
+  end_time: string;
+  duration_minutes: number;
+  class_type: string;
+  number_of_students: number;
+  total_price: number;
+  status: string;
+  payment_status: string;
+  notes?: string;
+  confirmed_at?: string;
+  created_at: string;
+  instructor_name: string;
+  instructor_email?: string;
+  instructor_bio?: string;
+  club_id: number;
+  club_name: string;
+  court_id?: number;
+  court_name?: string;
+  // Legacy fields for backward compatibility
+  validated?: number;
+  event_title?: string;
+  stripe_id?: string;
 }
 
 export interface SectionsModel {

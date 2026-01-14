@@ -2,11 +2,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import store from "./store";
 import LoadingMask from "./screens/HomeScreen/shared/components/LoadingMask/LoadingMask";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import AppContent from "./AppContent";
+
+// Your Stripe publishable key (from Stripe Dashboard)
+const STRIPE_PUBLISHABLE_KEY =
+  process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+  "pk_test_51SifQHCDsJ3n85lgKPd95YIHKqBtTzit9nekjSUd2sNtDRclIvjLwFQoxo1cWWj8kwMcApRB5WpYumL9AK3dlmuO00OemnnPHQ";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,11 +54,13 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <AppContent />
-        </View>
-      </NavigationContainer>
+      <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+        <NavigationContainer>
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <AppContent />
+          </View>
+        </NavigationContainer>
+      </StripeProvider>
     </Provider>
   );
 }
